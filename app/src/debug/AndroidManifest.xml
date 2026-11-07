@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Debug builds only: a second launcher entry for the Inputs kit, every control Kosha draws on one screen. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <activity
+            android:name=".InputsKitActivity"
+            android:exported="true"
+            android:label="@string/kit_title"
+            android:taskAffinity="app.getkosha.kit"
+            android:theme="@style/Theme.Kosha">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

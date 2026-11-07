@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The debug Inputs kit's own words (design/source/InputsKit.dc.html). Debug builds only, so not translated;
+     the controls themselves take their strings from core:design. -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="kit_title">Inputs kit</string>
+    <string name="kit_lead">Kosha draws its own controls, so entry feels the same on iOS and Android and never waits for a system picker.</string>
+    <string name="kit_keypad">Amount keypad</string>
+    <string name="kit_keypad_lead">Used everywhere an amount is entered. Digits type straight into the amount, and a fourth column does the maths.</string>
+    <string name="kit_keypad_notes">• + − × ÷ work on the amount. Kosha keeps the sum and saves the result.\n• 00 for round amounts. The decimal key follows the currency.\n• Hold backspace to clear.</string>
+    <string name="kit_tiles">Tile row</string>
+    <string name="kit_tiles_lead">Account, category, date and note above the payee. Empty is dashed, a guess is grey, a sparkle marks an AI guess.</string>
+    <string name="kit_date">Date</string>
+    <string name="kit_date_lead">Quick picks for the usual cases, a month grid for the rest.</string>
+    <string name="kit_date_notes">Dots mark days that already have entries. Future days stay pickable for planned payments.</string>
+    <string name="kit_time">Time</string>
+    <string name="kit_time_lead">A wheel for hours and minutes, drawn by Kosha in the style of iOS.</string>
+    <string name="kit_time_notes">Flick or drag each wheel, or tap a row to jump to it. 24-hour or AM/PM follows your language.</string>
+    <string name="kit_account">Account</string>
+    <string name="kit_account_lead">Each account carries its colour, balance and currency.</string>
+    <string name="kit_account_notes">Recent first. Archived accounts are left out of quick entry.</string>
+    <string name="kit_category">Category</string>
+    <string name="kit_category_lead">Opens from the category tile, or from Next when Kosha can’t guess one. Five a row, most used first.</string>
+    <string name="kit_category_notes">Picked: accent outline. Guess: dashed, with a sparkle when AI made it. One tap accepts. After Next, picking a tile adds the entry straight away.</string>
+    <string name="kit_controls">Controls</string>
+    <string name="kit_controls_lead">Segmented, switch, radio, tick, chip, stepper and buttons.</string>
+    <string name="kit_fields">Text fields</string>
+    <string name="kit_fields_lead">Rest, focused and with an error.</string>
+    <string name="kit_fields_notes">The system keyboard only ever opens for words: payee, note, names, search, server address and API keys.</string>
+    <string name="kit_sheets">Sheets, lists and toasts</string>
+    <string name="kit_sheets_lead">One sheet pattern for every picker.</string>
+    <string name="kit_sheets_notes">Sheets size to their content, drag down to close and keep the keypad under the thumb. Toasts carry Undo for five seconds. One list picker serves currencies, time zones, languages and “Move to…”.</string>
+    <string name="kit_open_account">Open the account sheet</string>
+    <string name="kit_open_list">Open the list picker</string>
+    <string name="kit_open_date">Open the date sheet</string>
+    <string name="kit_open_time">Open the time sheet</string>
+    <string name="kit_open_category">Open the category sheet</string>
+    <string name="kit_show_toast">Show a toast</string>
+    <string name="kit_toast">Added €4.20, Bonanza Coffee</string>
+    <string name="kit_light">Light</string>
+    <string name="kit_dark">Dark</string>
+    <string name="kit_more_colour">More colour</string>
+    <string name="kit_neutral">Neutral</string>
+    <string name="kit_mono">Mono</string>
+    <string name="kit_proportional">Proportional</string>
+    <string name="kit_primary">Primary</string>
+    <string name="kit_secondary">Secondary</string>
+    <string name="kit_server_error">Enter a full URL, like https://kosha.example.com</string>
+</resources>

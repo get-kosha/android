@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The brand name is never translated (translations.md). Every other string comes from core:design. -->
+    <string name="app_name" translatable="false">Kosha</string>
+</resources>

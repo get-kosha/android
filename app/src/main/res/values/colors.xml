@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand colours appear only on the launch screen and the app icon. -->
+    <color name="peacock">#0F524E</color>
+    <color name="bg">#F6F6F4</color>
+</resources>
