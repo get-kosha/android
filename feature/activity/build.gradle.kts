@@ -14,5 +14,8 @@ android {
 
 dependencies {
     implementation(project(":core:ui"))
+    // The camera, photo and file pickers for attachments, and the FileProvider that hands files to other apps.
+    implementation(libs.activity.compose)
+    implementation(libs.core)
     testImplementation(libs.junit)
 }
