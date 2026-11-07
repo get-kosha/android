@@ -448,7 +448,7 @@ internal class AddModel(route: Route.Add) : ViewModel() {
             val saved = try {
                 kosha.api.post<NewTransfers, SavedTransfers>(
                     "/api/v1/transfers",
-                    NewTransfers(listOf(NewTransfer(from.id, to.id, sent, s.received, s.fee, fee.provider.trim(), day.toString(), note.trim()))),
+                    NewTransfers(listOf(NewTransfer(from.id, to.id, sent, s.received, s.fee, fee.provider.trim(), day.toString(), time?.let(Dates::text), note.trim()))),
                 ).transfers.first()
             } catch (e: IOException) {
                 saving = false
@@ -595,26 +595,9 @@ internal class AddModel(route: Route.Add) : ViewModel() {
 
     // ---------- duplicate ----------
 
-    /**
-     * Starts from an existing entry with today's date. There is no read by id, so this pages through the newest
-     * entries until it finds it.
-     * ponytail: up to 2,000 entries back; a read-by-id operation would make it one call.
-     */
+    /** Starts from an existing entry (GET /api/app/transactions/{id}) with today's date. */
     private suspend fun duplicate(id: String) {
-        var offset: Int? = 0
-        var found: Transaction? = null
-        var pages = 0
-        while (found == null && offset != null && pages < 4) {
-            val page = runCatching {
-                kosha.api.get<TransactionList>(
-                    "/api/v1/transactions",
-                    mapOf("from" to "1970-01-01", "to" to today.plusYears(10).toString(), "limit" to 500, "offset" to offset, "includeCorrections" to true),
-                )
-            }.getOrNull() ?: return
-            found = page.transactions.firstOrNull { it.id == id || it.transfer?.id == id }
-            offset = page.nextOffset
-            pages++
-        }
+        val found = runCatching { kosha.api.get<Transaction>("/api/app/transactions/$id") }.getOrNull()
         val tx = found ?: return
         val link = tx.transfer
         kind = when {

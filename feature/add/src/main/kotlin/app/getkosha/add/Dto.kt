@@ -18,6 +18,7 @@ internal data class NewTransfer(
     val fee: Long,
     val provider: String,
     val day: String,
+    val time: String?,
     val note: String,
 )
 
