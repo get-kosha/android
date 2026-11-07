@@ -14,5 +14,11 @@ android {
 
 dependencies {
     implementation(project(":core:ui"))
+    implementation(libs.activity.compose)
+    implementation(libs.core)
+    implementation(libs.browser)
+    implementation(libs.biometric)
+    implementation(libs.fragment)
+    implementation(libs.serialization.json)
     testImplementation(libs.junit)
 }
