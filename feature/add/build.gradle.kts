@@ -14,5 +14,9 @@ android {
 
 dependencies {
     implementation(project(":core:ui"))
+    implementation(libs.activity.compose)
+    implementation(libs.camera.camera2)
+    implementation(libs.camera.lifecycle)
+    implementation(libs.camera.view)
     testImplementation(libs.junit)
 }
