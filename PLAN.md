@@ -23,7 +23,7 @@ Decided while doing M0:
 
 Done means what `CLAUDE.md` and the brief say. Each screen matches its PNG in light and dark, and works in neutral mode and every accent. Its strings come from the message files, it has TalkBack labels, and it reads from the cache when offline. It is read-only for the demo and shows no trace of AI when AI is off. It holds up at 360dp and the largest font size.
 
-### M0 · Server prep (web repo, branch `feat/mobile-app-api`): done, awaiting review
+### M0 · Server prep (web repo, branch `feat/mobile-app-api`): done
 
 - [x] `/api/v1` accepts OAuth access tokens (same scopes, demo lock, rate limit). The OpenAPI document gets an `oauth` security scheme, and the 401 message names both methods.
 - [x] `kosha-android` and `kosha-ios` public clients: PKCE, `skipConsent`, redirect `app.getkosha:/oauth/callback`. They are listed as `cachedTrustedClients`. Dynamic registration is unchanged.
@@ -43,9 +43,15 @@ Done means what `CLAUDE.md` and the brief say. Each screen matches its PNG in li
 - [x] Fixed: the CSRF check refused `/api/auth/oauth2/token`, `revoke`, `introspect` and `register` for any client without an `Origin` header, which means every native app. Those endpoints never read cookies, so they are now exempt.
 - [x] Checked live against `npm run dev`: PKCE sign-in as demo with no consent screen, token exchange, REST read, demo writes refused (messages in German with `Accept-Language: de`), meta, export, refresh rotation, revoke, and the token refused after revoke. A retried `create_transactions` with the same `id` saved one row.
 - [ ] Owner: review, merge and deploy. Deploying runs migration 0009 remotely.
+- [x] Added later on the same branch:
+  - app endpoints for the dashboard, accounts overview, subscriptions, payee history, days, recap, reconcile and one transaction
+  - `time` and `attachmentCount` on transactions, and `time` on transfers
+  - the `account_colours` preference
+  - app tokens tied to the sign-in session they came from
+  - the phone app's message areas (`app.json`, `app-*.json`) in all 12 languages
 - [x] Added in M1: the `app` message area (`messages/<locale>/app.json`, all 12 languages) for strings only the phone apps show.
 
-### M1 · Skeleton and design system: done, awaiting review
+### M1 · Skeleton and design system: done
 
 - [x] `git init`. Gradle 9.6.0 wrapper, AGP 9.2.1 (the newest Android Studio supports; 9.4.1 also builds), built-in Kotlin 2.4.21, Compose BOM 2026.09.00, JDK 21. Version catalog in `gradle/libs.versions.toml`.
 - [x] Modules: `app`, `core:model` (pure Kotlin, JVM unit tests), `core:network`, `core:data` (empty until M2 and M3), `core:design`.
@@ -68,58 +74,55 @@ Done means what `CLAUDE.md` and the brief say. Each screen matches its PNG in li
 - [x] `./gradlew test lint` passes.
 - Not yet: ktlint and detekt (Android lint runs). Hilt and Navigation come in M2 with the first real screens, and each `feature:*` module comes with its milestone.
 
-### M2 · Auth and session
+### M2–M10: built
 
-- Launch (SplashScreen API), SignIn, OwnServer (live discovery check), Finishing, SignInError.
-- Browser sign-in: Custom Tabs, our own PKCE, state check, redirect `app.getkosha:/oauth/callback`, scopes `openid profile email offline_access kosha:read kosha:write`, `resource=<server>/api/v1`.
-- Token store: Tink AEAD with a Keystore key and DataStore. One refresh at a time behind a mutex, and the new refresh token is stored before the new access token is used.
-- Demo: `login_hint=demo&prompt=login`, the demo banner, write actions disabled.
-- Sign out: revoke, clear cache and outbox (warn when entries are waiting), back to SignIn.
-- App lock: `BiometricPrompt` with `BIOMETRIC_STRONG | DEVICE_CREDENTIAL`, Lock again after, `FLAG_SECURE` while locked, LockScreen.
+Built in one pass: the lead built M2 and M3, then five agents built the feature modules in parallel, and the lead merged and fixed them. Every screen in HANDOFF §5 exists and works against a Kosha dev server.
 
-### M3 · Data layer
+- **M2 Auth and session** (`core:network`, `feature:auth`):
+  - sign-in, demo and own server: SignIn, OwnServer (live check, refuses servers without /api/app), Finishing, SignInError; browser sign-in with PKCE through Custom Tabs
+  - Keystore AES-GCM token store, one refresh at a time with rotation, sign-out revoking the refresh token
+  - SplashScreen launch, app lock (BiometricPrompt, lock after N minutes, hidden from recents)
+- **M3 Data layer** (`core:data`, `core:ui`):
+  - typed client for /api/v1 and /api/app (network work on the IO dispatcher)
+  - cache-first reads (`Kosha.load`, JSON files) and the outbox of new entries (client ids, sent by WorkManager when back online)
+  - offline and demo banners, the shared month and currency, preferences applied at once, the app language
+- **M4 Add** (`feature:add`): every 02-add board, keypad, guesses, Next, transfers with the fee sheet, Add another, Undo, offline save, haptics, Describe it and the receipt camera (AI), app shortcuts.
+- **M5 Overview, Activity, Ask** (`feature:overview`, `feature:activity`, header in `core:ui`): every 03-overview, 04-activity and 07-ask board, quick add (port of quick-add.ts with its tests), the recap card.
+- **M6 Recurring and Accounts** (`feature:recurring`, `feature:accounts`): every 05 board and the 06 account boards, gains sheet, the Canvas net worth chart, document zips.
+- **M7 Reconcile and Import** (`feature:statements`): the reconcile and import flows; files are parsed on the server and the pure statement helpers are ported with tests; share target for statements.
+- **M8 Settings and Welcome** (`feature:settings`, `feature:welcome`): every 08 board, browser hand-off for the web-only pages, and the welcome flow.
+- **M9 AI**: Describe it, receipts, auto-categorise, recap, Ask, AI settings, providers, privacy, log, and AI hints in reconcile and import. Each one renders only when `meta.ai` has it on.
+- **M10 Polish**:
+  - quick-add home-screen widget (Glance), per-app languages (`locales_config`), and money read aloud with the currency's name
+  - release build with R8 and an optional upload key from `keystore.properties`; `bundleRelease` produces the .aab
+  - `TourTest` (instrumented): signs in to a dev server as the demo, opens every main screen in light and dark, saves screenshots (run with `adb reverse tcp:3000 tcp:3000` and `-Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true`, then `adb pull /sdcard/Android/data/app.getkosha/files/tour`)
 
-- Typed client for `/api/v1` and `/api/app`. Errors are `{ error: { code, message, issues } }`, and `issues[].path` maps to fields. `Accept-Language` follows the app's language.
-- Room cache: accounts, categories, payees, recent transactions per month, recurring, settings, month overview and net worth. Reads go cache-first with a background refresh, and nothing polls (120 requests a minute).
-- Outbox: new transactions only, each with a client `id`, sent in order by WorkManager when online. Rejected entries are dropped and reported. Lists show "waiting" rows.
-- Global state: selected month, display currency, `meta`, settings. Day and month maths use the user's time zone from settings (`java.time`).
-- Loading and Offline states.
+Checks: `./gradlew test lint` passes, and so does the tour test on the Pixel 10 Pro emulator (Android 17). The tour found and fixed a launch crash (the current month was parsed from the time zone name), network reads on the main thread, and the web's unrounded converted amounts. I compared the light and dark screenshots of Overview, Activity, Add, Accounts and Settings with their PNGs, and they match closely.
 
-### M4 · Add
+### Still open
 
-- Every `02-add-*` board: keypad, tiles, payee field with `search_payees` guesses (`count` and `averageAmount` give "14 times" and "usually €28"), the category Next flow, account, date, time and note sheets, income, transfer with the fee sheet, Add another, Undo toast (5 s), offline save, haptics.
-- App shortcuts: Add expense, Add income, Scan receipt.
+- **On-device review isn't complete.** The device panel failed all session (its screen-streaming helper crashes), so the only screenshots come from the tour test. Not yet checked:
+  - neutral mode and the other four accents
+  - 360dp width and the largest font
+  - TalkBack
+  - the sheets and states inside each screen (the tour opens screens, not sheets)
+- **Security:** the app clients skip consent on a custom URL scheme (see "Other notes"). The fix is a claimed HTTPS redirect with `assetlinks.json`, which needs the release signing key's fingerprint.
+- **Play internal testing:** needs a Play Console app and an upload key (`keystore.properties`). Wear OS isn't started.
+- **Server gaps that remain** (each has a workaround in the app, marked `ponytail`):
+  - variable bills can't be saved (the server stores `variable` only for transfers; the web wins)
+  - `update_recurring_payment` has no account
+  - `Transaction.transfer` carries no provider
+  - no payslip count per schedule, and no usage count for Balance correction
+  - TagView sums its entries by category on the phone
+  - an offline entry with "No event" loses that choice
+- **App gaps:**
+  - the `motion` preference only reaches the charts; other animations don't follow it yet
+  - a card's Pay opens Add as a transfer with no account or amount filled in
+  - `feature:accounts` borrows `feature:recurring`'s helper file (`Kit.kt`); move it to `core:ui`
 
-### M5 · Overview and Activity
+## Gaps found at the start
 
-- Overview cards, pace chart, Needs attention, Coming up, Where it went, Net worth. Month, currency and search sheets with quick add (port `quick-add.ts` and its tests from `core.test.ts`). Account menu.
-- Activity with filters, swipe to delete and duplicate, tag and event view, transaction and transfer detail, delete confirm, attachments.
-
-### M6 · Recurring and Accounts
-
-- Recurring list, detail, form, payment sheet, documents (zip and share).
-- Accounts with the net worth chart, account and investment detail, account form, Fix balance, gains sheet, exchanges.
-
-### M7 · Reconcile and Import
-
-- Reconcile start, tick and done (`check_statement`, `reconcile_account`, `undo_reconciliation`).
-- Import choose, accounts, payees, done (`/api/app/import/*`). A share target for CSV, OFX, QFX and PDF.
-- Decide then whether `matchLines`, `pairTransfers` and `payeeFor` (pure, in `statement.ts`) are ported to Kotlin or move to a server endpoint. Prefer the endpoint, so there is one implementation.
-
-### M8 · Settings and onboarding
-
-- Every `08-settings-*` screen. Browser hand-off for Security and Delete account.
-- Welcome flow (`/welcome` logic: shown when there are no accounts), FirstOverview, empty states.
-
-### M9 · AI
-
-- Describe it, receipt camera (CameraX), filled-by-AI state, recap card, Ask Kosha, AI settings, provider, privacy, log, and AI hints in reconcile and import. Nothing shows when `meta.ai` says a feature is off.
-
-### M10 · Polish and release
-
-- Dark and neutral pass on every screen, hide amounts, density, number font, animations (system reduce-motion counts as Reduced), every language, TalkBack, large fonts, the Glance quick-add widget, Play internal testing.
-
-## Gaps: server work still needed (before the milestone named)
+Resolved by later server work on `feat/mobile-app-api`: transaction `time` and `attachmentCount`, transfer `time`, and app endpoints that mirror the web's own reads: dashboard (pace curves), accounts-overview (per-account history and flows), subscriptions (payment history), payee-history, days with entries, recap, reconcile, and one transaction by id. What remains is under "Still open".
 
 Found by comparing the designs with `api-contract.ts`. Each item needs a small change to the public API or `/api/app`. Do each one in the web repo at the start of the milestone that needs it.
 
