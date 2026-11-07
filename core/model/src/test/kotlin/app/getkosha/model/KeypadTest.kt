@@ -11,7 +11,6 @@ class KeypadTest {
     private fun type(keys: String, decimals: Int = 2) = keys.fold("") { acc, c ->
         val key = when (c) {
             '.' -> Key.Dot
-            'z' -> Key.DoubleZero
             '<' -> Key.Delete
             '+' -> Key.Operator(Op.Add)
             '-' -> Key.Operator(Op.Subtract)
@@ -27,17 +26,14 @@ class KeypadTest {
         assertEquals("5", type("05"))
         assertEquals("0", type("0"))
         assertEquals("0", type("00"))
-        assertEquals("", type("z"))
-        assertEquals("0", type("0z"))
-        assertEquals("100", type("1z"))
+        assertEquals("100", type("100"))
         assertEquals("12345678", type("123456789"))
-        assertEquals("1234567", type("1234567z"))
     }
 
     @Test fun decimals() {
         assertEquals("0.", type("."))
         assertEquals("12.5", type("12.5."))
-        assertEquals("12.50", type("12.5z"))
+        assertEquals("12.50", type("12.50"))
         assertEquals("12.05", type("12.057"))
         assertEquals("12", type("12.", decimals = 0))
         assertEquals("0.0", type(".0"))
@@ -50,6 +46,7 @@ class KeypadTest {
         assertEquals("24.07+5.5", type("24.07+5.5"))
         assertEquals("24.07+0.", type("24.07+."))
         assertEquals("1+0", type("1+00+<"))
+        assertEquals("1", type("12<"))
         assertEquals(Op.Add, Keypad.pendingOperator("12+"))
         assertNull(Keypad.pendingOperator("12+3"))
         assertEquals("", Keypad.press("12+3", Key.Clear))

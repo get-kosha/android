@@ -6,7 +6,7 @@
     <string name="kit_lead">Kosha draws its own controls, so entry feels the same on iOS and Android and never waits for a system picker.</string>
     <string name="kit_keypad">Amount keypad</string>
     <string name="kit_keypad_lead">Used everywhere an amount is entered. Digits type straight into the amount, and a fourth column does the maths.</string>
-    <string name="kit_keypad_notes">• + − × ÷ work on the amount. Kosha keeps the sum and saves the result.\n• 00 for round amounts. The decimal key follows the currency.\n• Hold backspace to clear.</string>
+    <string name="kit_keypad_notes">• + − × ÷ work on the amount. Kosha keeps the sum and saves the result.\n• The decimal key follows the currency.\n• Backspace sits in the keypad; hold it to clear.</string>
     <string name="kit_tiles">Tile row</string>
     <string name="kit_tiles_lead">Account, category, date and note above the payee. Empty is dashed, a guess is grey, a sparkle marks an AI guess.</string>
     <string name="kit_date">Date</string>

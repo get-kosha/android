@@ -2352,6 +2352,12 @@
     <string name="app_add_clear_payee">Tegenpartij wissen</string>
     <string name="app_add_time_row">Tijd, %1$s, wijzigen</string>
     <string name="app_add_back_to_date">Terug naar datum</string>
+    <string name="app_add_repeat">Herhalen</string>
+    <string name="app_add_repeat_once">Herhaalt niet</string>
+    <string name="app_add_repeat_custom">Aangepast</string>
+    <string name="app_add_repeat_note">Kosha bewaart dit als terugkerende betaling vanaf de datum. Wijzig of stop hem wanneer je wilt in Terugkerend.</string>
+    <string name="app_add_repeat_offline">Herhalende boekingen hebben een verbinding nodig. Voeg hem nu eenmalig toe of probeer het opnieuw als je online bent.</string>
+    <string name="app_add_repeat_label">Herhalen, %1$s</string>
     <string name="app_rec_asks_each_time">Kosha vraagt elke keer om het bedrag</string>
     <string name="app_rec_asks_that_day">Kosha vraagt die dag om het bedrag</string>
     <string name="app_rec_attach_bill">Rekening bijvoegen</string>

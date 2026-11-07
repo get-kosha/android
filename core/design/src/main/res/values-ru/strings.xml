@@ -2490,6 +2490,12 @@
     <string name="app_add_clear_payee">Очистить контрагента</string>
     <string name="app_add_time_row">Время, %1$s, изменить</string>
     <string name="app_add_back_to_date">Назад к дате</string>
+    <string name="app_add_repeat">Повтор</string>
+    <string name="app_add_repeat_once">Не повторяется</string>
+    <string name="app_add_repeat_custom">Своё</string>
+    <string name="app_add_repeat_note">Kosha сохранит это как регулярный платёж с этой даты. Изменить или завершить его можно в разделе «Регулярные».</string>
+    <string name="app_add_repeat_offline">Для повторяющихся записей нужна сеть. Добавьте запись один раз сейчас или повторите, когда появится сеть.</string>
+    <string name="app_add_repeat_label">Повтор, %1$s</string>
     <string name="app_rec_asks_each_time">Kosha каждый раз спрашивает сумму</string>
     <string name="app_rec_asks_that_day">Kosha спросит сумму в этот день</string>
     <string name="app_rec_attach_bill">Прикрепить счёт</string>

@@ -152,7 +152,7 @@ internal fun AddScreen(m: AddModel) {
         var top by remember { mutableStateOf(0.dp) }
         var bottom by remember { mutableStateOf(0.dp) }
         // The amount takes the room the rest leaves; on short screens or with big fonts the whole screen scrolls.
-        val amountHeight = (total - top - bottom).coerceAtLeast(if (payeeFocused) 76.dp else 132.dp)
+        val amountHeight = (total - top - bottom).coerceAtLeast(if (payeeFocused) 76.dp else 184.dp)
         Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
             Header(m, ui, Modifier.onSizeChanged { top = with(density) { it.height.toDp() } })
             Box(Modifier.fillMaxWidth().height(amountHeight).padding(horizontal = 16.dp), contentAlignment = Alignment.Center) {
@@ -240,7 +240,8 @@ private fun Amount(m: AddModel, compact: Boolean) {
             m.kind == EntryKind.Income -> stringResource(R.string.app_add_income_note)
             else -> null
         }
-        AmountDisplay(m.input, m.currency, m.kind, { m.input = it }, note = note)
+        AmountDisplay(m.input, m.currency, m.kind, note = note)
+        if (!compact) Pills(m)
     }
 }
 
@@ -274,22 +275,8 @@ private fun Tiles(m: AddModel) {
     val day = dayLabel(m.day, today)
     val shownTime = timeText(m.time ?: Dates.now(m.meta.tz))
     TileRow(Modifier.padding(horizontal = 16.dp)) {
+        // The account is the pill under the amount; three tiles stay: category, date, note.
         if (!m.transfer) {
-            val account = m.account
-            FieldTile(
-                label = account?.name ?: stringResource(R.string.add_no_account),
-                onClick = { m.sheet = AddSheet.Account },
-                modifier = cell,
-                icon = "wallet",
-                pick = if (m.accountGuessed) Pick.Guess else Pick.Picked,
-                description = when {
-                    account == null -> stringResource(R.string.add_chip_account_none)
-                    m.accountGuessed -> stringResource(R.string.app_add_account_guessed, account.name)
-                    else -> stringResource(R.string.add_chip_account, account.name)
-                },
-                // The account's colour square; neutral mode shows the wallet icon instead.
-                leading = if (c.accountColours && account != null) ({ AccountDot(c.account(m.colorIndex(account.id)), size = 18.dp) }) else null,
-            )
             val cat = m.chosenCategory
             val pick = when {
                 m.categoryId != null -> Pick.Picked

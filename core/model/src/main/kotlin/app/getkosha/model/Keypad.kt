@@ -18,7 +18,6 @@ object Keypad {
 
     sealed interface Key {
         data class Digit(val digit: Int) : Key
-        data object DoubleZero : Key
         data object Dot : Key
         data class Operator(val op: Op) : Key
         /** Backspace. */
@@ -59,11 +58,11 @@ object Keypad {
                 seg.isEmpty() -> "${input}0."
                 else -> "$input."
             }
-            is Key.Digit, Key.DoubleZero -> {
-                val add = if (key is Key.Digit) key.digit.toString() else "00"
-                if (add.all { it == '0' } && (seg.isEmpty() || seg == "0")) {
-                    // A first 0 types "0"; another zero, or 00, on "0" or nothing does nothing.
-                    return if (seg.isEmpty() && add == "0") input + "0" else input
+            is Key.Digit -> {
+                val add = key.digit.toString()
+                if (add == "0" && (seg.isEmpty() || seg == "0")) {
+                    // A first 0 types "0"; another zero on "0" does nothing.
+                    return if (seg.isEmpty()) input + "0" else input
                 }
                 val dot = seg.indexOf('.')
                 if (dot >= 0) {

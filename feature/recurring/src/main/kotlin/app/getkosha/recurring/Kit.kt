@@ -224,7 +224,7 @@ fun rememberAmountInput(minor: Long?, currency: String, vararg keys: Any?): Amou
 /** The amount line and the 4×4 keypad. */
 @Composable
 fun AmountPad(state: AmountInput, currency: String, kind: EntryKind = EntryKind.Transfer, note: String? = null, keypad: Boolean = true) {
-    AmountDisplay(state.shown, currency, kind, { state.fromDisplay(it) }, note = note)
+    AmountDisplay(state.shown, currency, kind, note = note)
     if (keypad) AmountKeypad(state.keypad, { state.fromKeypad(it) }, decimals = Money.decimals(currency))
 }
 

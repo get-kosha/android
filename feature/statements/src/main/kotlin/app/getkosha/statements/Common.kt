@@ -161,7 +161,7 @@ fun AmountSheet(title: String, start: Long?, currency: String, signed: Boolean, 
     var negative by rememberSaveable { mutableStateOf((start ?: 0) < 0) }
     Sheet(title, onDismiss) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            AmountDisplay(input, currency, if (negative) EntryKind.Expense else EntryKind.Transfer, { input = it })
+            AmountDisplay(input, currency, if (negative) EntryKind.Expense else EntryKind.Transfer)
             if (signed) {
                 Chip(
                     stringResource(R.string.app_rcn_below_zero),

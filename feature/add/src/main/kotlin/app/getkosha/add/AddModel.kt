@@ -47,6 +47,8 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonObject
@@ -57,7 +59,20 @@ import java.util.Base64
 import java.util.UUID
 import kotlin.math.abs
 
-internal enum class AddSheet { Account, To, Date, Time, Note, Category, Fee, Describe }
+internal enum class AddSheet { Account, To, Date, Time, Note, Category, Fee, Describe, Repeat }
+
+/**
+ * How an entry repeats, which saves it as a schedule (create_recurring) instead of a single entry: every [every]
+ * [unit]s from its day, until [endDay]. [kind] is "repetitive" for a bill and "subscription" for a subscription;
+ * income and transfers use "repetitive", as the Recurring form does.
+ */
+internal data class Repeat(
+    val every: Int = 1,
+    val unit: String = "month",
+    val kind: String = "repetitive",
+    val endDay: LocalDate? = null,
+    val autoPay: Boolean = true,
+)
 
 /** Where AI filled the form from. */
 internal enum class Filled { Text, Receipt }
@@ -137,6 +152,9 @@ internal class AddModel(route: Route.Add) : ViewModel() {
     var day by mutableStateOf(today)
     /** Null until changed: then today's entries get the moment they're saved, as on the web. */
     var time by mutableStateOf<LocalTime?>(null)
+
+    /** Set from the Repeat pill: the entry becomes a bill, subscription, recurring income or recurring transfer. */
+    var repeat by mutableStateOf<Repeat?>(null)
     var note by mutableStateOf("")
     var tags by mutableStateOf<List<String>>(emptyList())
     /** Until an event is picked, the entry joins the event its day falls in. */
@@ -357,9 +375,11 @@ internal class AddModel(route: Route.Add) : ViewModel() {
         val amount = minor ?: return ui.error(ui.s(R.string.add_error_amount))
         val from = account ?: return ui.error(ui.s(R.string.add_error_no_account))
         if (meta.demo) return ui.error(ui.s(R.string.common_demo_read_only))
+        repeat?.let { r -> if (transfer) return saveRecurring(ui, again, amount, from, r, null, null) }
         if (transfer) return saveTransfer(ui, again, amount, from)
         val cat = top ?: chosen ?: return ui.error(ui.s(R.string.add_error_category))
         val subId = if (top != null) sub else subcategoryId.takeIf { categoryId == cat }
+        repeat?.let { r -> return saveRecurring(ui, again, amount, from, r, cat, subId) }
         val signed = if (kind == EntryKind.Income) amount else -amount
         val catName = meta.categories.firstOrNull { it.id == (subId ?: cat) }?.name ?: ""
         val entry = NewTransaction(
@@ -468,6 +488,96 @@ internal class AddModel(route: Route.Add) : ViewModel() {
         }
     }
 
+    /**
+     * Saves a repeating entry as a schedule (create_recurring), the way the Recurring form does. When its day is
+     * today or past, that payment is recorded at once (update_recurring_payment → paid), so the entry shows up now
+     * whatever "Record payments automatically" says; later ones follow the schedule. Schedules need a connection.
+     */
+    private fun saveRecurring(ui: AddUi, again: Boolean, amount: Long, from: Wallet, r: Repeat, cat: String?, subId: String?) {
+        val to = if (transfer) toAccount ?: run {
+            sheet = AddSheet.To
+            return ui.error(ui.s(R.string.add_error_to_account))
+        } else null
+        val catName = meta.categories.firstOrNull { it.id == (subId ?: cat) }?.name ?: ""
+        val name = payee.trim().ifEmpty { if (to != null) "${from.name} → ${to.name}" else catName }
+        val signed = if (kind == EntryKind.Income) amount else -amount
+        val body = buildJsonObject {
+            put("name", JsonPrimitive(name))
+            put("accountId", JsonPrimitive(from.id))
+            put("amount", JsonPrimitive(signed))
+            if (to == null) put("categoryId", JsonPrimitive(subId ?: cat))
+            put("every", JsonPrimitive(r.every))
+            put("unit", JsonPrimitive(r.unit))
+            put("startDay", JsonPrimitive(day.toString()))
+            put("endDay", r.endDay?.let { JsonPrimitive(it.toString()) } ?: JsonNull)
+            put("autoPay", JsonPrimitive(r.autoPay))
+            put("kind", JsonPrimitive(if (kind == EntryKind.Expense) r.kind else "repetitive"))
+            put("note", JsonPrimitive(note.trim()))
+            if (to != null) {
+                put("toAccountId", JsonPrimitive(to.id))
+                // Between currencies, what arrives each time.
+                if (to.currency != from.currency) put("toAmount", JsonPrimitive(sides.received))
+            }
+        }
+        val staged = files.toList()
+        val first = day
+        saving = true
+        sheet = null
+        viewModelScope.launch {
+            val id: String
+            var paid: String? = null
+            try {
+                id = kosha.api.post<JsonObject, JsonObject>("/api/v1/recurring", body)["id"]!!.let { (it as JsonPrimitive).content }
+                if (!first.isAfter(today)) {
+                    val payment = kosha.api.patch<JsonObject, JsonObject>("/api/v1/recurring/$id/payments/$first", buildJsonObject { put("status", JsonPrimitive("paid")) })
+                    paid = (payment["payment"] as? JsonObject)?.get("transactionId")?.let { (it as? JsonPrimitive)?.contentOrNull }
+                }
+            } catch (e: IOException) {
+                saving = false
+                return@launch ui.error(ui.s(R.string.app_add_repeat_offline))
+            } catch (e: Exception) {
+                saving = false
+                return@launch ui.error((e as? ApiException)?.message?.ifBlank { null } ?: ui.s(R.string.add_error_add))
+            }
+            saving = false
+            kosha.local.lastAccount = from.id
+            ui.success()
+            kosha.changed()
+            // Tags, the event and files belong to the payment's entry, not the schedule.
+            if (paid != null && to == null && (tags.isNotEmpty() || eventPicked)) {
+                runCatching {
+                    kosha.api.send("PATCH", "/api/v1/transactions", buildJsonObject {
+                        put("transactions", JsonArray(listOf(buildJsonObject {
+                            put("id", JsonPrimitive(paid))
+                            put("tags", JsonArray(tags.map(::JsonPrimitive)))
+                            if (eventPicked) put("eventId", eventChoice?.let(::JsonPrimitive) ?: JsonNull)
+                        })))
+                    })
+                }
+            }
+            if (paid != null && staged.isNotEmpty() && meta.attachments) upload(ui, paid, staged)
+            val added = ui.s(
+                when {
+                    to != null -> R.string.subs_transfer_added
+                    kind == EntryKind.Income -> R.string.subs_income_added
+                    r.kind == "subscription" -> R.string.subs_subscription_added
+                    else -> R.string.subs_bill_added
+                },
+            )
+            ui.toast("$added · ${Money.format(signed, from.currency, kosha.language, if (to != null) Sign.None else Sign.Always)}, $name") {
+                kosha.scope.launch {
+                    // The schedule first: deleting a schedule's payment on its own would only mark it skipped.
+                    runCatching {
+                        kosha.api.send("DELETE", "/api/v1/recurring/$id")
+                        if (paid != null) kosha.api.send("POST", "/api/v1/transactions/delete", KoshaJson.encodeToJsonElement(DeleteIds(listOf(paid))))
+                    }.onFailure { ui.error((it as? ApiException)?.message ?: ui.s(R.string.tx_delete_failed)) }
+                    kosha.changed()
+                }
+            }
+            if (again) next() else ui.close()
+        }
+    }
+
     /** delete_transactions takes a half's id, so Undo finds the outgoing half by the transfer's id. */
     private suspend fun undoTransfer(ui: AddUi, t: SavedTransfer) {
         runCatching {
@@ -484,6 +594,7 @@ internal class AddModel(route: Route.Add) : ViewModel() {
     private fun next() {
         input = ""
         payee = ""
+        repeat = null
         picked = null
         suggestions = emptyList()
         categoryId = null

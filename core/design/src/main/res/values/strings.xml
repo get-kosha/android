@@ -2352,6 +2352,12 @@
     <string name="app_add_clear_payee">Clear payee</string>
     <string name="app_add_time_row">Time, %1$s, change</string>
     <string name="app_add_back_to_date">Back to date</string>
+    <string name="app_add_repeat">Repeat</string>
+    <string name="app_add_repeat_once">Doesn’t repeat</string>
+    <string name="app_add_repeat_custom">Custom</string>
+    <string name="app_add_repeat_note">Kosha saves this as a recurring payment from its date. Change or end it any time in Recurring.</string>
+    <string name="app_add_repeat_offline">Repeating entries need a connection. Add it once now, or try again when you’re online.</string>
+    <string name="app_add_repeat_label">Repeat, %1$s</string>
     <string name="app_rec_asks_each_time">Kosha asks for the amount each time</string>
     <string name="app_rec_asks_that_day">Kosha asks for the amount that day</string>
     <string name="app_rec_attach_bill">Attach bill</string>

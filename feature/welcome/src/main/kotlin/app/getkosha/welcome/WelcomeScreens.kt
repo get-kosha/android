@@ -582,7 +582,7 @@ private fun AccountCard(
             val which = sheet!!
             var input by remember(which) { mutableStateOf(if (which == "amount") row.amount else row.extra) }
             Sheet(stringResource(if (which == "amount") first else second!!), { sheet = null }) {
-                AmountDisplay(input, row.currency, EntryKind.Transfer, { input = it })
+                AmountDisplay(input, row.currency, EntryKind.Transfer)
                 AmountKeypad(input, { input = it }, decimals = Money.decimals(row.currency))
                 Spacer(Modifier.height(12.dp))
                 Button(

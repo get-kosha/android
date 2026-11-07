@@ -2596,6 +2596,12 @@
     <string name="app_add_clear_payee">Effacer le tiers</string>
     <string name="app_add_time_row">Heure, %1$s, modifier</string>
     <string name="app_add_back_to_date">Retour à la date</string>
+    <string name="app_add_repeat">Répéter</string>
+    <string name="app_add_repeat_once">Ne se répète pas</string>
+    <string name="app_add_repeat_custom">Personnalisé</string>
+    <string name="app_add_repeat_note">Kosha l’enregistre comme paiement récurrent à partir de sa date. Modifiez-le ou arrêtez-le à tout moment dans Récurrents.</string>
+    <string name="app_add_repeat_offline">Les opérations répétées nécessitent une connexion. Ajoutez-la une fois maintenant, ou réessayez une fois en ligne.</string>
+    <string name="app_add_repeat_label">Répéter, %1$s</string>
     <string name="app_rec_asks_each_time">Kosha vous demande le montant à chaque fois</string>
     <string name="app_rec_asks_that_day">Kosha vous demande le montant ce jour-là</string>
     <string name="app_rec_attach_bill">Joindre la facture</string>

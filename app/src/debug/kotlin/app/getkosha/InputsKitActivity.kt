@@ -169,7 +169,7 @@ private fun KeypadCard() {
             ),
             kind, { kind = it },
         )
-        AmountDisplay(input, "eur", kind, { input = it }, note = "≈ " + Money.format(156090, "inr", locale) + " · HDFC Savings")
+        AmountDisplay(input, "eur", kind, note = "≈ " + Money.format(156090, "inr", locale) + " · HDFC Savings")
         AmountKeypad(input, { input = it })
     }
 }

@@ -427,7 +427,7 @@ internal fun AmountSheet(minor: Long, currency: String, kind: EntryKind, onDismi
     var input by remember { mutableStateOf(plainAmount(minor)) }
     val value = Keypad.minorUnits(input, Money.decimals(currency))
     Sheet(title, onDismiss) {
-        AmountDisplay(input, currency, kind, { input = it })
+        AmountDisplay(input, currency, kind)
         AmountKeypad(input, { input = it }, Modifier.padding(vertical = 8.dp), decimals = Money.decimals(currency))
         Button(stringResource(R.string.common_save), { value?.let(onSave) }, Modifier.fillMaxWidth(), enabled = value != null)
     }

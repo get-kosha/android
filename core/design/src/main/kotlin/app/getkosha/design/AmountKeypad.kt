@@ -61,15 +61,14 @@ fun amountText(input: String, currency: String, kind: EntryKind, locale: java.ut
 }
 
 /**
- * The amount being entered: the expression above it when it has an operator, the amount in the middle
- * (60, or 46 when longer than 8 characters), backspace on the right (hold to clear), and a note below.
+ * The amount being entered: the expression above it when it has an operator, the amount (60, or 46 when longer
+ * than 8 characters), and a note below. Backspace is on the keypad.
  */
 @Composable
 fun AmountDisplay(
     input: String,
     currency: String,
     kind: EntryKind,
-    onInput: (String) -> Unit,
     modifier: Modifier = Modifier,
     note: String? = null,
 ) {
@@ -88,7 +87,7 @@ fun AmountDisplay(
         Box(Modifier.fillMaxWidth().padding(vertical = 6.dp), contentAlignment = Alignment.Center) {
             KText(
                 text,
-                Modifier.padding(horizontal = 48.dp).semantics { liveRegion = LiveRegionMode.Polite },
+                Modifier.padding(horizontal = 16.dp).semantics { liveRegion = LiveRegionMode.Polite },
                 style = KoshaTheme.type.amount.let { if (text.length > 8) it.copy(fontSize = 46.sp) else it },
                 color = when {
                     input.isEmpty() -> c.ink3
@@ -98,22 +97,14 @@ fun AmountDisplay(
                 align = TextAlign.Center,
                 maxLines = 1,
             )
-            if (input.isNotEmpty()) {
-                HoldKey(
-                    Modifier.align(Alignment.CenterEnd),
-                    label = stringResource(R.string.app_key_delete),
-                    onClick = { onInput(Keypad.press(input, Key.Delete)) },
-                    onHold = { onInput("") },
-                ) { PhIcon("backspace", size = 26.dp, tint = c.ink3) }
-            }
         }
         if (note != null) KText(note, style = KoshaTheme.type.small, color = c.ink2, maxLines = 2, align = TextAlign.Center)
     }
 }
 
 /**
- * The 4×4 keypad: digits, `.`, `0` and `00`, and a column of ÷ × − + on soft keys. A light haptic tick on
- * each press. The decimal key follows the currency: hidden for currencies without decimals.
+ * The 4×4 keypad: digits, `.`, `0` and backspace (hold to clear), and a column of ÷ × − + on soft keys. A light
+ * haptic tick on each press. The decimal key follows the currency: hidden for currencies without decimals.
  */
 @Composable
 fun AmountKeypad(input: String, onInput: (String) -> Unit, modifier: Modifier = Modifier, decimals: Int = 2) {
@@ -127,7 +118,7 @@ fun AmountKeypad(input: String, onInput: (String) -> Unit, modifier: Modifier = 
         listOf(Key.Digit(1), Key.Digit(2), Key.Digit(3), Key.Operator(Op.Divide)),
         listOf(Key.Digit(4), Key.Digit(5), Key.Digit(6), Key.Operator(Op.Multiply)),
         listOf(Key.Digit(7), Key.Digit(8), Key.Digit(9), Key.Operator(Op.Subtract)),
-        listOf(Key.Dot, Key.Digit(0), Key.DoubleZero, Key.Operator(Op.Add)),
+        listOf(Key.Dot, Key.Digit(0), Key.Delete, Key.Operator(Op.Add)),
     )
     Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(2.dp)) {
         rows.forEach { row ->
@@ -136,6 +127,7 @@ fun AmountKeypad(input: String, onInput: (String) -> Unit, modifier: Modifier = 
                     Box(Modifier.weight(1f)) {
                         when {
                             key is Key.Operator -> OperatorKey(key.op, on = pending == key.op) { press(key) }
+                            key == Key.Delete -> BackspaceKey(onDelete = { press(Key.Delete) }, onClear = { onInput("") })
                             key == Key.Dot && decimals == 0 -> Spacer(Modifier.height(60.dp))
                             else -> DigitKey(key, press)
                         }
@@ -148,16 +140,8 @@ fun AmountKeypad(input: String, onInput: (String) -> Unit, modifier: Modifier = 
 
 @Composable
 private fun DigitKey(key: Key, press: (Key) -> Unit) {
-    val label = when (key) {
-        is Key.Digit -> key.digit.toString()
-        Key.DoubleZero -> "00"
-        else -> "."
-    }
-    val spoken = when (key) {
-        Key.Dot -> stringResource(R.string.add_key_decimal)
-        Key.DoubleZero -> stringResource(R.string.app_key_double_zero)
-        else -> label
-    }
+    val label = if (key is Key.Digit) key.digit.toString() else "."
+    val spoken = if (key == Key.Dot) stringResource(R.string.add_key_decimal) else label
     Box(
         Modifier
             .fillMaxWidth()
@@ -167,8 +151,32 @@ private fun DigitKey(key: Key, press: (Key) -> Unit) {
             .clearAndSetSemantics { contentDescription = spoken },
         contentAlignment = Alignment.Center,
     ) {
-        KText(label, style = KoshaTheme.type.key.let { if (key == Key.DoubleZero) it.copy(fontSize = 24.sp) else it })
+        KText(label, style = KoshaTheme.type.key)
     }
+}
+
+/** Backspace in the keypad's last row: a tap deletes one character, holding clears the amount. */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun BackspaceKey(onDelete: () -> Unit, onClear: () -> Unit) {
+    val view = LocalView.current
+    val label = stringResource(R.string.app_key_delete)
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .clip(RoundedCornerShape(14.dp))
+            .combinedClickable(
+                role = Role.Button,
+                onClick = onDelete,
+                onLongClick = {
+                    view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                    onClear()
+                },
+            )
+            .clearAndSetSemantics { contentDescription = label },
+        contentAlignment = Alignment.Center,
+    ) { PhIcon("backspace", size = 28.dp, tint = KoshaTheme.colors.ink2) }
 }
 
 @Composable

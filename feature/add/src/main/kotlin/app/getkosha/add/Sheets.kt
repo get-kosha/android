@@ -128,6 +128,7 @@ internal fun Sheets(m: AddModel, ui: AddUi) {
         AddSheet.Category -> CategorySheet(m, ui, close)
         AddSheet.Fee -> FeeSheet(m, close)
         AddSheet.Describe -> DescribeSheet(m, ui, close)
+        AddSheet.Repeat -> RepeatSheet(m, close)
         null -> {}
     }
 }

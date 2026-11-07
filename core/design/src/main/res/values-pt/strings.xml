@@ -2596,6 +2596,12 @@
     <string name="app_add_clear_payee">Limpar favorecido</string>
     <string name="app_add_time_row">Hora, %1$s, alterar</string>
     <string name="app_add_back_to_date">Voltar à data</string>
+    <string name="app_add_repeat">Repetir</string>
+    <string name="app_add_repeat_once">Não se repete</string>
+    <string name="app_add_repeat_custom">Personalizado</string>
+    <string name="app_add_repeat_note">O Kosha salva isto como pagamento recorrente a partir da data. Altere ou encerre quando quiser em Recorrentes.</string>
+    <string name="app_add_repeat_offline">Lançamentos que se repetem precisam de conexão. Adicione uma vez agora ou tente de novo quando estiver online.</string>
+    <string name="app_add_repeat_label">Repetir, %1$s</string>
     <string name="app_rec_asks_each_time">O Kosha pergunta o valor a cada vez</string>
     <string name="app_rec_asks_that_day">O Kosha pergunta o valor nesse dia</string>
     <string name="app_rec_attach_bill">Anexar conta</string>

@@ -2236,6 +2236,12 @@
     <string name="app_add_clear_payee">取引先を消去</string>
     <string name="app_add_time_row">時刻、%1$s、変更</string>
     <string name="app_add_back_to_date">日付に戻る</string>
+    <string name="app_add_repeat">繰り返し</string>
+    <string name="app_add_repeat_once">繰り返さない</string>
+    <string name="app_add_repeat_custom">カスタム</string>
+    <string name="app_add_repeat_note">この日付から定期支払いとして保存します。定期の画面でいつでも変更・終了できます。</string>
+    <string name="app_add_repeat_offline">繰り返しの記録にはネット接続が必要です。今は1回だけ追加するか、オンラインになってからもう一度お試しください。</string>
+    <string name="app_add_repeat_label">繰り返し、%1$s</string>
     <string name="app_rec_asks_each_time">毎回Koshaが金額を確認します</string>
     <string name="app_rec_asks_that_day">当日にKoshaが金額を確認します</string>
     <string name="app_rec_attach_bill">請求書を添付</string>

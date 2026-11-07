@@ -631,7 +631,7 @@ private fun FiltersSheet(start: Filters, month: YearMonth, m: Meta, onApply: (Fi
             "min", "max" -> {
                 val startValue = if (page == "min") draft.minAmount else draft.maxAmount
                 var input by remember(page) { mutableStateOf(startValue?.let { plainAmount(it) } ?: "") }
-                AmountDisplay(input, m.primary, EntryKind.Transfer, { input = it }, note = stringResource(R.string.tx_amount_note))
+                AmountDisplay(input, m.primary, EntryKind.Transfer, note = stringResource(R.string.tx_amount_note))
                 AmountKeypad(input, { input = it }, Modifier.padding(vertical = 8.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Button(stringResource(R.string.tx_clear), {

@@ -2596,6 +2596,12 @@
     <string name="app_add_clear_payee">Cancella beneficiario</string>
     <string name="app_add_time_row">Ora, %1$s, cambia</string>
     <string name="app_add_back_to_date">Torna alla data</string>
+    <string name="app_add_repeat">Ripeti</string>
+    <string name="app_add_repeat_once">Non si ripete</string>
+    <string name="app_add_repeat_custom">Personalizzato</string>
+    <string name="app_add_repeat_note">Kosha lo salva come pagamento ricorrente dalla sua data. Modificalo o terminalo quando vuoi in Ricorrenti.</string>
+    <string name="app_add_repeat_offline">I movimenti che si ripetono richiedono una connessione. Aggiungilo una volta ora o riprova quando sei online.</string>
+    <string name="app_add_repeat_label">Ripeti, %1$s</string>
     <string name="app_rec_asks_each_time">Kosha ti chiede l\'importo ogni volta</string>
     <string name="app_rec_asks_that_day">Kosha ti chiede l\'importo quel giorno</string>
     <string name="app_rec_attach_bill">Allega bolletta</string>

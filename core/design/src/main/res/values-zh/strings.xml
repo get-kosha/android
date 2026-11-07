@@ -2291,6 +2291,12 @@
     <string name="app_add_clear_payee">清除交易对象</string>
     <string name="app_add_time_row">时间，%1$s，更改</string>
     <string name="app_add_back_to_date">返回日期</string>
+    <string name="app_add_repeat">重复</string>
+    <string name="app_add_repeat_once">不重复</string>
+    <string name="app_add_repeat_custom">自定义</string>
+    <string name="app_add_repeat_note">Kosha 会从该日期起将其保存为周期付款。可随时在周期页面修改或结束。</string>
+    <string name="app_add_repeat_offline">重复记录需要联网。现在先添加一次，或联网后再试。</string>
+    <string name="app_add_repeat_label">重复，%1$s</string>
     <string name="app_rec_asks_each_time">Kosha 每次都会询问金额</string>
     <string name="app_rec_asks_that_day">Kosha 会在当天询问金额</string>
     <string name="app_rec_attach_bill">附上账单</string>

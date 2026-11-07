@@ -289,7 +289,7 @@ private fun FeeSheet(fee: Long, currency: String, onDismiss: () -> Unit, onSave:
     var input by remember { mutableStateOf(if (fee == 0L) "" else plainAmount(fee)) }
     val decimals = Money.decimals(currency)
     Sheet(stringResource(R.string.tx_fee_currency, currency.uppercase()), onDismiss) {
-        app.getkosha.design.AmountDisplay(input, currency, EntryKind.Transfer, { input = it })
+        app.getkosha.design.AmountDisplay(input, currency, EntryKind.Transfer)
         app.getkosha.design.AmountKeypad(input, { input = it }, Modifier.padding(vertical = 8.dp), decimals = decimals)
         val value = if (input.isEmpty()) 0L else app.getkosha.model.Keypad.minorUnits(input, decimals)
         Button(stringResource(R.string.common_save), { value?.let(onSave) }, Modifier.fillMaxWidth(), enabled = value != null)

@@ -2352,6 +2352,12 @@
     <string name="app_add_clear_payee">Zahlungspartner leeren</string>
     <string name="app_add_time_row">Uhrzeit, %1$s, ändern</string>
     <string name="app_add_back_to_date">Zurück zum Datum</string>
+    <string name="app_add_repeat">Wiederholen</string>
+    <string name="app_add_repeat_once">Einmalig</string>
+    <string name="app_add_repeat_custom">Eigene</string>
+    <string name="app_add_repeat_note">Kosha speichert das als wiederkehrende Zahlung ab diesem Datum. Ändere oder beende sie jederzeit unter Wiederkehrend.</string>
+    <string name="app_add_repeat_offline">Wiederkehrende Einträge brauchen eine Verbindung. Erfasse ihn jetzt einmalig oder versuche es online erneut.</string>
+    <string name="app_add_repeat_label">Wiederholen, %1$s</string>
     <string name="app_rec_asks_each_time">Kosha fragt jedes Mal nach dem Betrag</string>
     <string name="app_rec_asks_that_day">Kosha fragt an dem Tag nach dem Betrag</string>
     <string name="app_rec_attach_bill">Rechnung anhängen</string>
