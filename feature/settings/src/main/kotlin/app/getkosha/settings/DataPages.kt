@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.text.BasicText
 import androidx.core.content.FileProvider
+import app.getkosha.ui.filesAuthority
 import app.getkosha.design.Button
 import app.getkosha.design.ButtonSize
 import app.getkosha.design.ButtonStyle
@@ -68,7 +69,7 @@ import java.text.NumberFormat
 
 /** The share sheet for a file this app wrote to its cache, through the module's FileProvider. */
 private fun shareFile(context: Context, file: File, type: String) {
-    val uri = FileProvider.getUriForFile(context, "app.getkosha.settings.files", file)
+    val uri = FileProvider.getUriForFile(context, context.filesAuthority(), file)
     val send = Intent(Intent.ACTION_SEND).setType(type).putExtra(Intent.EXTRA_STREAM, uri).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     context.startActivity(Intent.createChooser(send, file.name))
 }

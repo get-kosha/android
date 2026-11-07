@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
+import app.getkosha.ui.filesAuthority
 import app.getkosha.design.AccountDot
 import app.getkosha.design.Button
 import app.getkosha.design.ButtonStyle
@@ -239,7 +240,7 @@ fun DocumentsPage(s: Sub, files: List<ScheduleFile>, onBack: () -> Unit) {
                                     }
                                 }
                             }
-                            val uri = FileProvider.getUriForFile(context, "app.getkosha.files", zip)
+                            val uri = FileProvider.getUriForFile(context, context.filesAuthority(), zip)
                             val send = Intent(Intent.ACTION_SEND).setType("application/zip").putExtra(Intent.EXTRA_STREAM, uri)
                                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             context.startActivity(Intent.createChooser(send, zip.name))

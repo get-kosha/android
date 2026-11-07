@@ -54,3 +54,6 @@ sealed interface Route {
 
 /** The app's NavController, for any screen to open another: `LocalNav.current.navigate(Route.TxDetail(id))`. */
 val LocalNav = staticCompositionLocalOf<NavController> { error("No NavController") }
+
+/** The authority of the app's one FileProvider (core:ui's manifest), for files under cache/attachments, camera, exports and shared. */
+fun android.content.Context.filesAuthority() = "$packageName.files"

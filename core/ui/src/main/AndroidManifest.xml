@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
-        <!-- Exports (Settings › Import & export) go to the share sheet from the cache through this provider. -->
+        <!-- The app's one FileProvider: files written to the cache go to the share sheet and other apps from here
+             (attachments, camera photos, exports, zips of documents). Use filesAuthority() from core:ui. -->
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="app.getkosha.settings.files"
+            android:authorities="${applicationId}.files"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/settings_files" />
+                android:resource="@xml/kosha_files" />
         </provider>
     </application>
 </manifest>

@@ -47,6 +47,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import app.getkosha.ui.filesAuthority
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.getkosha.design.Button
 import app.getkosha.design.ButtonStyle
@@ -80,7 +81,6 @@ internal data class Attachment(val id: String, val name: String, val type: Strin
 /** Up to 10 MB each, as the server takes them. */
 private const val LIMIT = 10L * 1024 * 1024
 
-private fun Context.authority() = "$packageName.activity.files"
 
 /** "240 KB", "1.2 MB". */
 internal fun fileSize(bytes: Long, context: Context): String = android.text.format.Formatter.formatShortFileSize(context, bytes)
@@ -168,7 +168,7 @@ private suspend fun open(context: Context, a: Attachment, bytes: ByteArray) {
     val file = withContext(Dispatchers.IO) {
         File(context.cacheDir, "attachments").apply { mkdirs() }.resolve(a.id + "-" + a.name.replace(Regex("[^A-Za-z0-9._-]"), "_")).apply { writeBytes(bytes) }
     }
-    val uri = FileProvider.getUriForFile(context, context.authority(), file)
+    val uri = FileProvider.getUriForFile(context, context.filesAuthority(), file)
     val intent = Intent(Intent.ACTION_VIEW).setDataAndType(uri, a.type.ifEmpty { "*/*" }).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     try {
         context.startActivity(Intent.createChooser(intent, a.name).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
@@ -216,7 +216,7 @@ internal fun AttachSheet(transactionId: String, onDismiss: () -> Unit) {
     val camera = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { ok -> if (ok) photo?.let { upload(it) } }
     val takePhoto = {
         val file = File(context.cacheDir, "camera").apply { mkdirs() }.resolve("photo-${System.currentTimeMillis()}.jpg")
-        val uri = FileProvider.getUriForFile(context, context.authority(), file)
+        val uri = FileProvider.getUriForFile(context, context.filesAuthority(), file)
         photo = uri
         camera.launch(uri)
     }
