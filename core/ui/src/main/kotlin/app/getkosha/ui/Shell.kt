@@ -103,13 +103,16 @@ fun MoneyText(
     color: Color = KoshaTheme.colors.ink,
     align: TextAlign? = null,
 ) {
-    val text = Money.format(minor, currency, KoshaTheme.locale, sign)
+    val locale = KoshaTheme.locale
+    val text = Money.format(minor, currency, locale, sign)
     val hidden = hideAmounts()
+    val spoken = if (hidden) stringResource(R.string.shell_hide_amounts) else spokenMoney(minor, currency, locale, sign)
     var peek by remember { mutableStateOf(false) }
     val masked = hidden && !peek
     KText(
         if (masked && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) "••••" else text,
         modifier
+            .semantics { contentDescription = spoken }
             .then(if (masked && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) Modifier.blur(7.dp) else Modifier)
             .then(
                 if (hidden) Modifier.pointerInput(Unit) {
@@ -121,6 +124,20 @@ fun MoneyText(
         align = align,
         maxLines = 1,
     )
+}
+
+/**
+ * How TalkBack reads an amount: the currency by name ("minus 29.57 euros") rather than symbols, from ICU's
+ * plural currency format in the app's language.
+ */
+fun spokenMoney(minor: Long, currency: String, locale: java.util.Locale, sign: Sign = Sign.Natural): String {
+    val f = android.icu.text.NumberFormat.getInstance(locale, android.icu.text.NumberFormat.PLURALCURRENCYSTYLE)
+    runCatching { f.currency = android.icu.util.Currency.getInstance(currency.uppercase()) }
+    val digits = Money.decimals(currency)
+    f.minimumFractionDigits = digits
+    f.maximumFractionDigits = digits
+    val value = java.math.BigDecimal.valueOf(minor, 2)
+    return f.format(if (sign == Sign.None) value.abs() else value)
 }
 
 /**
