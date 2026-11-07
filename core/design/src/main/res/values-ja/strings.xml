@@ -2186,4 +2186,6 @@
     <string name="app_next_year">次の年</string>
     <string name="app_month_swipe">概要・アクティビティ・定期を横にスワイプすると 1 か月移動します。</string>
     <string name="app_signout_clears">サインアウトすると、このデバイスに保存された内容は消去されます。</string>
+    <string name="app_widget_name">クイック追加</string>
+    <string name="app_widget_description">ホーム画面から支出や収入を追加できます。</string>
 </resources>

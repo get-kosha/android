@@ -2546,4 +2546,6 @@
     <string name="app_next_year">Año siguiente</string>
     <string name="app_month_swipe">Desliza Resumen, Actividad o Recurrentes hacia un lado para moverte un mes.</string>
     <string name="app_signout_clears">Al cerrar sesión se borra lo que guardó este dispositivo.</string>
+    <string name="app_widget_name">Añadir rápido</string>
+    <string name="app_widget_description">Añade un gasto o un ingreso desde tu pantalla de inicio.</string>
 </resources>

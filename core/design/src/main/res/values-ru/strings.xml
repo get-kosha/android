@@ -2440,4 +2440,6 @@
     <string name="app_next_year">Следующий год</string>
     <string name="app_month_swipe">Проведите вбок на экранах «Обзор», «Операции» или «Регулярные», чтобы сменить месяц.</string>
     <string name="app_signout_clears">При выходе удаляется всё, что сохранено на этом устройстве.</string>
+    <string name="app_widget_name">Быстрое добавление</string>
+    <string name="app_widget_description">Добавляйте расходы и доходы с главного экрана.</string>
 </resources>

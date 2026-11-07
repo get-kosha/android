@@ -2302,4 +2302,6 @@
     <string name="app_next_year">Next year</string>
     <string name="app_month_swipe">Swipe Overview, Activity or Recurring sideways to move one month.</string>
     <string name="app_signout_clears">Signing out clears what this device saved.</string>
+    <string name="app_widget_name">Quick add</string>
+    <string name="app_widget_description">Add an expense or income from your home screen.</string>
 </resources>

@@ -39,4 +39,5 @@ dependencies {
     implementation(libs.core.splashscreen)
     implementation(libs.fragment)
     implementation(libs.lifecycle.process)
+    implementation(libs.glance.appwidget)
 }

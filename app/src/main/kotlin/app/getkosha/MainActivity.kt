@@ -1,6 +1,8 @@
 package app.getkosha
 
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
@@ -16,6 +18,9 @@ import app.getkosha.ui.KoshaThemeFromPrefs
 import app.getkosha.ui.Route
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import java.util.Locale
 import kotlinx.coroutines.launch
 
 // A FragmentActivity because the fingerprint and face unlock prompt needs one.
@@ -36,7 +41,23 @@ class MainActivity : FragmentActivity() {
                 else window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
             }
         }
+        lifecycleScope.launch {
+            Kosha.get().meta.map { it?.pref("language", "") ?: "" }.distinctUntilChanged().collect {
+                if (it != appliedLanguage && Kosha.get().meta.value != null) recreate()
+            }
+        }
         setContent { KoshaThemeFromPrefs { Root(pending) } }
+    }
+
+    // The app's language is the account's `language` preference, else the phone's. Resources follow the wrapped
+    // context; a change of preference recreates the activity.
+    private var appliedLanguage: String = ""
+
+    override fun attachBaseContext(newBase: Context) {
+        appliedLanguage = Kosha.init(newBase).meta.value?.pref("language", "") ?: ""
+        if (appliedLanguage.isEmpty()) return super.attachBaseContext(newBase)
+        val config = Configuration(newBase.resources.configuration).apply { setLocale(Locale.forLanguageTag(appliedLanguage)) }
+        super.attachBaseContext(newBase.createConfigurationContext(config))
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -51,6 +72,8 @@ class MainActivity : FragmentActivity() {
 
     private fun handle(intent: Intent) {
         intent.data?.takeIf { it.scheme == "app.getkosha" }?.let { SignInFlow.redirect(this, it) }
+        // Statements shared to Kosha (feature:statements' share activity) open Import.
+        if (intent.getStringExtra("kosha.route") == "import") pending.value = Route.Import
         when (intent.getStringExtra("kosha.add")) {
             "expense" -> pending.value = Route.Add(kind = "expense")
             "income" -> pending.value = Route.Add(kind = "income")

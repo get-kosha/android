@@ -2546,4 +2546,6 @@
     <string name="app_next_year">Próximo ano</string>
     <string name="app_month_swipe">Deslize Visão geral, Atividade ou Recorrentes para o lado para mudar de mês.</string>
     <string name="app_signout_clears">Sair apaga o que este dispositivo salvou.</string>
+    <string name="app_widget_name">Adição rápida</string>
+    <string name="app_widget_description">Adicione uma despesa ou receita pela tela inicial.</string>
 </resources>

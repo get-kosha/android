@@ -28,22 +28,23 @@ data class Tokens(
  * Keeps the session encrypted with an AES-GCM key that never leaves the Android Keystore. Nothing here is
  * backed up (data_extraction_rules.xml), so a restored phone signs in again.
  */
-class TokenStore(context: Context) {
-    private val prefs = context.getSharedPreferences("kosha.session", Context.MODE_PRIVATE)
+open class TokenStore(context: Context?) {
+    // Null only in unit tests, which override read, write and clear.
+    private val prefs by lazy { context!!.getSharedPreferences("kosha.session", Context.MODE_PRIVATE) }
 
     @Volatile private var cached: Tokens? = null
 
-    fun read(): Tokens? = cached ?: prefs.getString(KEY, null)?.let { stored ->
+    open fun read(): Tokens? = cached ?: prefs.getString(KEY, null)?.let { stored ->
         runCatching { KoshaJson.decodeFromString(Tokens.serializer(), decrypt(stored)) }.getOrNull()
     }?.also { cached = it }
 
     /** Stores the new tokens before anyone uses them, so a rotated refresh token is never lost. */
-    fun write(tokens: Tokens) {
+    open fun write(tokens: Tokens) {
         prefs.edit().putString(KEY, encrypt(KoshaJson.encodeToString(Tokens.serializer(), tokens))).commit()
         cached = tokens
     }
 
-    fun clear() {
+    open fun clear() {
         prefs.edit().remove(KEY).commit()
         cached = null
     }

@@ -108,7 +108,12 @@ class KoshaApi(val http: OkHttpClient, private val store: TokenStore, private va
                 .build()
             http.newCall(request).await().use { res ->
                 if (res.code == 401 && attempt == 0) {
-                    tokens = auth.refresh(tokens.access) ?: throw SignedOutException()
+                    // A refused refresh ends the session (Auth has cleared it): the app shows sign-in.
+                    tokens = try {
+                        auth.refresh(tokens.access)
+                    } catch (e: AuthException) {
+                        null
+                    } ?: throw SignedOutException()
                     return@repeat
                 }
                 if (res.code == 401) {

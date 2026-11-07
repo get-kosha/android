@@ -2546,4 +2546,6 @@
     <string name="app_next_year">Anno successivo</string>
     <string name="app_month_swipe">Scorri di lato Panoramica, Attività o Ricorrenti per spostarti di un mese.</string>
     <string name="app_signout_clears">Uscendo si cancella ciò che questo dispositivo ha salvato.</string>
+    <string name="app_widget_name">Aggiunta rapida</string>
+    <string name="app_widget_description">Aggiungi una spesa o un’entrata dalla schermata Home.</string>
 </resources>

@@ -2302,4 +2302,6 @@
     <string name="app_next_year">अगला साल</string>
     <string name="app_month_swipe">एक महीना आगे-पीछे जाने के लिए ओवरव्यू, गतिविधि या आवर्ती को बगल में स्वाइप करें।</string>
     <string name="app_signout_clears">साइन आउट करने पर इस डिवाइस में सहेजी चीज़ें मिट जाती हैं।</string>
+    <string name="app_widget_name">झटपट जोड़ें</string>
+    <string name="app_widget_description">होम स्क्रीन से खर्च या आमदनी जोड़ें।</string>
 </resources>

@@ -8,3 +8,6 @@ local.properties
 captures/
 # The design export (kosha-mobile-design.zip); unzip it here when missing (HANDOFF.md).
 design/
+
+# Agent worktrees and local tool state.
+.claude/

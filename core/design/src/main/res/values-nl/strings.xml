@@ -2302,4 +2302,6 @@
     <string name="app_next_year">Volgend jaar</string>
     <string name="app_month_swipe">Veeg in Overzicht, Activiteit of Terugkerend opzij om een maand te verschuiven.</string>
     <string name="app_signout_clears">Uitloggen wist wat dit apparaat heeft bewaard.</string>
+    <string name="app_widget_name">Snel toevoegen</string>
+    <string name="app_widget_description">Voeg een uitgave of inkomsten toe vanaf je startscherm.</string>
 </resources>
