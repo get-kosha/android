@@ -17,9 +17,12 @@ from pathlib import Path
 
 WEB = Path(sys.argv[1] if len(sys.argv) > 1 else Path(__file__).resolve().parents[1].parent / "kosha")
 OUT = Path(__file__).resolve().parents[1] / "core/design/src/main/res"
-# Landing, demos, legal and site are the web's marketing pages; server messages come back in API errors.
+# Landing, demos and legal are the web's marketing pages. Site holds the tagline; server holds messages the app
+# also shows itself (such as the demo lock).
 AREAS = ["common", "auth", "overview", "transactions", "add", "accounts", "reconcile", "import", "welcome",
-         "settings", "settings-sections", "ai", "app"]
+         "settings", "settings-sections", "ai", "site", "server", "app"]
+# The app's own areas: app.json and app-<feature>.json.
+AREAS += sorted(p.stem for p in (WEB / "messages/en").glob("app-*.json"))
 # Android's folder for each locale. pt is Brazilian Portuguese and zh Simplified Chinese (translations.md).
 FOLDER = {"en": "values"}
 PLURAL_KEYS = {"zero", "one", "two", "few", "many", "other"}

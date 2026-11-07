@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A receipt frame on the peacock ground. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="48dp" android:height="48dp"
+    android:viewportWidth="48" android:viewportHeight="48">
+    <path android:fillColor="#0F524E" android:pathData="M24,0a24,24 0,1 1,0 48a24,24 0,1 1,0 -48z" />
+    <path android:fillColor="#F3F5F0" android:pathData="M14,14h6v2h-4v4h-2zM28,14h6v6h-2v-4h-4zM14,28h2v4h4v2h-6zM32,28h2v6h-6v-2h4zM19,23h10v2h-10z" />
+</vector>
