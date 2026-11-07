@@ -14,5 +14,7 @@ android {
 
 dependencies {
     implementation(project(":core:ui"))
+    implementation(libs.activity.compose)
+    implementation(libs.serialization.json)
     testImplementation(libs.junit)
 }
