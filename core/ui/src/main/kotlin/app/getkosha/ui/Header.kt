@@ -32,6 +32,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
@@ -201,11 +202,36 @@ fun MainHeader(
 @Composable
 fun Avatar(name: String, onClick: () -> Unit, size: Int = 36) {
     val label = stringResource(R.string.shell_account_menu)
+    val photo = profilePhoto()
     Box(Modifier.size(48.dp).clickable(role = Role.Button, onClickLabel = label, onClick = onClick).semantics { contentDescription = label }, contentAlignment = Alignment.Center) {
         Box(Modifier.size(size.dp).clip(CircleShape).background(KoshaTheme.colors.sel), contentAlignment = Alignment.Center) {
-            KText(name.trim().take(1).uppercase().ifEmpty { "K" }, style = KoshaTheme.type.small.copy(fontSize = (size * 0.39).sp, fontWeight = FontWeight.SemiBold))
+            if (photo != null) {
+                androidx.compose.foundation.Image(photo, null, Modifier.size(size.dp), contentScale = androidx.compose.ui.layout.ContentScale.Crop)
+            } else {
+                KText(name.trim().take(1).uppercase().ifEmpty { "K" }, style = KoshaTheme.type.small.copy(fontSize = (size * 0.39).sp, fontWeight = FontWeight.SemiBold))
+            }
         }
     }
+}
+
+/** Profile pictures already fetched, by their URL (user.image changes with each upload). */
+private object Photos {
+    val loaded = mutableMapOf<String, androidx.compose.ui.graphics.ImageBitmap>()
+}
+
+/** The account's profile picture from GET /api/app/avatar, or null when there is none or it can't load. */
+@Composable
+fun profilePhoto(): androidx.compose.ui.graphics.ImageBitmap? {
+    val kosha = rememberKosha()
+    val image = meta()?.user?.image ?: return null
+    val photo by androidx.compose.runtime.produceState(Photos.loaded[image], image) {
+        if (value != null) return@produceState
+        value = runCatching {
+            val bytes = kosha.api.bytes("/api/app/avatar")
+            android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap()
+        }.getOrNull()?.also { Photos.loaded[image] = it }
+    }
+    return photo
 }
 
 /** One month of get_month_overview's history: what MonthSheet shows under each month. */

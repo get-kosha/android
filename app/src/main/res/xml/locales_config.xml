@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The languages Kosha speaks (translations.md), so Android's per-app language setting offers them. -->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <locale android:name="en" />
+    <locale android:name="de" />
+    <locale android:name="es" />
+    <locale android:name="fr" />
+    <locale android:name="pt" />
+    <locale android:name="it" />
+    <locale android:name="nl" />
+    <locale android:name="ru" />
+    <locale android:name="ja" />
+    <locale android:name="zh" />
+    <locale android:name="ko" />
+    <locale android:name="hi" />
+</locale-config>

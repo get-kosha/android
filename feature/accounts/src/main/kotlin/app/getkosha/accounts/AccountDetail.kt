@@ -49,7 +49,9 @@ import app.getkosha.recurring.typeLabel
 import app.getkosha.ui.LocalNav
 import app.getkosha.ui.MoneyText
 import app.getkosha.ui.Page
+import app.getkosha.ui.ActivitySearch
 import app.getkosha.ui.Route
+import app.getkosha.ui.openActivity
 import app.getkosha.ui.meta
 import app.getkosha.ui.rememberKosha
 import kotlinx.coroutines.launch
@@ -210,6 +212,13 @@ private fun RecentCard(w: Wallet, recent: List<Transaction>, today: java.time.Lo
                     transfer != null -> MoneyText(t.amount, t.currency, color = c.ink2)
                     else -> MoneyText(t.amount, t.currency, sign = Sign.Always, color = if (t.amount > 0) c.pos else c.ink)
                 }
+            }
+        }
+        // Every entry of this account, in Activity.
+        if (!transfersOnly && w.txCount > recent.size) {
+            Hairline()
+            ListRow(onClick = { nav.openActivity(ActivitySearch(accountId = w.id)) }) {
+                KText(stringResource(R.string.accounts_all_count, w.txCount), Modifier.weight(1f), color = c.ink2)
             }
         }
     }

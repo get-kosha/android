@@ -121,8 +121,7 @@ internal fun rememberTransaction(id: String): app.getkosha.data.Loaded<Transacti
     val kosha = rememberKosha()
     val version by kosha.version.collectAsStateWithLifecycle()
     return remember(id, version) {
-        val seed = Seen[id] ?: kosha.cache.read("tx/$id")?.let { runCatching { KoshaJson.decodeFromString(Transaction.serializer(), it) }.getOrNull() }
-        kosha.load("tx/$id") { findTransaction(id, seed) }
+        kosha.load("tx/$id") { findTransaction(id) }
     }.collectAsStateWithLifecycle(null).value
 }
 

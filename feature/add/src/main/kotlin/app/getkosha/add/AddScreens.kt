@@ -106,7 +106,9 @@ import app.getkosha.model.Sign
 import app.getkosha.model.Wallet
 import app.getkosha.ui.LocalNav
 import app.getkosha.ui.LocalToasts
+import app.getkosha.ui.ActivitySearch
 import app.getkosha.ui.Route
+import app.getkosha.ui.openActivity
 import app.getkosha.ui.hideAmounts
 import kotlin.math.abs
 
@@ -412,8 +414,7 @@ private fun Suggestions(m: AddModel, ui: AddUi, done: () -> Unit) {
                 .fillMaxWidth()
                 .clickable(role = Role.Button) {
                     nav.popBackStack()
-                    // ponytail: opens Activity; Route.Activity carries no search yet, so the payee isn't typed in for you.
-                    nav.navigate(Route.Activity) { launchSingleTop = true }
+                    nav.openActivity(ActivitySearch(query = m.payee.trim()))
                 }
                 .heightIn(min = KoshaTheme.dims.row)
                 .padding(horizontal = 16.dp, vertical = 8.dp),

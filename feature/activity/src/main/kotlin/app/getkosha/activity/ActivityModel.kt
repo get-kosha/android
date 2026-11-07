@@ -92,31 +92,8 @@ val Transaction.sent: Long get() = Math.abs(amount) + if (amount < 0) transfer?.
 /** An entry dated outside its event's days was put in the event by hand. */
 fun Transaction.outsideEvent(start: String?, end: String?) = (start != null && day < start) || (end != null && day > end)
 
-/**
- * One transaction by id. The public API has no read by id, so this searches its day (and account, which also
- * finds a transfer's incoming half) when the row is known, and otherwise pages back through every date.
- * ponytail: the fallback reads up to 2,000 rows; a GET /api/app/transactions/{id} would make it one request.
- */
-suspend fun KoshaApi.findTransaction(id: String, seed: Transaction?): Transaction {
-    if (seed != null) {
-        val day = get<TransactionList>(
-            "/api/v1/transactions",
-            mapOf("from" to seed.day, "to" to seed.day, "accountId" to seed.accountId, "includeCorrections" to true, "limit" to 500),
-        )
-        day.transactions.firstOrNull { it.id == id }?.let { return it }
-    }
-    var offset = 0
-    val to = LocalDate.now().plusYears(2).toString()
-    repeat(4) {
-        val page = get<TransactionList>(
-            "/api/v1/transactions",
-            mapOf("from" to "1970-01-01", "to" to to, "includeCorrections" to true, "limit" to 500, "offset" to offset),
-        )
-        page.transactions.firstOrNull { it.id == id }?.let { return it }
-        offset = page.nextOffset ?: throw ApiException(404, app.getkosha.model.ApiError("not_found", ""))
-    }
-    throw ApiException(404, app.getkosha.model.ApiError("not_found", ""))
-}
+/** One transaction by id (GET /api/app/transactions/{id}). */
+suspend fun KoshaApi.findTransaction(id: String): Transaction = get("/api/app/transactions/$id")
 
 /** Rows seen in lists this run, so a detail opens at once. */
 internal object Seen {
