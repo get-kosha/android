@@ -50,7 +50,7 @@ import app.getkosha.model.Categories
 import app.getkosha.model.Meta
 import app.getkosha.model.Money
 import app.getkosha.model.Sign
-import app.getkosha.model.TransactionList
+import app.getkosha.model.Transaction
 import app.getkosha.model.Wallet
 import app.getkosha.ui.LocalNav
 import app.getkosha.ui.MoneyText
@@ -184,17 +184,14 @@ fun RecurringFormScreen(id: String?, fromPayee: String?, fromTransaction: String
     // Fill the form once from what it starts from.
     val subs = if (id != null) rememberLoad<SubscriptionsData>("subscriptions") { get("/api/app/subscriptions") }.value else null
     val suggestions = if (fromPayee != null && fromTransaction == null) rememberLoad<RecurringList>("recurring/suggestions") { get("/api/v1/recurring", mapOf("includeSuggestions" to true)) }.value else null
-    val entries = if (fromTransaction != null) {
-        rememberLoad<TransactionList>("recurring/from/$fromTransaction") {
-            // There is no read for one transaction: search its payee (or everything) from the start.
-            get("/api/v1/transactions", mapOf("query" to fromPayee?.take(40), "from" to "2000-01-01", "limit" to if (fromPayee != null) 100 else 500))
-        }.value
+    val entry = if (fromTransaction != null) {
+        rememberLoad<Transaction>("transaction/$fromTransaction") { get("/api/app/transactions/$fromTransaction") }.value
     } else null
-    LaunchedEffect(subs, suggestions, entries) {
+    LaunchedEffect(subs, suggestions, entry) {
         if (form.filled) return@LaunchedEffect
         subs?.subscriptions?.find { it.id == id }?.let(form::from)
         suggestions?.suggestions?.find { it.payee == fromPayee }?.let(form::from)
-        entries?.transactions?.find { it.id == fromTransaction }?.let(form::from)
+        entry?.let(form::from)
         if (!form.filled && fromPayee != null && form.name.isEmpty()) form.name = fromPayee
     }
 
