@@ -556,7 +556,8 @@ private fun Buttons(m: AddModel, ui: AddUi) {
         Button(
             stringResource(R.string.add_another),
             { m.save(ui, again = true) },
-            Modifier.width(132.dp),
+            // Sized to its label, so it never cuts off at large font sizes; the primary button takes the rest.
+            Modifier,
             style = ButtonStyle.Secondary,
             enabled = m.ready,
         )
