@@ -1,4 +1,5 @@
 // Recurring (M6): bills, subscriptions, income and transfers on a schedule, their payments and documents.
+// Its Kit.kt (cached reads, writes, keypad and date sheets, form scaffold) is shared with feature:accounts.
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
@@ -13,6 +14,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:ui"))
+    api(project(":core:ui"))
+    implementation(libs.core)
+    implementation(libs.activity.compose)
     testImplementation(libs.junit)
 }

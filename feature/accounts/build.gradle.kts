@@ -13,6 +13,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:ui"))
+    // Recurring's Kit.kt: cached reads, writes, keypad and date sheets, the form scaffold.
+    implementation(project(":feature:recurring"))
     testImplementation(libs.junit)
 }
