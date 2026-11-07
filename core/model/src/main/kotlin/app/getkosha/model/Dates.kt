@@ -20,9 +20,10 @@ object Dates {
 
     fun month(tz: String, now: Instant = Instant.now()): YearMonth = YearMonth.from(today(tz, now))
 
-    fun day(text: String): LocalDate = LocalDate.parse(text)
+    // Named apart from today(tz) and month(tz): a String overload of month() took "UTC" for "YYYY-MM".
+    fun parseDay(text: String): LocalDate = LocalDate.parse(text)
 
-    fun month(text: String): YearMonth = YearMonth.parse(text)
+    fun parseMonth(text: String): YearMonth = YearMonth.parse(text)
 
     fun text(day: LocalDate): String = day.toString()
 

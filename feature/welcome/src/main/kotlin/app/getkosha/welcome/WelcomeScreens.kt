@@ -1,4 +1,9 @@
+@file:UseSerializers(RoundedLong::class)
+
 package app.getkosha.welcome
+
+import kotlinx.serialization.UseSerializers
+import app.getkosha.model.RoundedLong
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.ExperimentalLayoutApi

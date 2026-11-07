@@ -1,7 +1,14 @@
+@file:UseSerializers(RoundedLong::class)
+
 package app.getkosha.network
 
+import kotlinx.serialization.UseSerializers
+import app.getkosha.model.RoundedLong
+
 import app.getkosha.model.KoshaJson
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -62,12 +69,12 @@ class Auth(private val http: OkHttpClient, private val store: TokenStore) {
     private fun defaultPort(scheme: String) = if (scheme == "https") 443 else 80
 
     /** Reads the server's OAuth discovery document, which also proves it is a Kosha server. */
-    suspend fun discover(server: String): PendingSignIn {
+    suspend fun discover(server: String): PendingSignIn = withContext(Dispatchers.IO) {
         val doc = http.newCall(Request.Builder().url("$server/.well-known/oauth-authorization-server").build()).await().use { res ->
             if (!res.isSuccessful) throw AuthException("No Kosha server at $server")
             KoshaJson.decodeFromString(Discovery.serializer(), res.body.string())
         }
-        return PendingSignIn(server, doc.authorize, "", "", doc.token, doc.revoke)
+        PendingSignIn(server, doc.authorize, "", "", doc.token, doc.revoke)
     }
 
     /** The browser URL for a sign-in, with a fresh PKCE verifier and state. `demo` opens the demo account. */
@@ -149,7 +156,7 @@ class Auth(private val http: OkHttpClient, private val store: TokenStore) {
     /** Signs out: revokes the refresh token on the server (best effort when offline) and forgets the session. */
     suspend fun signOut() {
         val current = store.read() ?: return
-        runCatching {
+        withContext(Dispatchers.IO) { runCatching {
             http.newCall(
                 Request.Builder()
                     .url("${current.server}/api/auth/oauth2/revoke")
@@ -162,18 +169,18 @@ class Auth(private val http: OkHttpClient, private val store: TokenStore) {
                     )
                     .build(),
             ).await().close()
-        }
+        } }
         store.clear()
     }
 
-    private suspend fun exchange(server: String, url: String, body: FormBody, previousRefresh: String?): Tokens {
+    private suspend fun exchange(server: String, url: String, body: FormBody, previousRefresh: String?): Tokens = withContext(Dispatchers.IO) {
         val res = http.newCall(Request.Builder().url(url).post(body).build()).await()
         val text = res.use { it.body.string() }
         // 4xx is the server saying no (an expired or reused code or token); anything else may pass, so retry later.
         if (res.code in 400..499) throw AuthException(text.ifBlank { "Sign-in failed (${res.code})" })
         if (!res.isSuccessful) throw java.io.IOException("Sign-in failed (${res.code})")
         val t = KoshaJson.decodeFromString(TokenResponse.serializer(), text)
-        return Tokens(
+        Tokens(
             server = server,
             clientId = CLIENT_ID,
             access = t.access,

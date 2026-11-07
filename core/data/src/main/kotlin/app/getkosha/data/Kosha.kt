@@ -139,7 +139,11 @@ class Kosha private constructor(context: Context) {
                 val s = api.get<Settings>("/api/v1/settings")
                 cache.write("settings", KoshaJson.encodeToString(Settings.serializer(), s))
                 _settings.value = s
-            }.onFailure { if (it is SignedOutException) signedOutLocally() }
+            }.onFailure {
+                // The error only, never the account's data.
+                android.util.Log.w("Kosha", "refresh failed: ${it::class.simpleName}: ${it.message?.take(200)}")
+                if (it is SignedOutException) signedOutLocally()
+            }
             sendOutbox()
         }
     }
@@ -168,6 +172,10 @@ class Kosha private constructor(context: Context) {
         } catch (e: SignedOutException) {
             signedOutLocally()
             emit(Loaded(saved, refreshing = false))
+        } catch (e: kotlinx.serialization.SerializationException) {
+            // An answer this version can't read (a newer or older server): keep what was saved, and say so in the log.
+            android.util.Log.w("Kosha", "can't read $key: ${e.message?.take(200)}")
+            emit(Loaded(saved, refreshing = false, error = e.message?.take(200)))
         }
     }
 

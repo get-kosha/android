@@ -1,4 +1,9 @@
+@file:UseSerializers(RoundedLong::class)
+
 package app.getkosha.overview
+
+import kotlinx.serialization.UseSerializers
+import app.getkosha.model.RoundedLong
 
 import android.content.Context
 import androidx.compose.animation.core.Animatable

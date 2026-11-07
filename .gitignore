@@ -11,3 +11,8 @@ design/
 
 # Agent worktrees and local tool state.
 .claude/
+
+# The Play upload key and its passwords.
+keystore.properties
+*.jks
+*.keystore

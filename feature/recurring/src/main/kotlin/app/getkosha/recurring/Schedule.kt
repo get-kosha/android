@@ -1,4 +1,9 @@
+@file:UseSerializers(RoundedLong::class)
+
 package app.getkosha.recurring
+
+import kotlinx.serialization.UseSerializers
+import app.getkosha.model.RoundedLong
 
 import app.getkosha.model.Categories
 import kotlinx.serialization.SerialName

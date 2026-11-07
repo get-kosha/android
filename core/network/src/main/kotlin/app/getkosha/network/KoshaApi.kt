@@ -3,7 +3,9 @@ package app.getkosha.network
 import app.getkosha.model.ApiError
 import app.getkosha.model.ErrorBody
 import app.getkosha.model.KoshaJson
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.serializer
@@ -94,7 +96,11 @@ class KoshaApi(val http: OkHttpClient, private val store: TokenStore, private va
     suspend fun call(method: String, path: String, query: Map<String, Any?>, body: RequestBody?): String =
         execute(method, path, query, body) { it.body.string() }
 
-    private suspend fun <R> execute(method: String, path: String, query: Map<String, Any?>, body: RequestBody?, read: (Response) -> R): R {
+    // Reading a response body is blocking I/O, so every request runs on the IO dispatcher, whoever calls it.
+    private suspend fun <R> execute(method: String, path: String, query: Map<String, Any?>, body: RequestBody?, read: (Response) -> R): R =
+        withContext(Dispatchers.IO) { send(method, path, query, body, read) }
+
+    private suspend fun <R> send(method: String, path: String, query: Map<String, Any?>, body: RequestBody?, read: (Response) -> R): R {
         var tokens = store.read() ?: throw SignedOutException()
         repeat(2) { attempt ->
             val url = (tokens.server + path).toHttpUrl().newBuilder().apply {

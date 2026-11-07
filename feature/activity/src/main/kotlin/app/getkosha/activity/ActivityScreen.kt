@@ -1,4 +1,9 @@
+@file:UseSerializers(RoundedLong::class)
+
 package app.getkosha.activity
+
+import kotlinx.serialization.UseSerializers
+import app.getkosha.model.RoundedLong
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween

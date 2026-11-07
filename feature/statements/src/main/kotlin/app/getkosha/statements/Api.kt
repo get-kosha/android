@@ -1,4 +1,9 @@
+@file:UseSerializers(RoundedLong::class)
+
 package app.getkosha.statements
+
+import kotlinx.serialization.UseSerializers
+import app.getkosha.model.RoundedLong
 
 import app.getkosha.model.AccountType
 import app.getkosha.model.KoshaJson

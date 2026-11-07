@@ -18,6 +18,9 @@ coil = "3.6.3"
 camerax = "1.5.2"
 glance = "1.2.0"
 junit = "4.13.2"
+test-ext = "1.3.0"
+test-runner = "1.7.0"
+espresso = "3.7.0"
 
 [libraries]
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
@@ -51,6 +54,11 @@ camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = 
 camera-view = { module = "androidx.camera:camera-view", version.ref = "camerax" }
 glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glance" }
 junit = { module = "junit:junit", version.ref = "junit" }
+test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "test-ext" }
+test-runner = { module = "androidx.test:runner", version.ref = "test-runner" }
+espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
+compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

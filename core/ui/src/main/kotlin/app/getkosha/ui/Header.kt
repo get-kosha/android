@@ -1,4 +1,9 @@
+@file:UseSerializers(RoundedLong::class)
+
 package app.getkosha.ui
+
+import kotlinx.serialization.UseSerializers
+import app.getkosha.model.RoundedLong
 
 import android.os.Build
 import androidx.browser.customtabs.CustomTabsIntent

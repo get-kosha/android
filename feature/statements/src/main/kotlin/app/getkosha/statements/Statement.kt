@@ -1,4 +1,9 @@
+@file:UseSerializers(RoundedLong::class)
+
 package app.getkosha.statements
+
+import kotlinx.serialization.UseSerializers
+import app.getkosha.model.RoundedLong
 
 import kotlinx.serialization.Serializable
 import java.time.LocalDate

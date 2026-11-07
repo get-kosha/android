@@ -1,4 +1,8 @@
+@file:UseSerializers(RoundedLong::class)
+
 package app.getkosha.model
+
+import kotlinx.serialization.UseSerializers
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
