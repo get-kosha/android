@@ -1,22 +1,12 @@
 package app.getkosha.statements
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import app.getkosha.design.R
-import app.getkosha.ui.LocalNav
-import app.getkosha.ui.Page
+import androidx.navigation.toRoute
 import app.getkosha.ui.Route
 
-/** The statements screens, registered in the app's NavHost. */
+/** Reconcile and Import, registered in the app's NavHost. Each flow's steps are its own state, not routes. */
 fun NavGraphBuilder.statementsScreens() {
-    composable<Route.Reconcile> { Placeholder(stringResource(R.string.shell_nav_accounts)) }
-    composable<Route.Import> { Placeholder(stringResource(R.string.shell_nav_accounts)) }
-}
-
-@Composable
-private fun Placeholder(title: String) {
-    val nav = LocalNav.current
-    Page(title, onBack = { nav.popBackStack() }) { }
+    composable<Route.Reconcile> { ReconcileScreen(it.toRoute<Route.Reconcile>().accountId) }
+    composable<Route.Import> { ImportScreen() }
 }
