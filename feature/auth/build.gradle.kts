@@ -14,6 +14,7 @@ android {
 dependencies {
     implementation(project(":core:ui"))
     implementation(libs.browser)
+    implementation(libs.activity.compose)
     implementation(libs.biometric)
     implementation(libs.fragment)
 }

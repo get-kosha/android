@@ -16,10 +16,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
+import androidx.activity.compose.LocalActivity
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -84,9 +86,9 @@ object AppLock {
 /** "Kosha is locked. Locked after a minute away." with Unlock. The prompt opens by itself. */
 @Composable
 fun LockScreen() {
-    val activity = LocalContext.current as FragmentActivity
+    val activity = LocalActivity.current as FragmentActivity
     val c = KoshaTheme.colors
-    val minutes = Kosha.get().local.lockAfter.value
+    val minutes by Kosha.get().local.lockAfter.collectAsStateWithLifecycle()
     val title = stringResource(R.string.app_lock_prompt)
     LaunchedEffect(Unit) { AppLock.unlock(activity, title) }
     Box(Modifier.fillMaxSize().background(c.bg).navigationBarsPadding().padding(24.dp), contentAlignment = Alignment.Center) {

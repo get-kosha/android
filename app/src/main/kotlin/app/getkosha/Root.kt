@@ -85,7 +85,8 @@ private fun Main(pending: MutableStateFlow<Route?>) {
     LaunchedEffect(Unit) { kosha.outbox.rejected.collect { toasts.show(Toast(it)) } }
     val asked by pending.collectAsStateWithLifecycle()
     LaunchedEffect(asked) {
-        asked?.let { nav.navigate(it); pending.value = null }
+        // Single top, so sharing statements while Import is open hands them to the open one.
+        asked?.let { nav.navigate(it) { launchSingleTop = true }; pending.value = null }
     }
     val entry by nav.currentBackStackEntryAsState()
     val current = entry?.destination

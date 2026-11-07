@@ -33,7 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.activity.compose.LocalActivity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -84,7 +84,7 @@ fun SignedOut() {
 
 @Composable
 private fun SignIn(failed: Step.Failed?, busy: Boolean, onOwnServer: () -> Unit) {
-    val activity = LocalContext.current as Activity
+    val activity = LocalActivity.current as Activity
     val scope = rememberCoroutineScope()
     val c = KoshaTheme.colors
     Column(Modifier.fillMaxSize().background(c.bg)) {
@@ -155,7 +155,7 @@ private fun SignIn(failed: Step.Failed?, busy: Boolean, onOwnServer: () -> Unit)
 @Composable
 private fun OwnServer(onBack: () -> Unit) {
     BackHandler(onBack = onBack)
-    val activity = LocalContext.current as Activity
+    val activity = LocalActivity.current as Activity
     val scope = rememberCoroutineScope()
     val auth = remember { Kosha.get().auth }
     val c = KoshaTheme.colors
