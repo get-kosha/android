@@ -27,6 +27,7 @@ class RefreshTest {
     private val server = MockWebServer()
     private val refreshes = AtomicInteger()
     @Volatile private var refusing = false
+    @Volatile private var busy: Int? = null
 
     @Before fun start() {
         server.dispatcher = object : Dispatcher() {
@@ -34,6 +35,7 @@ class RefreshTest {
                 val path = request.url.encodedPath
                 if (path == "/api/auth/oauth2/token") {
                     if (refusing) return MockResponse.Builder().code(400).body("""{"error":"invalid_grant"}""").build()
+                    busy?.let { return MockResponse.Builder().code(it).addHeader("X-Retry-After", "7").body("busy").build() }
                     val n = refreshes.incrementAndGet()
                     Thread.sleep(50)
                     return MockResponse.Builder().code(200)
@@ -74,5 +76,31 @@ class RefreshTest {
         val error = runCatching { api.get<Ok>("/api/v1/accounts") }.exceptionOrNull()
         assertEquals(SignedOutException::class, error!!::class)
         assertNull(store.tokens)
+    }
+
+    /** 429 and 5xx from the token endpoint are temporary: the session and its refresh token stay for the next try. */
+    @Test fun busyTokenEndpointKeepsTheSession() = runBlocking {
+        for (code in listOf(429, 503)) {
+            busy = code
+            val store = store()
+            val http = OkHttpClient()
+            val api = KoshaApi(http, store, Auth(http, store)) { Locale.UK }
+            val error = runCatching { api.get<Ok>("/api/v1/accounts") }.exceptionOrNull()
+            assertEquals(RetryLaterException::class, error!!::class)
+            assertEquals(7L, (error as RetryLaterException).seconds)
+            assertEquals("refresh-0", store.tokens?.refresh)
+        }
+        busy = null
+    }
+
+    @Test fun answersComeBackOnlyWhereTheyWereSent() {
+        val auth = Auth(OkHttpClient(), MemoryStore(null))
+        val s = "https://getkosha.app"
+        assertEquals("c", auth.callback(s, "https://getkosha.app/app/oauth/callback?code=c&state=x")?.queryParameter("code"))
+        assertEquals("c", auth.callback(s, "app.getkosha:/oauth/callback?code=c&state=x")?.queryParameter("code"))
+        assertNull(auth.callback(s, "https://evil.example/app/oauth/callback?code=c"))
+        assertNull(auth.callback(s, "https://getkosha.app/other?code=c"))
+        assertNull(auth.callback(s, "http://getkosha.app/app/oauth/callback?code=c"))
+        assertEquals("c", auth.callback("http://localhost:3456", "http://localhost:3456/app/oauth/callback?code=c")?.queryParameter("code"))
     }
 }

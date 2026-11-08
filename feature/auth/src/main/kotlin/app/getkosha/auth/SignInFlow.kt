@@ -3,12 +3,17 @@ package app.getkosha.auth
 import android.app.Activity
 import android.content.Context
 import android.net.Uri
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.browser.auth.AuthTabIntent
+import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsIntent
 import app.getkosha.data.Kosha
 import app.getkosha.model.KoshaJson
 import app.getkosha.network.AuthException
 import app.getkosha.network.PendingSignIn
 import app.getkosha.network.await
+import app.getkosha.network.redirectUri
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,9 +38,13 @@ sealed interface Step {
 }
 
 /**
- * Sign-in through the system browser (a Custom Tab). The pending request, with its PKCE verifier, is kept on
- * disk so a sign-in survives the app being closed while the browser is open. The browser hands back
- * app.getkosha:/oauth/callback to MainActivity, which passes it to [redirect].
+ * Sign-in through the system browser. The pending request, with its PKCE verifier, is kept on disk so a sign-in
+ * survives the app being closed while the browser is open.
+ *
+ * The server answers on its HTTPS callback (`<server>/app/oauth/callback`). An Auth Tab hands that answer straight
+ * back ([authResult]) when the browser supports one and the server is HTTPS; otherwise a Custom Tab opens and the
+ * answer arrives as an App Link (getkosha.app), or as app.getkosha:/oauth/callback after the server page's "Open
+ * Kosha" button. MainActivity passes both to [redirect].
  */
 object SignInFlow {
     private val _step = MutableStateFlow<Step>(Step.Idle)
@@ -77,14 +86,45 @@ object SignInFlow {
         val pending = kosha.auth.start(found, demo)
         prefs(activity).edit().putString("pending", KoshaJson.encodeToString(PendingSignIn.serializer(), pending)).commit()
         _step.value = Step.Browsing(host(server))
-        CustomTabsIntent.Builder().setShowTitle(true).build().launchUrl(activity, Uri.parse(pending.url))
+        val callback = Uri.parse(redirectUri(pending.server))
+        val browser = CustomTabsClient.getPackageName(activity, null)
+        val tab = authTab
+        if (tab != null && callback.scheme == "https" && browser != null && CustomTabsClient.isAuthTabSupported(activity, browser)) {
+            AuthTabIntent.Builder().build().launch(tab, Uri.parse(pending.url), callback.host!!, callback.path!!)
+        } else {
+            customTab(activity, pending.url)
+        }
     }
+
+    private fun customTab(context: Context, url: String) =
+        CustomTabsIntent.Builder().setShowTitle(true).build().launchUrl(context, Uri.parse(url))
+
+    /** The Auth Tab launcher, registered by MainActivity when it is created; null while there is no activity. */
+    var authTab: ActivityResultLauncher<Intent>? = null
+
+    /**
+     * The Auth Tab closed. An answer finishes the sign-in. If the browser couldn't verify that the app owns the
+     * server's callback (a server without assetlinks.json), the sign-in reopens in a Custom Tab, where the server's
+     * page offers "Open Kosha". A cancel may still be followed by that button's link, so it waits like [resumed].
+     */
+    fun authResult(context: Context, result: AuthTabIntent.AuthResult) {
+        when (result.resultCode) {
+            AuthTabIntent.RESULT_OK -> result.resultUri?.let { redirect(context, it) }
+            AuthTabIntent.RESULT_VERIFICATION_FAILED, AuthTabIntent.RESULT_VERIFICATION_TIMED_OUT -> {
+                val pending = stored(context) ?: return
+                customTab(context, pending.url)
+            }
+            else -> resumed()
+        }
+    }
+
+    private fun stored(context: Context): PendingSignIn? =
+        prefs(context).getString("pending", null)?.let { runCatching { KoshaJson.decodeFromString(PendingSignIn.serializer(), it) }.getOrNull() }
 
     /** The browser handed back the redirect. */
     fun redirect(context: Context, uri: Uri) {
         val kosha = Kosha.get()
-        val stored = prefs(context).getString("pending", null) ?: return
-        val pending = runCatching { KoshaJson.decodeFromString(PendingSignIn.serializer(), stored) }.getOrNull() ?: return
+        val pending = stored(context) ?: return
         val host = host(pending.server)
         _step.value = Step.Finishing(host, 0)
         kosha.scope.launch {

@@ -11,7 +11,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import app.getkosha.data.Kosha
 import app.getkosha.model.KoshaJson
 import app.getkosha.network.CLIENT_ID
-import app.getkosha.network.REDIRECT_URI
+import app.getkosha.network.CALLBACK_PATH
+import app.getkosha.network.redirectUri
 import app.getkosha.network.Tokens
 import app.getkosha.ui.Route
 import kotlinx.serialization.json.jsonObject
@@ -53,7 +54,7 @@ class TourTest {
         val challenge = b64(MessageDigest.getInstance("SHA-256").digest(verifier.toByteArray()))
         val authorize = "$server/api/auth/oauth2/authorize".toHttpUrl().newBuilder()
             .addQueryParameter("response_type", "code").addQueryParameter("client_id", CLIENT_ID)
-            .addQueryParameter("redirect_uri", REDIRECT_URI).addQueryParameter("scope", "openid profile email offline_access kosha:read kosha:write")
+            .addQueryParameter("redirect_uri", redirectUri(server)).addQueryParameter("scope", "openid profile email offline_access kosha:read kosha:write")
             .addQueryParameter("code_challenge", challenge).addQueryParameter("code_challenge_method", "S256")
             .addQueryParameter("state", "tour").addQueryParameter("resource", "$server/api/v1")
             .addQueryParameter("login_hint", "demo").addQueryParameter("prompt", "login").build()
@@ -69,11 +70,11 @@ class TourTest {
         val query = login.substringAfter('?')
         var next = browser("$server/api/auth/sign-in/email", """{"email":"demo@kosha.local","password":"kosha-demo-2026","oauth_query":${KoshaJson.encodeToString(kotlinx.serialization.serializer<String>(), query)}}""")
             .use { r -> KoshaJson.parseToJsonElement(r.body.string()).jsonObject["url"]?.jsonPrimitive?.content ?: r.header("location") }
-        repeat(5) { if (next != null && !next!!.startsWith("app.getkosha:")) next = browser(if (next!!.startsWith("http")) next!! else server + next).use { it.header("location") } }
-        val code = next!!.replace("app.getkosha:/", "https://app.getkosha/").toHttpUrl().queryParameter("code")!!
+        repeat(5) { if (next != null && CALLBACK_PATH !in next!!) next = browser(if (next!!.startsWith("http")) next!! else server + next).use { it.header("location") } }
+        val code = (if (next!!.startsWith("http")) next!! else server + next).toHttpUrl().queryParameter("code")!!
         val tokens = http.newCall(
             Request.Builder().url("$server/api/auth/oauth2/token").post(
-                FormBody.Builder().add("grant_type", "authorization_code").add("code", code).add("redirect_uri", REDIRECT_URI)
+                FormBody.Builder().add("grant_type", "authorization_code").add("code", code).add("redirect_uri", redirectUri(server))
                     .add("client_id", CLIENT_ID).add("code_verifier", verifier).add("resource", "$server/api/v1").build(),
             ).build(),
         ).execute().use { KoshaJson.parseToJsonElement(it.body.string()).jsonObject }

@@ -40,6 +40,13 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="app.getkosha" android:path="/oauth/callback" />
             </intent-filter>
+            <!-- The same answer on getkosha.app's HTTPS callback, claimed through /.well-known/assetlinks.json. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="getkosha.app" android:path="/app/oauth/callback" />
+            </intent-filter>
             <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts" />
         </activity>
         <receiver

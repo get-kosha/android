@@ -55,6 +55,7 @@ dependencies {
     implementation(project(":feature:settings"))
     implementation(project(":feature:welcome"))
     implementation(libs.activity.compose)
+    implementation(libs.browser)
     implementation(libs.core.splashscreen)
     implementation(libs.fragment)
     implementation(libs.lifecycle.process)

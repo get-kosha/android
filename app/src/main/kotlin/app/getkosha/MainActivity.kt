@@ -12,7 +12,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import app.getkosha.auth.AppLock
+import androidx.browser.auth.AuthTabIntent
 import app.getkosha.auth.SignInFlow
+import app.getkosha.network.CALLBACK_PATH
 import app.getkosha.data.Kosha
 import app.getkosha.ui.KoshaThemeFromPrefs
 import app.getkosha.ui.Route
@@ -28,10 +30,14 @@ class MainActivity : FragmentActivity() {
     /** A screen a shortcut asked for, opened once the app is signed in and unlocked. */
     val pending = MutableStateFlow<Route?>(null)
 
+    private var authTab: androidx.activity.result.ActivityResultLauncher<Intent>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        authTab = AuthTabIntent.registerActivityResultLauncher(this) { SignInFlow.authResult(this, it) }
+        SignInFlow.authTab = authTab
         handle(intent)
         // Hide the app's content in the app switcher while the lock is on.
         lifecycleScope.launch {
@@ -60,6 +66,12 @@ class MainActivity : FragmentActivity() {
         super.attachBaseContext(newBase.createConfigurationContext(config))
     }
 
+    override fun onDestroy() {
+        // The launcher belongs to this activity; a recreated one registers its own.
+        if (SignInFlow.authTab === authTab) SignInFlow.authTab = null
+        super.onDestroy()
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handle(intent)
@@ -71,7 +83,8 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun handle(intent: Intent) {
-        intent.data?.takeIf { it.scheme == "app.getkosha" }?.let { SignInFlow.redirect(this, it) }
+        // A sign-in's answer: the server's HTTPS callback as an App Link, or the app's scheme from the server's button.
+        intent.data?.takeIf { it.scheme == "app.getkosha" || it.path == CALLBACK_PATH }?.let { SignInFlow.redirect(this, it) }
         // Statements shared to Kosha (feature:statements' share activity) open Import.
         if (intent.getStringExtra("kosha.route") == "import") pending.value = Route.Import
         when (intent.getStringExtra("kosha.add")) {
