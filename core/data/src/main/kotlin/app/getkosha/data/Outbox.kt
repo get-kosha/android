@@ -34,8 +34,10 @@ data class Queued(
 )
 
 /**
- * The body of create_transactions for one new entry. "No event" goes as an explicit `eventId: null`; left out, the
- * server picks the event by date. KoshaJson drops nulls, so it is added here.
+ * The body of create_transactions for one new entry. The server tells a retry from a reused id by this body, so the
+ * queue stores the entry as first built (its time fixed, or left out for the server) and sends the same body again.
+ * "No event" goes as an explicit `eventId: null`; left out, the server picks the event by date. KoshaJson drops
+ * nulls, so it is added here.
  */
 fun createTransactions(entry: NewTransaction, noEvent: Boolean): JsonObject {
     var tx = KoshaJson.encodeToJsonElement(NewTransaction.serializer(), entry).jsonObject
@@ -89,9 +91,14 @@ class Outbox(context: Context, private val api: KoshaApi) {
             } catch (e: ApiException) {
                 // Busy or failing: keep it for the next try; its id makes a repeat save once.
                 if (e.retryable) return@withLock sent
-                // The server refused it for good (400, 404; 409 when the id was used for other details). A 403 means
-                // read-only: keep nothing either.
-                _rejected.tryEmit(e.message ?: "")
+                // 409: the id is taken by other details. Only this phone makes its ids, so an earlier try was saved
+                // and its reply lost: if the entry is there, it was sent (the server's version stands).
+                val saved = e.status == 409 && runCatching { api.call("GET", "/api/app/transactions/${item.entry.id}", emptyMap(), null) }
+                    .onFailure { if (it is IOException) return@withLock sent }
+                    .isSuccess
+                if (saved) sent++
+                // Otherwise the server refused it for good (400, 404). A 403 means read-only: keep nothing either.
+                else _rejected.tryEmit(e.message ?: "")
             }
             save(_items.value.filterNot { it.entry.id == item.entry.id })
         }
