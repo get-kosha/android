@@ -11,6 +11,13 @@ Written 7 Nov 2026, at the end of the design phase. This is the brief for buildi
 | Design, as source | `design/source/*.dc.html` (markup and copy of each screen) and `design/source/k.css` (every token and component style), in the same zip |
 | Design canvas (owner only) | https://claude.ai/artifact/CMwUHh6hVasBLg9ZZVhzfa (Design artifact "Kosha for iOS and Android", 88 screens, 10 pages) |
 
+**Revision 2 (7 Nov, evening).** The Add screen changed after the first handoff; the sections below already describe the new version:
+- The keypad's last row is `. 0 ⌫ +`: backspace replaced `00`, and there is no backspace next to the amount any more. This applies to every keypad (Add, fee sheet, Fix balance, Update gains, Enter this payment, the inputs kit).
+- The account is a pill under the amount, showing its full name (truncated when long). Transfers show two pills, From → To, with the arrow as the swap button; the From/To rows are gone. PaymentSheet uses the same pill.
+- The tiles are **Category, Date, Repeat, Note** (Transfer: Date, Repeat, Note).
+- **Repeat** (new `RepeatSheet` board) turns the entry into a bill, subscription, recurring income or recurring transfer, and the primary button says so (Add bill, Add subscription, Add recurring income, Add recurring transfer). See §5.2, §7.6 and §3.4.
+- Weekday labels in the designs now match the 2026 calendar (5 Nov is a Thursday, 20 Nov a Friday, 31 Oct a Saturday).
+
 The PNGs are the spec for layout. `k.css` is the spec for numbers: colours, sizes, radii. When a PNG and this file disagree, this file wins. When either disagrees with the web repo about money behaviour, the web repo wins.
 
 ---
@@ -105,6 +112,7 @@ These stay on the web and the app opens them in the browser, then returns (the d
 
 - **Idempotent creates.** The web's offline queue sends a client-chosen id (`newId`) so a retried entry is saved once (`src/lib/offline.ts`). Make sure `create_transactions` accepts a client id the same way; add it if not.
 - **Rate limit** is 120 requests a minute per user across REST and MCP. Batch writes, cache reads, and never poll.
+- **Recurring from Add.** Saving an entry with Repeat creates the recurring item (`create_recurring`: name from the payee, account, category, amount, `every`/`unit`, start day = the entry's day, `endDay`, `autoPay`, kind `subscription` or `repetitive`; income is `repetitive` with a positive amount; a transfer sets `toAccountId`, `toAmount` and the transfer category) **and records this entry as its first payment**, even when automatic recording is off. Make that one call (for example a `recordFirst` flag) so a retry can't create two schedules; it should accept the same client id as `create_transactions`.
 - **Locale.** The public API answers in English. App-only endpoints and AI replies should follow the app's language (send `Accept-Language`, and have the server honour it the way `start.ts` honours the `kosha-locale` cookie).
 
 ---
@@ -170,37 +178,40 @@ Welcome runs when the account has no accounts yet (match the web's `/welcome` lo
 
 The Add screen opens on the amount, with the keypad visible and no keyboard.
 
-Layout top to bottom: close ×, segmented **Expense · Income · Transfer**, AI sparkle (Describe it), the amount (expression line above it when it has an operator, backspace on the right, a note below such as the conversion hint), the **tile row**, the payee field with "usually €28", the 4×4 keypad, then **Add another** (secondary) and the primary button.
+Layout top to bottom: close ×, segmented **Expense · Income · Transfer**, AI sparkle (Describe it), the amount (expression line above it when it has an operator), the **account pill** right under it (Transfer: From pill → To pill), a note under that such as the conversion hint, the **tile row** (Category, Date, Repeat, Note), the payee field with "usually €28" (Transfer: the Fee and rate row), the 4×4 keypad with backspace, then **Add another** (secondary) and the primary button.
 
 | Board | What it is |
 |---|---|
-| AddEmpty | Fresh state: "€0 · Start with the amount", tiles show the default account, an empty dashed Category tile, Today, Note. Primary says **Next** (disabled until there is an amount). |
+| AddEmpty | Fresh state: "€0", the default account's pill, "Start with the amount", then an empty dashed Category tile, Today, Repeat, Note. Primary says **Next** (disabled until there is an amount). |
 | AddPayee | Typing a payee (system keyboard): suggestions with category, account, times used and usual amount ("Dosaking Indisches Restaurant · Dining · Visa Card · 14 times · usually €28.00"), then Go to and "Search activity for …". Picking one fills the guesses. |
-| AddReady | Amount `24.07 + 5.50 = −€29.57`, Visa Card, Dining (guessed), Today, payee with "usually €28". Primary **Add expense**. |
-| AddIncome | Income: "+€3,240.00 · Money in shows with a plus" in the positive colour, income categories, payee with its usual amount. |
-| AddSaved | After saving: toast "Added −€29.57 · Dosaking Indisches Restaurant" with **Undo**, form reset for the next one. Account and date stay. |
-| AccountSheet | Account picker: Bank & cash, Credit cards, Investments, each with colour square, type, currency and balance (cards show available credit). Recent first; archived accounts left out. |
+| AddReady | Amount `24.07 + 5.50 = −€29.57`, Visa Card pill (guessed), Dining (guessed), Today, Repeat off, payee with "usually €28". Primary **Add expense**. |
+| AddIncome | A salary that repeats: "+€3,240.00 · Money in shows with a plus" in the positive colour, N26 Main pill, Salary, Sat 31 Oct, Repeat **Monthly**, payee Nordlicht GmbH with its usual amount. Primary **Add recurring income**. |
+| AddSaved | After saving: toast "Added −€29.57 · Dosaking Indisches Restaurant" with **Undo**, form reset for the next one. Account and date stay; Repeat resets to off. |
+| AccountSheet | Account picker, opened from the pill: Bank & cash, Credit cards, Investments, each with colour square, type, currency and balance (cards show available credit). Recent first; archived accounts left out. For a transfer it opens as From or To. |
 | DateSheet | Date and time: quick picks (Today, Yesterday, Start of month), month grid with dots on days that already have entries, future days allowed, "Time 13:05" row. |
 | TimeSheet | iOS-style wheel for hours and minutes, Now, 24-hour or AM/PM from the language. |
 | NoteSheet | Note, tags (type a tag then space; "Used before" chips), event (picked by date automatically, or choose, or New event), files with Attach. |
+| RepeatSheet | Repeat, opened from the Repeat tile: Never · Weekly · Monthly · Yearly (with "Every month on the 7th" and a **Custom** link for every N days, weeks, months or years), **List it as** Bill · Subscription (expenses only), Ends (Never or a date), Record payments automatically (default from Settings › Recurring), "Today's payment is added now. The next is due Mon 7 Dec, under Subscriptions in Recurring.", Done. |
 | CategorySheet | "Pick a category", reached through **Next**: "Späti am Eck is new, so Kosha can't guess one. Pick it and the expense is added." Search, Most used, All, New. Picking a tile here **saves immediately**. |
-| AddTransfer | Transfer: amount, "Not counted as spending. The fee is.", tiles Date and Note only, From and To account rows with a swap button, a "Fee and rate" row. Primary **Add transfer**. |
+| AddTransfer | Transfer: amount, From and To pills with the arrow between them as the swap button (each pill truncates; no carets), "Not counted as spending. The fee is.", tiles Date, Repeat, Note, a "Fee and rate" row. Primary **Add transfer**. |
 | FeeSheet | Fee (in the From currency), Received (in the To currency), Via (provider), rate, and the cost against the market rate ("It costs €4.76 (0.95%) against the market rate"). |
 | DescribeSheet | AI: "What did you spend or receive?" one sentence ("Lunch with Sam at Nando's, 18.50 yesterday"), Fill in, or Scan a receipt. Uses the system keyboard. |
 | ReceiptCamera | AI: full-screen camera with receipt frame, choose a photo, shutter. |
-| AddFilledAI | Result: "Read from your receipt. Check it before adding. The photo is attached." AI-guessed tiles carry a small sparkle corner. |
+| AddFilledAI | Result: "Read from your receipt. Check it before adding. The photo is attached." The account pill shows as a guess; AI-guessed tiles carry a small sparkle corner. |
 
 Behaviour:
 
 - Account defaults to the last one used on this phone (Settings › General › Default account), date to today, kind to Expense (General › Add opens as).
 - Typing a payee or picking a suggestion fills **guesses** for category and account from payee rules and history (`search_payees`); a guess shows in the secondary ink colour until confirmed by tapping. With AI auto-categorise on, a new payee can get an AI guess (sparkle corner).
-- **Next flow:** if there is an amount and no category is known, the primary button says **Next** and opens the category sheet; picking a tile saves. With a category known (picked or guessed), the primary says **Add expense / Add income** (never the amount).
+- **Account pill:** the full account name under the amount (truncated with an ellipsis when long), with its colour square (wallet icon in neutral mode) and a caret. Tap opens the account sheet. A guessed account shows its name in ink2.
+- **Next flow:** if there is an amount and no category is known, the primary button says **Next** and opens the category sheet; picking a tile saves. With a category known (picked or guessed), the primary says **Add expense / Add income / Add transfer** (never the amount).
+- **Repeat:** off by default (tile shows "Repeat" in ink3). Picking Weekly, Monthly, Yearly or a custom interval makes the tile show it ("Monthly") and changes the primary to **Add bill** or **Add subscription** (expense, per List it as), **Add recurring income** or **Add recurring transfer**. Saving creates the recurring item starting on the entry's date and records this entry as its first payment (§3.4); the payee becomes its name. The toast says "Added −€9.99 · Disney+, repeats every month". Repeat resets to off after each save. Offline, an entry with Repeat can't be queued: say so and offer to save it once.
 - **Add another** saves and keeps the form open for the next entry, with account and date kept (AddSaved). The primary button saves and closes Add, back to where the user was, with the same toast.
 - After every save: success haptic, toast with Undo for 5 seconds (Undo deletes the saved entry, or removes it from the outbox).
 - Transfers in two currencies ask for the received amount in the fee sheet; the server stores both legs.
 - When the account's currency differs from the main currency, the note under the amount shows "≈ €16.49 at today's rate".
 - Offline: the save goes to the outbox ("Saved offline €4.20, Bonanza Coffee" with Undo).
-- Data: `create_transactions` (with client id), `create_transfers`, `search_payees`, `list_tags`, `list_events`, `create_event`, `read_transaction` (AI), `app: attachments`.
+- Data: `create_transactions` (with client id), `create_transfers`, `create_recurring` (Repeat), `search_payees`, `list_tags`, `list_events`, `create_event`, `read_transaction` (AI), `app: attachments`.
 
 ### 5.3 Overview (`03-overview-*`)
 
@@ -229,10 +240,10 @@ Behaviour:
 
 | Board | What it is | Data |
 |---|---|---|
-| Recurring | Header with `+` (new recurring). **Committed per month** card (bills and subscriptions split, per year with % of income, "Moved to savings … not counted"). **Looks recurring** suggestion (Make recurring / Not recurring). Lists: Bills, Subscriptions, Income, Transfers, sorted by cost per month, each with "Every month · next 20 Nov", overdue in warning colour, yearly ones show the monthly equivalent. Ended (3), collapsed. | `list_recurring`, `create_recurring`, `dismiss_recurring_suggestion` |
+| Recurring | Header with `+` (new recurring; new ones also come from Add with Repeat). **Committed per month** card (bills and subscriptions split, per year with % of income, "Moved to savings … not counted"). **Looks recurring** suggestion (Make recurring / Not recurring). Lists: Bills, Subscriptions, Income, Transfers, sorted by cost per month, each with "Every month · next 20 Nov", overdue in warning colour, yearly ones show the monthly equivalent. Ended (3), collapsed. | `list_recurring`, `create_recurring`, `dismiss_recurring_suggestion` |
 | RecurringDetail | Next payment (date, "Kosha asks for the amount that day" for variable ones, Enter amount / Skip this one), Paid so far, Per month, Payments list (paid, skipped, changed for this payment only, attached bills), Documents by month, account, category, amount, ends; End this bill / Delete. | `list_recurring`, `update_recurring`, `update_recurring_payment`, `delete_recurring` |
 | RecurringForm | New recurring: Bill · Subscription · Income · Transfer, name, usual amount (keypad), "Amount changes every time", account, category, repeats every N day/week/month/year (stepper + segmented), first payment, ends, "Kosha will record payments from 10 Aug until today: 3 payments.", Record payments automatically. | `create_recurring` |
-| PaymentSheet | Enter this payment: amount on the keypad ("Usually about €84.00"), account, date, Attach bill, Reset to regular, Record payment. | `update_recurring_payment`, `app: attachments` |
+| PaymentSheet | Enter this payment: amount on the keypad, the account pill under it, "Usually about €84.00", date and Attach bill chips, Reset to regular, Record payment. | `update_recurring_payment`, `app: attachments` |
 | PayslipsSheet | Documents by month for a recurring income or bill: tick months, "Share 3 as zip" (share sheet). | `app: attachments` |
 
 ### 5.6 Accounts (`06-accounts-*`)
@@ -360,7 +371,8 @@ Shadows: pop `0 8 24 -6 rgba(17,17,19,.18)` + 1px ring at 6%; sheet `0 -12 40 -1
 - Toast: top, 16 from the edges, min height 52, radius 14, ink ground, Undo button inside.
 - Tab bar: 88 high including the home indicator area, glass with blur, 5 columns; centre Add button 56×52, radius 18, ink ground, plus icon 26.
 - Header: page title left, then currency pill (36 high), icon buttons (44), avatar (36).
-- Tile row (Add): 4 equal tiles, gap 6, 58 high, radius 14, 1px line, icon 18 over a 12.5px label.
+- Tile row (Add): 4 equal tiles (3 for a transfer), gap 6, 58 high, radius 14, 1px line, icon 18 over a 12.5px label.
+- Account pill: 36 high, pill radius, 1px line, surface, padding 0 10 0 13, gap 8; 10px colour square (radius 3), name 14/500 truncated, caret-down 13 in ink3; selected (sheet open) = 1px ink border. In a transfer each pill takes at most half the row minus the 34px swap button, without the caret.
 - Keypad: 4 columns; digit keys 60 high, Geist Mono 28; operator column on soft, radius 12, 54 high, Geist 26 in ink2; the active operator highlighted.
 - Calendar: 38 day cells, today outlined, selected filled with accent, 4px dot under days with entries.
 - Charts: thin lines (2px), dashed comparisons, area fills at 6% ink; bar radius 4 on top; account colours in the net worth chart.
@@ -383,23 +395,24 @@ Build these once in `core:design` (and later `KoshaKit/Design`) and show them al
 
 ### 7.1 Amount keypad
 
-Keys, row by row: `1 2 3 ÷` / `4 5 6 ×` / `7 8 9 −` / `. 0 00 +`. Backspace sits next to the amount; holding it clears. The same keypad is used everywhere an amount is entered (Add, transfer fee sheet, Fix balance, Update gains, Enter this payment, recurring amount, transaction edit, filters' amount).
+Keys, row by row: `1 2 3 ÷` / `4 5 6 ×` / `7 8 9 −` / `. 0 ⌫ +`. Backspace (⌫, Phosphor `backspace` in ink2) deletes the last character of the expression; holding it clears the amount. The same keypad is used everywhere an amount is entered (Add, transfer fee sheet, Fix balance, Update gains, Enter this payment, recurring amount, transaction edit, filters' amount).
 
 Port this logic as a pure function with unit tests (from the working prototype in `design/source/AddPrototype.dc.html`):
 
 - The input is a string expression such as `24.07+5.5`. The current segment is the text after the last operator.
 - Digit: append, unless the segment's integer part already has 8 digits, or the decimals are full (2 for most currencies, the currency's minor units in general). A leading `0` is replaced by the next digit.
-- `00`: like two zeros, ignored when the segment is empty or `0`. `0` on an empty segment types `0`.
+- `0` on an empty segment types `0`; another `0` after a lone `0` is ignored.
+- ⌫: removes the last character (digit, dot or operator). Hold: clears everything. Disabled when the amount is empty.
 - `.`: only once per segment; on an empty segment types `0.`. Hidden for zero-decimal currencies.
 - Operator: ignored on an empty input; replaces a trailing operator; drops a trailing `.` first.
 - Evaluate with × and ÷ before + and −, ignoring a trailing operator or dot, then round to the currency's minor units. Division by zero is invalid: the amount shows `…` and save is disabled.
 - Display: with an operator, show the expression above in small type (`24.07 + 5.50`, with `×`, `÷`, `−`) and the result as the amount. Without, show the typed number grouped (`1,204.5`). The kind sets the sign: `−` for expense, `+` for income, none for transfer.
 - Save is enabled when the result is above zero. Convert to integer minor units with the sign of the kind.
-- Accessibility labels: "Divide", "Multiply", "Subtract", "Add", "Decimal point", "Double zero", "Delete, hold to clear".
+- Accessibility labels: "Divide", "Multiply", "Subtract", "Add", "Decimal point", "Delete, hold to clear".
 
 ### 7.2 Tile row
 
-Four tiles above the payee: **Account** (colour square or wallet icon + name), **Category** (icon + name), **Date** (Today, Yesterday, Wed 5 Nov), **Note** (or "1 file" when there is only a file). States: empty (dashed border, ink3), guess (label in ink2; a sparkle corner when AI made the guess), picked. In Transfer mode only Date and Note show, in 2 columns, with the From/To rows below.
+Four tiles above the payee: **Category** (icon + name), **Date** (Today, Yesterday, Thu 5 Nov), **Repeat** ("Repeat" when off, else Weekly, Monthly, Yearly or "Every 2 weeks"), **Note** (or "1 file" when there is only a file). States: empty (dashed border, ink3; used for a missing category), optional-and-unset (solid border, ink3; Repeat and Note), guess (label in ink2; a sparkle corner when AI made the guess), picked. In Transfer mode Date, Repeat and Note show in 3 columns. The account is not a tile: it is the pill under the amount (§5.2).
 
 ### 7.3 Category picker
 
@@ -415,7 +428,11 @@ Date: quick picks (Today, Yesterday, a recent weekday, Start of month), month gr
 - List picker: search on top, radio list. Used for time zone, currency, language and "Move to…".
 - Payee field: the only text field on Add. Suggestions from `search_payees` show times used and the usual amount; picking fills guesses.
 
-### 7.6 Sheets, toasts, confirmations
+### 7.6 Repeat sheet
+
+Opens from the Repeat tile. A segmented control Never · Weekly · Monthly · Yearly, a line that reads the rule back ("Every week on Saturdays", "Every month on the 7th", "Every year on 7 November", taken from the entry's date) with a **Custom** link (a stepper for N plus Day · Week · Month · Year). For expenses, **List it as** Bill · Subscription (the web's `repetitive` and `subscription`). Ends: Never, or a date from the date sheet. Record payments automatically: a switch defaulting to Settings › Recurring. A closing line says what will happen ("Today's payment is added now. The next is due Mon 7 Dec, under Subscriptions in Recurring."). Done closes the sheet; nothing is saved until the primary button.
+
+### 7.7 Sheets, toasts, confirmations
 
 - One sheet pattern for every picker; the keypad stays under the thumb when a sheet doesn't need it.
 - Toasts carry Undo for five seconds.
@@ -449,7 +466,7 @@ Android first. Each milestone ends with the app running on a device and the rele
 | M1 | **Skeleton and design system** | Android project with modules, KoshaTheme (tokens, accents, neutral mode, dark), fonts, icons, the Inputs kit debug screen with every component, tab bar shell with placeholder tabs. |
 | M2 | **Auth and session** | SignIn, browser sign-in with PKCE, Finishing, SignInError, OwnServer, demo, token storage and refresh, sign out, Launch, app lock and LockScreen. |
 | M3 | **Data layer** | API client for `/api/v1` and `/api/app`, cache, outbox with WorkManager, settings and meta, Loading and Offline states. |
-| M4 | **Add** | Every Add board: keypad logic with tests, tiles, payee suggestions and guesses, category Next flow, account/date/time/note sheets, income, transfer with fee sheet, Add another, Undo toast, offline save, haptics. App shortcuts. |
+| M4 | **Add** | Every Add board: keypad logic with tests, account pill, tiles, Repeat sheet and recurring save, payee suggestions and guesses, category Next flow, account/date/time/note sheets, income, transfer with fee sheet, Add another, Undo toast, offline save, haptics. App shortcuts. |
 | M5 | **Overview and Activity** | Overview with all cards and charts, month and currency sheets, account menu, search and quick add, Activity with filters, swipe actions, tag/event view, transaction and transfer detail, delete, attachments. |
 | M6 | **Recurring and Accounts** | Recurring list, detail, form, payment sheet, documents; Accounts with net worth chart, account and investment detail, account form, fix balance, gains, exchanges. |
 | M7 | **Reconcile and Import** | Reconcile start, tick, done; Import choose, accounts, payees, done; share target for statements. |
