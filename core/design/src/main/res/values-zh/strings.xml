@@ -1728,6 +1728,8 @@
     <plurals name="settings_events_delete_body">
         <item quantity="other">它的 %1$s 笔交易会保留，但不再属于任何事件。</item>
     </plurals>
+    <string name="settings_report_issue">报告问题</string>
+    <string name="settings_report_issue_desc">打开 Kosha 在 GitHub 上的 issue 页面，你可以在那里报告错误或提出建议。</string>
     <string name="settings_rec_group">付款</string>
     <string name="settings_rec_auto_title">自动记账</string>
     <string name="settings_rec_auto_description">为新账单设置默认值。开启后，Kosha 会在到期日自动记录固定金额。每个账单可单独设置。</string>

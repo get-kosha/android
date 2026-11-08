@@ -1886,6 +1886,8 @@
         <item quantity="many">Его %1$s операций останутся, но больше не будут относиться к событию.</item>
         <item quantity="other">Его %1$s операции останутся, но больше не будут относиться к событию.</item>
     </plurals>
+    <string name="settings_report_issue">Сообщить о проблеме</string>
+    <string name="settings_report_issue_desc">Открывает issues Kosha на GitHub, где можно сообщить об ошибке или предложить идею.</string>
     <string name="settings_rec_group">Платежи</string>
     <string name="settings_rec_auto_title">Записывать платежи автоматически</string>
     <string name="settings_rec_auto_description">Значение по умолчанию для новых обязательных платежей. Если включено, Kosha записывает фиксированные суммы в день оплаты. У каждого платежа остаётся своя настройка.</string>

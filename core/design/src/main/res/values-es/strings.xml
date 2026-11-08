@@ -1968,6 +1968,8 @@
         <item quantity="many">Sus %1$s movimientos se conservan, pero ya no pertenecerán a ningún evento.</item>
         <item quantity="other">Sus %1$s movimientos se conservan, pero ya no pertenecerán a ningún evento.</item>
     </plurals>
+    <string name="settings_report_issue">Informar de un problema</string>
+    <string name="settings_report_issue_desc">Abre las incidencias de Kosha en GitHub, donde puedes informar de un error o proponer una idea.</string>
     <string name="settings_rec_group">Pagos</string>
     <string name="settings_rec_auto_title">Registrar pagos automáticamente</string>
     <string name="settings_rec_auto_description">Define el valor predeterminado para las facturas nuevas. Si está activado, Kosha registra los importes fijos en su fecha de vencimiento. Cada factura conserva su propia opción.</string>

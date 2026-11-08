@@ -1673,6 +1673,8 @@
     <plurals name="settings_events_delete_body">
         <item quantity="other">%1$s件の取引は残りますが、イベントには属さなくなります。</item>
     </plurals>
+    <string name="settings_report_issue">問題を報告</string>
+    <string name="settings_report_issue_desc">GitHubのKoshaのissueを開きます。不具合の報告やアイデアの提案ができます。</string>
     <string name="settings_rec_group">支払い</string>
     <string name="settings_rec_auto_title">支払いを自動で記録</string>
     <string name="settings_rec_auto_description">新しい請求の既定値を設定します。オンにすると、金額が決まっている支払いを期日にKoshaが記録します。請求ごとに個別の設定が保たれます。</string>

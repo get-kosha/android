@@ -1776,6 +1776,8 @@
         <item quantity="one">Its %1$s transaction stays; it won\'t belong to an event any more.</item>
         <item quantity="other">Its %1$s transactions stay; they won\'t belong to an event any more.</item>
     </plurals>
+    <string name="settings_report_issue">Report a problem</string>
+    <string name="settings_report_issue_desc">Opens Kosha\'s issues on GitHub, where you can report a bug or suggest an idea.</string>
     <string name="settings_rec_group">Payments</string>
     <string name="settings_rec_auto_title">Record payments automatically</string>
     <string name="settings_rec_auto_description">Sets the default for new bills. When on, Kosha records fixed amounts on their due date. Each bill keeps its own choice.</string>

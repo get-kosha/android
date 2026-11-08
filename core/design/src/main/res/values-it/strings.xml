@@ -1968,6 +1968,8 @@
         <item quantity="many">I suoi %1$s movimenti restano; non apparterranno più a un evento.</item>
         <item quantity="other">I suoi %1$s movimenti restano; non apparterranno più a un evento.</item>
     </plurals>
+    <string name="settings_report_issue">Segnala un problema</string>
+    <string name="settings_report_issue_desc">Apre le issue di Kosha su GitHub, dove puoi segnalare un bug o proporre un\'idea.</string>
     <string name="settings_rec_group">Pagamenti</string>
     <string name="settings_rec_auto_title">Registra i pagamenti in automatico</string>
     <string name="settings_rec_auto_description">Imposta il valore predefinito per le nuove bollette. Se attivo, Kosha registra gli importi fissi alla scadenza. Ogni bolletta mantiene la propria scelta.</string>

@@ -181,7 +181,8 @@ fun providerName(id: String): String = when (id) {
 
 /**
  * Settings: search across every section's rows, the profile card, then the sections grouped You, Preferences,
- * Money, Intelligence and Data, each with a line about where it stands. Footer: version and server.
+ * Money, Intelligence and Data, each with a line about where it stands, then Report a problem (the Android
+ * repo's GitHub issues). Footer: version and server.
  */
 @Composable
 private fun SettingsList() {
@@ -288,6 +289,12 @@ private fun SettingsList() {
                 }.toTypedArray())
             }
         }
+
+        Rows({
+            NavRow(stringResource(R.string.settings_report_issue), stringResource(R.string.settings_report_issue_desc), icon = "bug", external = true) {
+                openUrl(context, "https://github.com/get-kosha/android/issues")
+            }
+        })
 
         val version = remember {
             runCatching {

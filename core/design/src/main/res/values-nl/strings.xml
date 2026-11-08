@@ -1776,6 +1776,8 @@
         <item quantity="one">De %1$s transactie blijft bestaan, maar hoort dan niet meer bij een evenement.</item>
         <item quantity="other">De %1$s transacties blijven bestaan, maar horen dan niet meer bij een evenement.</item>
     </plurals>
+    <string name="settings_report_issue">Probleem melden</string>
+    <string name="settings_report_issue_desc">Opent de issues van Kosha op GitHub, waar je een fout kunt melden of een idee kunt voorstellen.</string>
     <string name="settings_rec_group">Betalingen</string>
     <string name="settings_rec_auto_title">Betalingen automatisch vastleggen</string>
     <string name="settings_rec_auto_description">Stelt de standaard in voor nieuwe vaste lasten. Als dit aanstaat, legt Kosha vaste bedragen vast op de dag dat ze betaald moeten worden. Elke vaste last houdt zijn eigen keuze.</string>

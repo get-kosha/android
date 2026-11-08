@@ -1968,6 +1968,8 @@
         <item quantity="many">Ses %1$s opérations sont conservées ; elles n\'appartiendront plus à aucun événement.</item>
         <item quantity="other">Ses %1$s opérations sont conservées ; elles n\'appartiendront plus à aucun événement.</item>
     </plurals>
+    <string name="settings_report_issue">Signaler un problème</string>
+    <string name="settings_report_issue_desc">Ouvre les tickets de Kosha sur GitHub, où vous pouvez signaler un bug ou proposer une idée.</string>
     <string name="settings_rec_group">Paiements</string>
     <string name="settings_rec_auto_title">Enregistrer les paiements automatiquement</string>
     <string name="settings_rec_auto_description">Définit la valeur par défaut des nouvelles factures. Si activé, Kosha enregistre les montants fixes à leur échéance. Chaque facture garde son propre choix.</string>

@@ -1776,6 +1776,8 @@
         <item quantity="one">इसका %1$s लेन-देन बना रहेगा; वह अब किसी इवेंट का हिस्सा नहीं रहेगा।</item>
         <item quantity="other">इसके %1$s लेन-देन बने रहेंगे; वे अब किसी इवेंट का हिस्सा नहीं रहेंगे।</item>
     </plurals>
+    <string name="settings_report_issue">समस्या बताएँ</string>
+    <string name="settings_report_issue_desc">GitHub पर Kosha के issues खोलता है, जहाँ आप कोई गड़बड़ी बता सकते हैं या कोई सुझाव दे सकते हैं।</string>
     <string name="settings_rec_group">भुगतान</string>
     <string name="settings_rec_auto_title">भुगतान अपने-आप दर्ज करें</string>
     <string name="settings_rec_auto_description">नए बिलों के लिए डिफ़ॉल्ट तय करता है। चालू होने पर Kosha तय रकम को देय तारीख पर दर्ज कर देता है। हर बिल की अपनी अलग सेटिंग रहती है।</string>

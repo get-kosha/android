@@ -1728,6 +1728,8 @@
     <plurals name="settings_events_delete_body">
         <item quantity="other">이벤트의 거래 %1$s건은 그대로 남지만, 더 이상 이벤트에 속하지 않아요.</item>
     </plurals>
+    <string name="settings_report_issue">문제 신고</string>
+    <string name="settings_report_issue_desc">GitHub에서 Kosha 이슈를 열어요. 버그를 신고하거나 아이디어를 제안할 수 있어요.</string>
     <string name="settings_rec_group">결제</string>
     <string name="settings_rec_auto_title">결제 자동 기록</string>
     <string name="settings_rec_auto_description">새 고정비의 기본값이에요. 켜면 Kosha가 정해진 금액을 예정일에 기록해요. 고정비마다 각자의 설정을 유지해요.</string>

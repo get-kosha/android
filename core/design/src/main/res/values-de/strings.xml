@@ -1776,6 +1776,8 @@
         <item quantity="one">Die %1$s Buchung bleibt erhalten, gehört aber zu keinem Ereignis mehr.</item>
         <item quantity="other">Die %1$s Buchungen bleiben erhalten, gehören aber zu keinem Ereignis mehr.</item>
     </plurals>
+    <string name="settings_report_issue">Problem melden</string>
+    <string name="settings_report_issue_desc">Öffnet die Issues von Kosha auf GitHub. Dort kannst du einen Fehler melden oder eine Idee vorschlagen.</string>
     <string name="settings_rec_group">Zahlungen</string>
     <string name="settings_rec_auto_title">Zahlungen automatisch buchen</string>
     <string name="settings_rec_auto_description">Voreinstellung für neue wiederkehrende Zahlungen. Ist sie an, bucht Kosha feste Beträge am Fälligkeitstag. Jede Zahlung behält ihre eigene Einstellung.</string>

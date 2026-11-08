@@ -1968,6 +1968,8 @@
         <item quantity="many">As %1$s transações dele continuam, mas não vão mais pertencer a um evento.</item>
         <item quantity="other">As %1$s transações dele continuam, mas não vão mais pertencer a um evento.</item>
     </plurals>
+    <string name="settings_report_issue">Relatar um problema</string>
+    <string name="settings_report_issue_desc">Abre as issues do Kosha no GitHub, onde você pode relatar um bug ou sugerir uma ideia.</string>
     <string name="settings_rec_group">Pagamentos</string>
     <string name="settings_rec_auto_title">Registrar pagamentos automaticamente</string>
     <string name="settings_rec_auto_description">Define o padrão para novas despesas fixas. Quando ativado, o Kosha registra valores fixos na data de vencimento. Cada despesa fixa mantém a própria escolha.</string>
