@@ -8,7 +8,13 @@ import android.text.Annotation
 import android.text.Spanned
 import android.text.format.DateFormat
 import android.text.format.Formatter
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import app.getkosha.ui.filesAuthority
+import java.io.File
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -314,6 +320,28 @@ private fun NoteSheet(m: AddModel, ui: AddUi, close: () -> Unit) {
             }
         }
     }
+    // A photo from the phone's camera app (a JPEG in the cache), staged like a picked file; no AI needed.
+    var photo by remember { mutableStateOf<File?>(null) }
+    val camera = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { ok ->
+        val file = photo ?: return@rememberLauncherForActivityResult
+        photo = null
+        if (!ok) return@rememberLauncherForActivityResult
+        scope.launch {
+            val bytes = withContext(Dispatchers.IO) { runCatching { file.readBytes().also { file.delete() } }.getOrNull() }
+            when {
+                bytes == null || bytes.isEmpty() -> ui.error(ui.s(R.string.tx_attach_failed))
+                bytes.size > ATTACHMENT_LIMIT -> ui.error(ui.s(R.string.tx_file_too_big, file.name))
+                else -> m.files.add(Staged(file.name, "image/jpeg", bytes))
+            }
+        }
+    }
+    val takePhoto = {
+        val file = File(context.cacheDir, "camera").apply { mkdirs() }.resolve("photo-${System.currentTimeMillis()}.jpg")
+        photo = file
+        camera.launch(FileProvider.getUriForFile(context, context.filesAuthority(), file))
+    }
+    // Add declares the camera permission (receipt scanning), so the camera app's intent needs it granted too.
+    val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted -> if (granted) takePhoto() }
     val addTags = { text: String ->
         m.tags = (m.tags + parseTags(text)).distinct().take(app.getkosha.model.MAX_TAGS)
         tagText = ""
@@ -368,8 +396,12 @@ private fun NoteSheet(m: AddModel, ui: AddUi, close: () -> Unit) {
                                     leading = { PhIcon(if (f.type.startsWith("image/")) "image" else "file-pdf", size = 18.dp) },
                                 )
                             }
+                            Chip(stringResource(R.string.app_act_take_photo), onClick = {
+                                if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) takePhoto()
+                                else permission.launch(Manifest.permission.CAMERA)
+                            }, leading = { PhIcon("camera", size = 18.dp) })
                             Chip(stringResource(R.string.app_add_attach), onClick = {
-                                pickFile.launch(arrayOf("image/jpeg", "image/png", "image/webp", "application/pdf"))
+                                pickFile.launch(arrayOf("image/jpeg", "image/png", "image/webp", "image/heic", "image/heif", "application/pdf"))
                             }, leading = { PhIcon("paperclip", size = 18.dp) })
                         }
                     }

@@ -10,7 +10,19 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.util.LruCache
+import androidx.compose.foundation.Image
+import androidx.compose.runtime.produceState
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
+import java.nio.ByteBuffer
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.roundToInt
 import android.provider.OpenableColumns
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -72,6 +84,7 @@ import app.getkosha.ui.LocalToasts
 import app.getkosha.ui.rememberKosha
 import app.getkosha.ui.write
 import kotlinx.coroutines.Dispatchers
+import androidx.compose.foundation.layout.fillMaxSize
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
@@ -137,10 +150,7 @@ internal fun Attachments(t: Transaction, writable: Boolean, onAttach: () -> Unit
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
-                    Box(
-                        Modifier.size(56.dp, 72.dp).clip(RoundedCornerShape(8.dp)).background(c.soft).border(1.dp, c.line, RoundedCornerShape(8.dp)),
-                        contentAlignment = Alignment.Center,
-                    ) { PhIcon(if (a.type == "application/pdf") "file-pdf" else "file-image", size = 22.dp, tint = c.ink3) }
+                    Thumb(a, Modifier.size(56.dp, 72.dp).clip(RoundedCornerShape(8.dp)).background(c.soft).border(1.dp, c.line, RoundedCornerShape(8.dp)))
                     Column(Modifier.weight(1f)) {
                         KText(a.name, maxLines = 1)
                         KText(fileSize(a.size, context), style = KoshaTheme.type.num.copy(fontSize = KoshaTheme.type.xs.fontSize), color = c.ink3)
@@ -169,6 +179,40 @@ internal fun Attachments(t: Transaction, writable: Boolean, onAttach: () -> Unit
 }
 
 /** Saves the file where another app can read it, then opens it there. */
+/**
+ * Decoded thumbnails by attachment id. A file never changes under its id, so one decode per run is enough.
+ * ponytail: memory only, and each thumbnail downloads the whole file; a server preview would replace both.
+ */
+private val thumbs = LruCache<String, ImageBitmap>(48)
+
+/** An image attachment as a small picture (JPEG, PNG, WebP or HEIF); a PDF, or one that won't load, as its icon. */
+@Composable
+private fun Thumb(a: Attachment, modifier: Modifier) {
+    val kosha = rememberKosha()
+    val c = KoshaTheme.colors
+    val side = with(LocalDensity.current) { 72.dp.roundToPx() }
+    val bitmap by produceState(thumbs.get(a.id), a.id) {
+        if (value != null || !a.type.startsWith("image/")) return@produceState
+        value = runCatching {
+            val bytes = kosha.api.bytes("/api/app/attachments/${a.id}")
+            withContext(Dispatchers.Default) { thumbnail(bytes, side) }
+        }.getOrNull()?.also { thumbs.put(a.id, it) }
+    }
+    Box(modifier, contentAlignment = Alignment.Center) {
+        val shown = bitmap
+        if (shown != null) Image(shown, contentDescription = null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+        else PhIcon(if (a.type == "application/pdf") "file-pdf" else "file-image", size = 22.dp, tint = c.ink3)
+    }
+}
+
+/** Decodes an image so its shorter side is about [side] pixels, turned upright (ImageDecoder reads HEIF too). */
+internal fun thumbnail(bytes: ByteArray, side: Int): ImageBitmap =
+    ImageDecoder.decodeBitmap(ImageDecoder.createSource(ByteBuffer.wrap(bytes))) { decoder, info, _ ->
+        val scale = min(1f, side.toFloat() / min(info.size.width, info.size.height))
+        decoder.setTargetSize(max(1, (info.size.width * scale).roundToInt()), max(1, (info.size.height * scale).roundToInt()))
+        decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
+    }.asImageBitmap()
+
 private suspend fun open(context: Context, a: Attachment, bytes: ByteArray) {
     val file = withContext(Dispatchers.IO) {
         File(context.cacheDir, "attachments").apply { mkdirs() }.resolve(a.id + "-" + a.name.replace(Regex("[^A-Za-z0-9._-]"), "_")).apply { writeBytes(bytes) }
