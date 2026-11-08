@@ -1,0 +1,6 @@
+Primeira versão do Kosha para Android.
+• Anote um pagamento em segundos: primeiro o valor, no teclado do Kosha.
+• Compare este mês com um mês normal.
+• Todas as contas em um só patrimônio, em qualquer moeda.
+• Sem sinal? Os lançamentos novos ficam no celular e sincronizam depois.
+Experimente a conta demo ou entre com sua conta do getkosha.app.

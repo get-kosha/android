@@ -1,0 +1,6 @@
+De eerste versie van Kosha voor Android.
+• Noteer een uitgave in seconden: eerst het bedrag, op het toetsenblok van Kosha.
+• Vergelijk deze maand met een gewone maand.
+• Al je rekeningen in één vermogen, in elke valuta.
+• Geen bereik? Nieuwe transacties wachten op je telefoon en worden later gesynchroniseerd.
+Probeer het demo-account of log in met je getkosha.app-account.

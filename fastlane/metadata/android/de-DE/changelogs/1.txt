@@ -1,0 +1,6 @@
+Die erste Version von Kosha für Android.
+• Ausgaben in Sekunden notieren: zuerst der Betrag, auf Koshas Ziffernblock.
+• Sieh, wie dein Monat im Vergleich zu einem normalen läuft.
+• Alle Konten in einem Vermögen, in jeder Währung.
+• Kein Netz? Neue Buchungen warten auf dem Handy und werden später synchronisiert.
+Probier das Demokonto aus oder melde dich mit deinem getkosha.app-Konto an.

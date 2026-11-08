@@ -1,0 +1,6 @@
+Prima versione di Kosha per Android.
+• Annota una spesa in pochi secondi: prima l'importo, sul tastierino di Kosha.
+• Confronta questo mese con un mese abituale.
+• Tutti i conti in un unico patrimonio netto, in qualsiasi valuta.
+• Niente rete? I nuovi movimenti restano sul telefono e si sincronizzano dopo.
+Prova l'account demo o accedi con il tuo account getkosha.app.

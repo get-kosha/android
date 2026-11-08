@@ -1,0 +1,6 @@
+Première version de Kosha pour Android.
+• Notez un paiement en quelques secondes : le montant d’abord, sur le pavé numérique de Kosha.
+• Comparez ce mois-ci à un mois habituel.
+• Tous vos comptes dans un seul patrimoine, en toute devise.
+• Pas de réseau ? Les nouvelles opérations attendent sur votre téléphone et se synchronisent ensuite.
+Essayez le compte de démo, ou connectez-vous avec votre compte getkosha.app.

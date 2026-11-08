@@ -1,0 +1,6 @@
+First release of Kosha for Android.
+• Add a payment in seconds: amount first, on Kosha's own keypad.
+• See how this month compares with a usual one.
+• Every account in one net worth, in any currency.
+• No signal? New entries wait on your phone and sync later.
+Try the demo account, or sign in with your getkosha.app account.
