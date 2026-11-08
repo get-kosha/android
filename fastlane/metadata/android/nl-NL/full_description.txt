@@ -1,0 +1,43 @@
+Kosha is een app om je uitgaven bij te houden, gebouwd rond één gewoonte: noteer elke betaling op het moment zelf. Het kost een paar seconden, en de maand is in één oogopslag duidelijk.
+
+UITGAVE GENOTEERD
+• Typ eerst het bedrag op het toetsenblok van Kosha. Het rekent voor je, dus 24,07 + 5,50 kan gewoon.
+• Kies een tegenpartij en Kosha vult de categorie en rekening in op basis van wat je eerder invoerde.
+• Voeg uitgaven, inkomsten en overboekingen tussen je rekeningen toe.
+• Voeg toe vanuit de widget op je startscherm of via de app-snelkoppelingen.
+• Geen bereik? Nieuwe transacties wachten op je telefoon en worden gesynchroniseerd zodra je weer online bent.
+
+MAAND GECONTROLEERD
+• Overzicht vergelijkt je uitgaven tot nu toe met je gebruikelijke tempo en laat zien waar de maand eindigt.
+• Zie wat je hebt gespaard, wat er nog te betalen is en wat actie nodig heeft, zoals een creditcard die afgelost moet worden of een categorie boven het gebruikelijke.
+• Activiteit toont elke betaling per dag. Zoek op tegenpartij, notitie of bedrag.
+• Overboekingen tussen je eigen rekeningen tellen nooit als uitgaven.
+
+VASTE LASTEN EN ABONNEMENTEN
+• Stel één keer een schema in. Kosha legt een vast bedrag vast op de dag dat het betaald moet worden en vraagt het je als het bedrag wisselt.
+• Kosha herkent betalingen die terugkomen, zodat je ze met één tik kunt bijhouden.
+
+ELKE REKENING IN ÉÉN VERMOGEN
+• Bankrekeningen, contant geld, creditcards en beleggingen, elk in de eigen valuta.
+• Totalen worden omgerekend tegen dagelijkse wisselkoersen.
+• Creditcards tellen wat je verschuldigd bent. Beleggingen tellen wat je erin stopte plus het laatste rendement.
+
+VERGELIJK MET DE BANK
+• Kosha vraagt nooit om je inloggegevens van de bank.
+• Importeer afschriften in CSV, OFX en QFX. Elke maand vinkt Kosha af wat klopt en toont het wat er ontbreekt.
+
+OPTIONELE AI, MET JE EIGEN SLEUTEL
+• Beschrijf een betaling in je eigen woorden, maak een foto van een bonnetje, lees een terugblik op vorige maand of stel vragen over je geld.
+• Draait bij je eigen aanbieder: Anthropic, OpenAI, Gemini, OpenRouter, Ollama of een OpenAI-compatibel endpoint.
+• Elke AI-functie staat uit tot je hem aanzet, en jij kiest wat AI kan zien.
+
+PRIVÉ EN VAN JOU
+• Vergrendel de app met je vingerafdruk of gezicht.
+• Exporteer op elk moment naar CSV of JSON.
+• Log in met een wachtwoord, een passkey of Google, met optionele codes voor tweestapsverificatie.
+• Gratis en open source onder de MIT-licentie. Gebruik getkosha.app of draai je eigen server.
+
+NAAR JOUW SMAAK
+• Lichte en donkere modus, vijf accentkleuren en 12 talen.
+
+Kosha heeft een account nodig op getkosha.app of op je eigen Kosha-server. Eerst even rondkijken? Probeer het demo-account. Het bevat 14 maanden voorbeeldgegevens en je hoeft je niet te registreren.

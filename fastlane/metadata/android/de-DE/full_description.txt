@@ -1,0 +1,43 @@
+Kosha ist ein Haushaltsbuch, das auf einer einzigen Gewohnheit beruht: Trag jede Zahlung ein, sobald sie passiert. Das dauert ein paar Sekunden, und du verstehst den Monat auf einen Blick.
+
+AUSGABE NOTIERT
+• Tipp zuerst den Betrag auf Koshas Ziffernblock ein. Er rechnet mit, also geht auch 24,07 + 5,50.
+• Wähl einen Zahlungspartner, und Kosha ergänzt Kategorie und Konto anhand deiner bisherigen Buchungen.
+• Erfasse Ausgaben, Einnahmen und Umbuchungen zwischen deinen Konten.
+• Trag Buchungen auch über das Widget auf dem Startbildschirm oder die App-Verknüpfungen ein.
+• Kein Empfang? Neue Buchungen warten auf deinem Handy und werden synchronisiert, sobald du wieder online bist.
+
+MONAT KAPIERT
+• Die Übersicht vergleicht deine bisherigen Ausgaben mit deinem üblichen Tempo und zeigt, wo der Monat voraussichtlich endet.
+• Sieh, was du gespart hast, was noch zu zahlen ist und was zu erledigen bleibt, etwa eine Kreditkarte, die ausgeglichen werden will, oder eine Kategorie über dem Üblichen.
+• Aktivität listet jede Zahlung nach Tag. Such nach Zahlungspartner, Notiz oder Betrag.
+• Umbuchungen zwischen deinen Konten zählen nie als Ausgaben.
+
+RECHNUNGEN UND ABOS
+• Leg den Rhythmus einmal fest. Kosha bucht feste Beträge am Fälligkeitstag und fragt nach, wenn der Betrag schwankt.
+• Kosha erkennt wiederkehrende Zahlungen, sodass du sie mit einem Tippen im Blick behältst.
+
+ALLE KONTEN, EIN VERMÖGEN
+• Bankkonten, Bargeld, Kreditkarten und Geldanlagen, jedes in seiner eigenen Währung.
+• Summen werden zu tagesaktuellen Wechselkursen umgerechnet.
+• Bei Karten zählt, was du schuldest, bei Geldanlagen, was du eingezahlt hast, plus die aktuelle Wertentwicklung.
+
+MIT DER BANK ABGLEICHEN
+• Kosha fragt nie nach den Zugangsdaten deiner Bank.
+• Importiere Kontoauszüge als CSV, OFX und QFX. Jeden Monat hakt Kosha ab, was übereinstimmt, und zeigt dir, was fehlt.
+
+OPTIONALE KI MIT DEINEM EIGENEN SCHLÜSSEL
+• Beschreib eine Zahlung in eigenen Worten, fotografier einen Beleg, lies einen Rückblick auf den Vormonat oder stell Fragen zu deinem Geld.
+• Läuft über deinen eigenen Anbieter: Anthropic, OpenAI, Gemini, OpenRouter, Ollama oder jeden OpenAI-kompatiblen Endpunkt.
+• Jede KI-Funktion ist aus, bis du sie einschaltest, und du bestimmst, was die KI sieht.
+
+PRIVAT UND DEINS
+• Sperr die App mit Fingerabdruck oder Gesicht.
+• Exportiere jederzeit als CSV oder JSON.
+• Melde dich mit Passwort, Passkey oder Google an, auf Wunsch mit Zwei-Faktor-Codes.
+• Kostenlos und Open Source unter MIT-Lizenz. Nutze getkosha.app oder betreib deinen eigenen Server.
+
+PASST ZU DIR
+• Hell- und Dunkelmodus, fünf Akzentfarben und 12 Sprachen.
+
+Du brauchst ein Kosha-Konto auf getkosha.app oder auf deinem eigenen Kosha-Server. Willst du dich erst mal umsehen? Probier das Demokonto aus. Es enthält Beispieldaten aus 14 Monaten und braucht keine Registrierung.

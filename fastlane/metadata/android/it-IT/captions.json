@@ -1,0 +1,11 @@
+{
+  "feature": "Annota\nogni spesa.\n[Nessuna sorpresa.]",
+  "shots": [
+    { "screen": "add", "headline": "Annota\n[ogni spesa]", "sub": "Digita prima l'importo. Il tastierino\nfa i calcoli e Kosha indovina il resto." },
+    { "screen": "activity", "headline": "Nessuna\n[sorpresa]", "sub": "Ogni pagamento per giorno. I giroconti\ntra i tuoi conti non sono mai spese." },
+    { "screen": "overview", "headline": "Confrontalo con\nun [mese abituale]", "sub": "Spese finora rispetto al ritmo abituale,\ne dove finirà il mese." },
+    { "screen": "recurring", "headline": "Guarda cosa\n[resta da pagare]", "sub": "Kosha riconosce i pagamenti ricorrenti\ne registra le bollette alla scadenza." },
+    { "screen": "accounts", "headline": "Ogni conto nel\n[patrimonio netto]", "sub": "Banca, contanti, carte e investimenti,\nin qualsiasi valuta ai tassi del giorno." },
+    { "screen": "overview-dark", "headline": "Gratuito e\n[open source]", "sub": "Nessuna credenziale bancaria. Esporta in\nCSV o JSON quando vuoi. C'è il tema scuro." }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "_format": "Each headline has two lines split by \\n. Text inside [brackets] is drawn in the marigold accent. Each sub has at most two lines split by \\n.",
+  "feature": "Jot down\nwhat you spent.\n[Know where it went.]",
+  "shots": [
+    { "screen": "add", "headline": "Jot down\n[what you spent]", "sub": "Type the amount first. The keypad does\nthe maths, and Kosha guesses the rest." },
+    { "screen": "activity", "headline": "Know where\n[it went]", "sub": "Every payment by day. Transfers between\nyour accounts never count as spending." },
+    { "screen": "overview", "headline": "Compare it with\na [usual month]", "sub": "Spending so far against your usual pace,\nand where the month will end." },
+    { "screen": "recurring", "headline": "See what’s\n[still to pay]", "sub": "Kosha spots payments that repeat and\nrecords bills on the day they’re due." },
+    { "screen": "accounts", "headline": "Every account in\n[one net worth]", "sub": "Bank, cash, cards and investments,\nin any currency at daily rates." },
+    { "screen": "overview-dark", "headline": "Free and\n[open source]", "sub": "No bank login needed. Export to\nCSV or JSON, any time. Dark mode too." }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "feature": "花了就记，\n[心里有底。]",
+  "shots": [
+    { "screen": "add", "headline": "花了\n[就记]", "sub": "先输入金额。数字键盘帮你计算，\n其余内容由 Kosha 推测。" },
+    { "screen": "activity", "headline": "心里\n[有底]", "sub": "按天列出每一笔付款。\n自己账户之间的转账永远不计入支出。" },
+    { "screen": "overview", "headline": "和[往常月份]\n比一比", "sub": "目前的支出与往常节奏对比，\n并预计本月的最终支出。" },
+    { "screen": "recurring", "headline": "看看还有哪些\n[待支付]", "sub": "Kosha 识别重复出现的付款，\n账单在到期当天自动记账。" },
+    { "screen": "accounts", "headline": "所有账户汇成\n[一个净资产]", "sub": "银行、现金、信用卡和投资，\n任意货币，按每日汇率换算。" },
+    { "screen": "overview-dark", "headline": "免费\n[开源]", "sub": "无需网银登录。随时导出为\nCSV 或 JSON。还有深色模式。" }
+  ]
+}

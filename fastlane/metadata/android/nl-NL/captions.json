@@ -1,0 +1,11 @@
+{
+  "feature": "Uitgave\ngenoteerd.\n[Maand gecontroleerd.]",
+  "shots": [
+    { "screen": "add", "headline": "Uitgave\n[genoteerd]", "sub": "Typ eerst het bedrag. Het toetsenblok\nrekent het uit, en Kosha raadt de rest." },
+    { "screen": "activity", "headline": "Maand\n[gecontroleerd]", "sub": "Elke betaling per dag. Overboekingen\ntussen je rekeningen zijn nooit uitgaven." },
+    { "screen": "overview", "headline": "Vergelijk met\neen [gewone maand]", "sub": "Je uitgaven tot nu toe, afgezet tegen je\ngebruikelijke tempo, en waar je uitkomt." },
+    { "screen": "recurring", "headline": "Zie wat er nog\n[te betalen is]", "sub": "Kosha herkent terugkerende betalingen en\nnoteert vaste lasten op hun vervaldag." },
+    { "screen": "accounts", "headline": "Elke rekening in\n[één vermogen]", "sub": "Bank, contant, kaarten en beleggingen,\nin elke valuta, tegen dagkoersen." },
+    { "screen": "overview-dark", "headline": "Gratis en\n[open source]", "sub": "Geen bankinlog nodig. Altijd exporteren\nnaar CSV of JSON. Ook een donkere modus." }
+  ]
+}

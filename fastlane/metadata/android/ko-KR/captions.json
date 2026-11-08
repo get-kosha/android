@@ -1,0 +1,11 @@
+{
+  "feature": "쓴 만큼 적고,\n[간 곳은 알고.]",
+  "shots": [
+    { "screen": "add", "headline": "[쓴 만큼]\n적고", "sub": "금액부터 입력하세요. 계산은 키패드가,\n나머지는 Kosha가 추측해요." },
+    { "screen": "activity", "headline": "[간 곳은]\n알고", "sub": "모든 결제를 날짜별로 보여 줘요.\n내 계좌 간 이체는 지출로 치지 않아요." },
+    { "screen": "overview", "headline": "[평소 한 달]과\n비교해 보세요", "sub": "지금까지의 지출을 평소 수준과 비교하고,\n이번 달이 어디서 끝날지 예상해요." },
+    { "screen": "recurring", "headline": "[남은 결제]를\n한눈에 확인", "sub": "반복되는 결제를 Kosha가 찾아내고,\n고정비는 예정일에 기록해요." },
+    { "screen": "accounts", "headline": "모든 계좌를\n[하나의 순자산]으로", "sub": "은행, 현금, 카드, 투자를\n어떤 통화든 매일 환율로 합산해요." },
+    { "screen": "overview-dark", "headline": "무료\n[오픈소스]", "sub": "은행 로그인은 필요 없어요.\nCSV·JSON 내보내기, 다크 모드도." }
+  ]
+}

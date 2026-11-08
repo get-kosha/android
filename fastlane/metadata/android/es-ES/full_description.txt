@@ -1,0 +1,43 @@
+Kosha es una app para controlar tus gastos con un solo hábito: anotar cada pago en el momento. Lleva unos segundos y el mes se entiende de un vistazo.
+
+ANOTA LO QUE GASTASTE
+• Escribe primero el importe en el teclado numérico de Kosha. Hace las cuentas, así que puedes escribir 24,07 + 5,50.
+• Elige un beneficiario y Kosha rellena la categoría y la cuenta a partir de lo que anotaste antes.
+• Añade gastos, ingresos y transferencias entre tus cuentas.
+• Añade desde el widget de la pantalla de inicio o desde los accesos directos de la app.
+• ¿Sin cobertura? Los movimientos nuevos esperan en tu móvil y se sincronizan cuando vuelvas a tener conexión.
+
+SABRÁS DÓNDE LO DEJASTE
+• Resumen compara lo que llevas gastado con tu ritmo habitual y muestra cómo terminará el mes.
+• Mira lo que has ahorrado, lo que queda por pagar y lo que requiere atención, como una tarjeta por pagar o una categoría por encima de lo habitual.
+• Actividad muestra cada pago por día. Busca por beneficiario, nota o importe.
+• Las transferencias entre tus cuentas nunca cuentan como gasto.
+
+FACTURAS Y SUSCRIPCIONES
+• Configura una programación una vez. Kosha registra un importe fijo el día en que vence y te pregunta cuando el importe varía.
+• Kosha detecta los pagos que se repiten, para que los sigas con un toque.
+
+TODAS TUS CUENTAS EN UN SOLO PATRIMONIO NETO
+• Cuentas bancarias, efectivo, tarjetas de crédito e inversiones, cada una en su moneda.
+• Los totales se convierten con tipos de cambio diarios.
+• Las tarjetas cuentan lo que debes. Las inversiones cuentan lo que aportaste más su último rendimiento.
+
+COMPRUÉBALO CON EL BANCO
+• Kosha nunca te pide las claves de tu banco.
+• Importa extractos CSV, OFX y QFX. Cada mes, Kosha marca lo que coincide y enumera lo que falta.
+
+IA OPCIONAL, CON TU PROPIA CLAVE
+• Describe un pago con tus palabras, fotografía un recibo, lee una nota sobre el mes pasado o pregunta por tu dinero.
+• Funciona con tu propio proveedor: Anthropic, OpenAI, Gemini, OpenRouter, Ollama o cualquier endpoint compatible con OpenAI.
+• Todas las funciones de IA están desactivadas hasta que las actives, y tú eliges lo que ve la IA.
+
+PRIVADO Y TUYO
+• Bloquea la app con tu huella o tu rostro.
+• Exporta a CSV o JSON cuando quieras.
+• Inicia sesión con una contraseña, una llave de acceso o Google, con códigos de verificación en dos pasos opcionales.
+• Gratis y de código abierto con licencia MIT. Usa getkosha.app o ejecuta tu propio servidor.
+
+A TU MEDIDA
+• Modo claro y oscuro, cinco colores de acento y 12 idiomas.
+
+Kosha necesita una cuenta en getkosha.app o en tu propio servidor de Kosha. ¿Quieres echar un vistazo antes? Prueba la cuenta demo. Tiene 14 meses de datos de ejemplo y no necesita registro.

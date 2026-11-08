@@ -1,0 +1,11 @@
+{
+  "feature": "Anota lo que\ngastaste. [Sabrás]\n[dónde lo dejaste.]",
+  "shots": [
+    { "screen": "add", "headline": "Anota\n[lo que gastaste]", "sub": "Empieza por el importe. El teclado hace\nlas cuentas y Kosha deduce el resto." },
+    { "screen": "activity", "headline": "Sabrás dónde\n[lo dejaste]", "sub": "Cada pago, día a día. Las transferencias\nentre tus cuentas nunca son gasto." },
+    { "screen": "overview", "headline": "Compáralo con\nun [mes habitual]", "sub": "Lo que llevas gastado frente a tu\nritmo habitual, y cómo terminará el mes." },
+    { "screen": "recurring", "headline": "Mira lo que\n[queda por pagar]", "sub": "Kosha detecta los pagos que se repiten y\nregistra las facturas el día que vencen." },
+    { "screen": "accounts", "headline": "Tus cuentas, un\n[patrimonio neto]", "sub": "Banco, efectivo, tarjetas e inversiones,\nen cualquier moneda con tipos diarios." },
+    { "screen": "overview-dark", "headline": "Gratis y de\n[código abierto]", "sub": "Sin las claves de tu banco. Exporta a\nCSV o JSON cuando quieras. Y modo oscuro." }
+  ]
+}

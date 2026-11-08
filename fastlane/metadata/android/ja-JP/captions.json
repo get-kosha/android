@@ -1,0 +1,11 @@
+{
+  "feature": "サッと記録、\n[ちゃんと把握。]",
+  "shots": [
+    { "screen": "add", "headline": "サッと\n[記録]", "sub": "まず金額を入力。テンキーで計算でき、\n残りはKoshaが推測します。" },
+    { "screen": "activity", "headline": "ちゃんと\n[把握]", "sub": "すべての支払いを日付ごとに。\n口座間の振替は支出として計上されません。" },
+    { "screen": "overview", "headline": "[いつもの月]と\n比べる", "sub": "ここまでの支出をいつものペースと比べ、\n月末の見込みも示します。" },
+    { "screen": "recurring", "headline": "これから\n[支払う分]", "sub": "繰り返す支払いをKoshaが見つけ、\n請求は期日に記録します。" },
+    { "screen": "accounts", "headline": "すべての口座を\n[ひとつの純資産]に", "sub": "銀行、現金、カード、投資を、\nどの通貨でも毎日のレートで。" },
+    { "screen": "overview-dark", "headline": "無料で\n[オープンソース]", "sub": "銀行のログイン情報は不要。ダークモード対応。\nいつでもCSVやJSONにエクスポート。" }
+  ]
+}

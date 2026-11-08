@@ -1,0 +1,35 @@
+{
+  "feature": "Notez ce que\nvous dépensez.\n[Voyez où c’est passé.]",
+  "shots": [
+    {
+      "screen": "add",
+      "headline": "Notez ce que\n[vous dépensez]",
+      "sub": "Tapez d’abord le montant. Le pavé\nnumérique calcule, Kosha devine le reste."
+    },
+    {
+      "screen": "activity",
+      "headline": "Voyez où\n[c’est passé]",
+      "sub": "Chaque paiement par jour. Les virements\nentre comptes ne sont jamais des dépenses."
+    },
+    {
+      "screen": "overview",
+      "headline": "Comparez-le à\nun [mois habituel]",
+      "sub": "Vos dépenses à ce jour face à votre\nrythme habituel, et où le mois va finir."
+    },
+    {
+      "screen": "recurring",
+      "headline": "Voyez ce qu’il\n[reste à payer]",
+      "sub": "Kosha repère les paiements récurrents\net enregistre les factures à l’échéance."
+    },
+    {
+      "screen": "accounts",
+      "headline": "Tous vos comptes\nen [un patrimoine]",
+      "sub": "Banque, espèces, cartes et placements,\nen toute devise, aux taux du jour."
+    },
+    {
+      "screen": "overview-dark",
+      "headline": "Gratuit et\n[open source]",
+      "sub": "Aucun identifiant bancaire. Export en CSV\nou JSON à tout moment. Et un mode sombre."
+    }
+  ]
+}

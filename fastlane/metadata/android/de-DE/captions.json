@@ -1,0 +1,11 @@
+{
+  "feature": "Ausgabe notiert.\n[Monat kapiert.]",
+  "shots": [
+    { "screen": "add", "headline": "Ausgabe\n[notiert]", "sub": "Tipp zuerst den Betrag. Der Ziffernblock\nrechnet, und Kosha ergänzt den Rest." },
+    { "screen": "activity", "headline": "Monat\n[kapiert]", "sub": "Alle Zahlungen nach Tag. Umbuchungen\nzwischen Konten zählen nie als Ausgaben." },
+    { "screen": "overview", "headline": "Im Vergleich zum\n[normalen Monat]", "sub": "Bisherige Ausgaben gegen dein übliches\nTempo und wohin der Monat steuert." },
+    { "screen": "recurring", "headline": "Sieh, was noch\n[ansteht]", "sub": "Kosha erkennt wiederkehrende Zahlungen\nund bucht Rechnungen am Fälligkeitstag." },
+    { "screen": "accounts", "headline": "Alle Konten,\n[ein Vermögen]", "sub": "Bank, Bargeld, Karten und Geldanlagen,\nin jeder Währung zu Tageskursen." },
+    { "screen": "overview-dark", "headline": "Kostenlos und\n[Open Source]", "sub": "Keine Bank-Zugangsdaten. Jederzeit Export\nals CSV oder JSON. Auch im Dunkelmodus." }
+  ]
+}

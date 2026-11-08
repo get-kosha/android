@@ -1,0 +1,43 @@
+Kosha est une application de suivi des dépenses construite autour d’une habitude : noter chaque paiement au moment où il a lieu. Cela prend quelques secondes, et le mois se comprend d’un coup d’œil.
+
+NOTEZ CE QUE VOUS DÉPENSEZ
+• Tapez d’abord le montant sur le pavé numérique de Kosha. Il fait les calculs, vous pouvez donc saisir 24,07 + 5,50.
+• Choisissez un tiers et Kosha remplit la catégorie et le compte d’après vos saisies précédentes.
+• Ajoutez des dépenses, des revenus et des virements entre vos comptes.
+• Ajoutez depuis le widget de l’écran d’accueil ou les raccourcis de l’application.
+• Pas de réseau ? Les nouvelles opérations attendent sur votre téléphone et se synchronisent dès votre retour en ligne.
+
+VOYEZ OÙ C’EST PASSÉ
+• L’écran Aperçu compare vos dépenses à ce jour avec votre rythme habituel et montre où le mois va se terminer.
+• Voyez ce que vous avez épargné, ce qu’il reste à payer et ce qui demande votre attention, comme une carte à rembourser ou une catégorie plus élevée que d’habitude.
+• L’écran Activité liste chaque paiement par jour. Recherchez par tiers, note ou montant.
+• Les virements entre vos comptes ne comptent jamais comme des dépenses.
+
+FACTURES ET ABONNEMENTS
+• Définissez un échéancier une fois. Kosha enregistre un montant fixe le jour de l’échéance et vous demande le montant quand il varie.
+• Kosha repère les paiements qui se répètent, pour que vous puissiez les suivre d’une simple pression.
+
+TOUS VOS COMPTES DANS UN SEUL PATRIMOINE
+• Comptes bancaires, espèces, cartes de crédit et placements, chacun dans sa devise.
+• Les totaux sont convertis aux taux de change du jour.
+• Les cartes comptent ce que vous devez. Les placements comptent ce que vous avez versé plus leur dernière plus-value.
+
+COMPAREZ AVEC LA BANQUE
+• Kosha ne vous demande jamais vos identifiants bancaires.
+• Importez des relevés CSV, OFX et QFX. Chaque mois, Kosha coche ce qui correspond et liste ce qui manque.
+
+IA FACULTATIVE, AVEC VOTRE PROPRE CLÉ
+• Décrivez un paiement avec vos propres mots, photographiez un reçu, lisez un bilan du mois dernier ou posez des questions sur votre argent.
+• Fonctionne avec votre propre fournisseur : Anthropic, OpenAI, Gemini, OpenRouter, Ollama ou tout endpoint compatible OpenAI.
+• Chaque fonction d’IA reste désactivée tant que vous ne l’activez pas, et vous choisissez ce qu’elle peut voir.
+
+PRIVÉ ET À VOUS
+• Verrouillez l’application par empreinte ou par visage.
+• Exportez en CSV ou JSON à tout moment.
+• Connectez-vous avec un mot de passe, une clé d’accès ou Google, avec des codes de double authentification en option.
+• Gratuit et open source sous licence MIT. Utilisez getkosha.app ou hébergez votre propre serveur.
+
+À VOTRE GOÛT
+• Mode clair et sombre, cinq couleurs d’accent et 12 langues.
+
+Kosha nécessite un compte sur getkosha.app ou sur votre propre serveur Kosha. Envie de jeter un œil d’abord ? Essayez le compte de démo. Il contient 14 mois de données d’exemple et ne demande aucune inscription.

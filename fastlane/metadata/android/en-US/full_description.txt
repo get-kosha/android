@@ -1,0 +1,43 @@
+Kosha is an expense tracker built around one habit: write each payment down as it happens. It takes a few seconds, and the month makes sense at a glance.
+
+JOT DOWN WHAT YOU SPENT
+• Type the amount first on Kosha's keypad. It does the maths, so 24.07 + 5.50 is fine.
+• Pick a payee and Kosha fills in the category and account from what you entered before.
+• Add expenses, income and transfers between your accounts.
+• Add from the home screen widget or the app shortcuts.
+• No signal? New entries wait on your phone and sync when you're back online.
+
+KNOW WHERE IT WENT
+• Overview compares spending so far with your usual pace and shows where the month will end.
+• See what you've saved, what's still to pay and what needs attention, like a card to pay off or a category above its usual.
+• Activity lists every payment by day. Search by payee, note or amount.
+• Transfers between your accounts never count as spending.
+
+BILLS AND SUBSCRIPTIONS
+• Set a schedule once. Kosha records a fixed amount on the day it's due and asks you when the amount varies.
+• Kosha spots payments that repeat, so you can track them in one tap.
+
+EVERY ACCOUNT IN ONE NET WORTH
+• Bank accounts, cash, credit cards and investments, each in its own currency.
+• Totals convert at daily exchange rates.
+• Cards count what you owe. Investments count what you put in plus their latest gain.
+
+CHECK IT AGAINST THE BANK
+• Kosha never asks for your bank login.
+• Import CSV, OFX and QFX statements. Each month, Kosha ticks off what matches and lists what's missing.
+
+OPTIONAL AI, WITH YOUR OWN KEY
+• Describe a payment in your own words, snap a receipt, read a note on last month or ask about your money.
+• Runs on your own provider: Anthropic, OpenAI, Gemini, OpenRouter, Ollama or any OpenAI-compatible endpoint.
+• Every AI feature is off until you turn it on, and you choose what it can see.
+
+PRIVATE AND YOURS
+• Lock the app with your fingerprint or face.
+• Export to CSV or JSON any time.
+• Sign in with a password, a passkey or Google, with optional two-factor codes.
+• Free and open source under the MIT licence. Use getkosha.app or run your own server.
+
+MADE TO FIT
+• Light and dark mode, five accent colours and 12 languages.
+
+Kosha needs an account on getkosha.app or on your own Kosha server. Want to look around first? Try the demo account. It holds 14 months of sample data and needs no sign-up.
