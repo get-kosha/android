@@ -120,7 +120,7 @@ Checked: `./gradlew test lint`, and the tour on the Pixel 10 Pro Fold emulator a
 ### Still open
 
 - **Before release:**
-  - deploy the server first (migrations 0009–0012 and code)
+  - the server is live on getkosha.app with migrations 0009–0012, HEIF uploads (`5a438ea`) and the app-client fix (`4265025`)
   - set `ANDROID_CERT_SHA256` to the upload key's and Play app signing key's fingerprints, and the debug key's on staging only, so getkosha.app's `assetlinks.json` verifies the App Link and the Auth Tab
   - the Auth Tab path is untested until then; today it falls back to a Custom Tab
 - **On-device review isn't complete.** Not yet checked:
