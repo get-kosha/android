@@ -119,6 +119,9 @@ data class KoshaDims(val row: Dp, val settingsRow: Dp, val cardPadding: Dp) {
 }
 
 private val LocalColors = staticCompositionLocalOf { KoshaColors.of(dark = false) }
+/** App languages whose script letter spacing breaks (see [KoshaType.of]). */
+private val UNTRACKED = setOf("hi")
+
 private val LocalType = staticCompositionLocalOf { KoshaType.of(Figures.Mono) }
 private val LocalDims = staticCompositionLocalOf { KoshaDims.of(Density.Comfortable) }
 private val LocalLocale = staticCompositionLocalOf { Money.locale("en") }
@@ -148,7 +151,7 @@ fun KoshaTheme(
     }
     CompositionLocalProvider(
         LocalColors provides colors,
-        LocalType provides KoshaType.of(figures),
+        LocalType provides KoshaType.of(figures, tracked = Money.locale(language).language !in UNTRACKED),
         LocalDims provides KoshaDims.of(density),
         LocalLocale provides Money.locale(language),
         LocalIndication provides ripple(color = colors.ink),

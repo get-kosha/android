@@ -192,6 +192,10 @@
     <string name="email_reset_requested">Angefordert am %1$s.</string>
     <string name="email_reset_footer">Du bekommst diese E-Mail, weil für dein Kosha-Konto ein neues Passwort angefordert wurde.</string>
     <string name="auth_consent_unnamed_app">Eine App</string>
+    <string name="auth_app_callback_page_title">App öffnen · Kosha</string>
+    <string name="auth_app_callback_title">In der Kosha-App abschließen</string>
+    <string name="auth_app_callback_body">Dein Browser hat diese Seite statt der Kosha-App geöffnet. Fahre nur fort, wenn du dich gerade in der Kosha-App auf diesem Handy angemeldet hast.</string>
+    <string name="auth_app_callback_open">Kosha öffnen</string>
     <string name="shell_nav_overview">Übersicht</string>
     <string name="shell_nav_activity">Aktivität</string>
     <string name="shell_nav_recurring">Wiederkehrend</string>
@@ -2223,7 +2227,7 @@
     <string name="server_recurring_not_found">Wiederkehrende Zahlung nicht gefunden</string>
     <string name="server_attachments_unavailable">Anhänge sind auf diesem Server nicht eingerichtet</string>
     <string name="server_attachment_too_big">Wähle eine Datei unter 10 MB</string>
-    <string name="server_attachment_type">Hänge ein Foto (JPEG, PNG oder WebP) oder ein PDF an</string>
+    <string name="server_attachment_type">Hänge ein Foto (JPEG, PNG, WebP oder HEIF) oder ein PDF an</string>
     <string name="server_attachment_not_found">Anhang nicht gefunden</string>
     <string name="server_avatar_too_big">Wähle ein Bild unter 512 KB</string>
     <string name="server_choose_file">Wähle eine Datei</string>
@@ -2235,6 +2239,9 @@
     <string name="server_password_min_length">Verwende mindestens 10 Zeichen</string>
     <string name="server_avatars_off">Profilbilder sind auf diesem Server nicht eingerichtet</string>
     <string name="server_avatar_unreadable">Dieses Bild konnte nicht gelesen werden</string>
+    <string name="server_request_too_large">Das ist zu groß zum Senden. Versuch es mit einer kleineren Datei oder weniger Buchungen.</string>
+    <string name="server_transaction_id_taken">Eine andere Buchung hat bereits die ID %1$s. Verwende für eine neue Buchung eine neue ID.</string>
+    <string name="server_transaction_id_twice">Diese ID kommt in derselben Anfrage zweimal vor.</string>
     <string name="app_key_divide">Teilen</string>
     <string name="app_key_multiply">Multiplizieren</string>
     <string name="app_key_subtract">Subtrahieren</string>

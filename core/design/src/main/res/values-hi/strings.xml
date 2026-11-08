@@ -192,6 +192,10 @@
     <string name="email_reset_requested">%1$s को अनुरोध किया गया।</string>
     <string name="email_reset_footer">आपको यह ईमेल इसलिए मिला है क्योंकि आपके अकाउंट के लिए पासवर्ड रीसेट का अनुरोध किया गया था।</string>
     <string name="auth_consent_unnamed_app">एक ऐप</string>
+    <string name="auth_app_callback_page_title">ऐप खोलें · Kosha</string>
+    <string name="auth_app_callback_title">Kosha ऐप में पूरा करें</string>
+    <string name="auth_app_callback_body">आपके ब्राउज़र ने Kosha ऐप की जगह यह पेज खोला है। आगे तभी बढ़ें जब आपने अभी इस फ़ोन पर Kosha ऐप से साइन इन किया हो।</string>
+    <string name="auth_app_callback_open">Kosha खोलें</string>
     <string name="shell_nav_overview">ओवरव्यू</string>
     <string name="shell_nav_activity">गतिविधि</string>
     <string name="shell_nav_recurring">नियमित</string>
@@ -2223,7 +2227,7 @@
     <string name="server_recurring_not_found">नियमित भुगतान नहीं मिला</string>
     <string name="server_attachments_unavailable">इस सर्वर पर अटैचमेंट सेट अप नहीं हैं</string>
     <string name="server_attachment_too_big">10 MB से छोटी फ़ाइल चुनें</string>
-    <string name="server_attachment_type">फ़ोटो (JPEG, PNG या WebP) या PDF अटैच करें</string>
+    <string name="server_attachment_type">फ़ोटो (JPEG, PNG, WebP या HEIF) या PDF अटैच करें</string>
     <string name="server_attachment_not_found">अटैचमेंट नहीं मिला</string>
     <string name="server_avatar_too_big">512 KB से छोटी इमेज चुनें</string>
     <string name="server_choose_file">एक फ़ाइल चुनें</string>
@@ -2235,6 +2239,9 @@
     <string name="server_password_min_length">कम से कम 10 अक्षर इस्तेमाल करें</string>
     <string name="server_avatars_off">इस सर्वर पर प्रोफ़ाइल फ़ोटो सेट अप नहीं हैं</string>
     <string name="server_avatar_unreadable">वह इमेज पढ़ी नहीं जा सकी</string>
+    <string name="server_request_too_large">यह भेजने के लिए बहुत बड़ा है। कोई छोटी फ़ाइल आज़माएँ या कम एंट्री भेजें।</string>
+    <string name="server_transaction_id_taken">किसी दूसरे लेन-देन की ID पहले से %1$s है। नए लेन-देन के लिए नई ID इस्तेमाल करें।</string>
+    <string name="server_transaction_id_twice">यह ID एक ही अनुरोध में दो बार है।</string>
     <string name="app_key_divide">भाग दें</string>
     <string name="app_key_multiply">गुणा करें</string>
     <string name="app_key_subtract">घटाएँ</string>

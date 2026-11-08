@@ -190,6 +190,10 @@
     <string name="email_reset_requested">申请时间：%1$s。</string>
     <string name="email_reset_footer">你收到此邮件，是因为有人为你的账号申请了密码重置。</string>
     <string name="auth_consent_unnamed_app">一个应用</string>
+    <string name="auth_app_callback_page_title">打开应用 · Kosha</string>
+    <string name="auth_app_callback_title">在 Kosha 应用中完成</string>
+    <string name="auth_app_callback_body">浏览器打开了此页面，而不是 Kosha 应用。只有在你刚刚从这部手机上的 Kosha 应用登录时才继续。</string>
+    <string name="auth_app_callback_open">打开 Kosha</string>
     <string name="shell_nav_overview">概览</string>
     <string name="shell_nav_activity">明细</string>
     <string name="shell_nav_recurring">定期</string>
@@ -2162,7 +2166,7 @@
     <string name="server_recurring_not_found">找不到该定期付款</string>
     <string name="server_attachments_unavailable">此服务器未设置附件功能</string>
     <string name="server_attachment_too_big">请选择小于 10 MB 的文件</string>
-    <string name="server_attachment_type">请附上照片（JPEG、PNG 或 WebP）或 PDF</string>
+    <string name="server_attachment_type">请附上照片（JPEG、PNG、WebP 或 HEIF）或 PDF</string>
     <string name="server_attachment_not_found">找不到该附件</string>
     <string name="server_avatar_too_big">请选择小于 512 KB 的图片</string>
     <string name="server_choose_file">请选择文件</string>
@@ -2174,6 +2178,9 @@
     <string name="server_password_min_length">请至少使用 10 个字符</string>
     <string name="server_avatars_off">此服务器未设置头像功能</string>
     <string name="server_avatar_unreadable">无法读取该图片</string>
+    <string name="server_request_too_large">内容太大，无法发送。请换一个更小的文件，或减少交易数量。</string>
+    <string name="server_transaction_id_taken">另一笔交易已使用 ID %1$s。新交易请使用新的 ID。</string>
+    <string name="server_transaction_id_twice">此 ID 在同一请求中出现了两次。</string>
     <string name="app_key_divide">除</string>
     <string name="app_key_multiply">乘</string>
     <string name="app_key_subtract">减</string>
@@ -2239,7 +2246,7 @@
     </plurals>
     <string name="app_previous_year">上一年</string>
     <string name="app_next_year">下一年</string>
-    <string name="app_month_swipe">在概览、动态或周期页面左右滑动可切换一个月。</string>
+    <string name="app_month_swipe">在概览、明细或定期页面左右滑动可切换一个月。</string>
     <string name="app_signout_clears">退出登录会清除此设备保存的内容。</string>
     <string name="app_widget_name">快速添加</string>
     <string name="app_widget_description">在主屏幕上添加支出或收入。</string>

@@ -190,6 +190,10 @@
     <string name="email_reset_requested">%1$sにリクエストされました。</string>
     <string name="email_reset_footer">このメールは、あなたのアカウントでパスワードの再設定がリクエストされたためお送りしています。</string>
     <string name="auth_consent_unnamed_app">アプリ</string>
+    <string name="auth_app_callback_page_title">アプリを開く · Kosha</string>
+    <string name="auth_app_callback_title">Koshaアプリで続けてください</string>
+    <string name="auth_app_callback_body">Koshaアプリの代わりにブラウザでこのページが開きました。このスマートフォンのKoshaアプリからサインインしたばかりの場合のみ続けてください。</string>
+    <string name="auth_app_callback_open">Koshaを開く</string>
     <string name="shell_nav_overview">概要</string>
     <string name="shell_nav_activity">履歴</string>
     <string name="shell_nav_recurring">定期</string>
@@ -2107,7 +2111,7 @@
     <string name="server_recurring_not_found">定期支払いが見つかりません</string>
     <string name="server_attachments_unavailable">このサーバーでは添付ファイルが設定されていません</string>
     <string name="server_attachment_too_big">10 MB未満のファイルを選んでください</string>
-    <string name="server_attachment_type">写真（JPEG、PNG、WebP）またはPDFを添付してください</string>
+    <string name="server_attachment_type">写真（JPEG、PNG、WebP、HEIF）またはPDFを添付してください</string>
     <string name="server_attachment_not_found">添付ファイルが見つかりません</string>
     <string name="server_avatar_too_big">512 KB未満の画像を選んでください</string>
     <string name="server_choose_file">ファイルを選んでください</string>
@@ -2119,6 +2123,9 @@
     <string name="server_password_min_length">10文字以上にしてください</string>
     <string name="server_avatars_off">このサーバーではプロフィール画像が設定されていません</string>
     <string name="server_avatar_unreadable">その画像を読み込めませんでした</string>
+    <string name="server_request_too_large">送信するにはサイズが大きすぎます。小さいファイルにするか、取引の数を減らしてください。</string>
+    <string name="server_transaction_id_taken">別の取引がすでにID %1$s を使っています。新しい取引には新しいIDを使ってください。</string>
+    <string name="server_transaction_id_twice">このIDが同じリクエスト内に2回含まれています。</string>
     <string name="app_key_divide">割る</string>
     <string name="app_key_multiply">掛ける</string>
     <string name="app_key_subtract">引く</string>

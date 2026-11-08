@@ -200,6 +200,10 @@
     <string name="email_reset_requested">Richiesto il %1$s.</string>
     <string name="email_reset_footer">Ricevi questa email perché è stata chiesta la reimpostazione della password del tuo account.</string>
     <string name="auth_consent_unnamed_app">Un\'app</string>
+    <string name="auth_app_callback_page_title">Apri l\'app · Kosha</string>
+    <string name="auth_app_callback_title">Completa nell\'app Kosha</string>
+    <string name="auth_app_callback_body">Il browser ha aperto questa pagina invece dell\'app Kosha. Continua solo se hai appena effettuato l\'accesso dall\'app Kosha su questo telefono.</string>
+    <string name="auth_app_callback_open">Apri Kosha</string>
     <string name="shell_nav_overview">Panoramica</string>
     <string name="shell_nav_activity">Attività</string>
     <string name="shell_nav_recurring">Ricorrenti</string>
@@ -2467,7 +2471,7 @@
     <string name="server_recurring_not_found">Pagamento ricorrente non trovato</string>
     <string name="server_attachments_unavailable">Gli allegati non sono configurati su questo server</string>
     <string name="server_attachment_too_big">Scegli un file inferiore a 10 MB</string>
-    <string name="server_attachment_type">Allega una foto (JPEG, PNG o WebP) o un PDF</string>
+    <string name="server_attachment_type">Allega una foto (JPEG, PNG, WebP o HEIF) o un PDF</string>
     <string name="server_attachment_not_found">Allegato non trovato</string>
     <string name="server_avatar_too_big">Scegli un\'immagine inferiore a 512 KB</string>
     <string name="server_choose_file">Scegli un file</string>
@@ -2479,6 +2483,9 @@
     <string name="server_password_min_length">Usa almeno 10 caratteri</string>
     <string name="server_avatars_off">Le immagini del profilo non sono configurate su questo server</string>
     <string name="server_avatar_unreadable">Impossibile leggere l\'immagine</string>
+    <string name="server_request_too_large">È troppo grande per essere inviato. Prova con un file più piccolo o meno movimenti.</string>
+    <string name="server_transaction_id_taken">Un altro movimento ha già l\'id %1$s. Usa un nuovo id per un nuovo movimento.</string>
+    <string name="server_transaction_id_twice">Questo id compare due volte nella stessa richiesta.</string>
     <string name="app_key_divide">Dividi</string>
     <string name="app_key_multiply">Moltiplica</string>
     <string name="app_key_subtract">Sottrai</string>

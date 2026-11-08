@@ -192,6 +192,10 @@
     <string name="email_reset_requested">Aangevraagd op %1$s.</string>
     <string name="email_reset_footer">Je krijgt deze e-mail omdat er voor je account een wachtwoordreset is aangevraagd.</string>
     <string name="auth_consent_unnamed_app">Een app</string>
+    <string name="auth_app_callback_page_title">App openen · Kosha</string>
+    <string name="auth_app_callback_title">Rond af in de Kosha-app</string>
+    <string name="auth_app_callback_body">Je browser opende deze pagina in plaats van de Kosha-app. Ga alleen verder als je net bent ingelogd vanuit de Kosha-app op deze telefoon.</string>
+    <string name="auth_app_callback_open">Kosha openen</string>
     <string name="shell_nav_overview">Overzicht</string>
     <string name="shell_nav_activity">Activiteit</string>
     <string name="shell_nav_recurring">Terugkerend</string>
@@ -2223,7 +2227,7 @@
     <string name="server_recurring_not_found">Terugkerende betaling niet gevonden</string>
     <string name="server_attachments_unavailable">Bijlagen zijn niet ingesteld op deze server</string>
     <string name="server_attachment_too_big">Kies een bestand kleiner dan 10 MB</string>
-    <string name="server_attachment_type">Voeg een foto (JPEG, PNG of WebP) of een pdf toe</string>
+    <string name="server_attachment_type">Voeg een foto (JPEG, PNG, WebP of HEIF) of een pdf toe</string>
     <string name="server_attachment_not_found">Bijlage niet gevonden</string>
     <string name="server_avatar_too_big">Kies een afbeelding kleiner dan 512 KB</string>
     <string name="server_choose_file">Kies een bestand</string>
@@ -2235,6 +2239,9 @@
     <string name="server_password_min_length">Gebruik minstens 10 tekens</string>
     <string name="server_avatars_off">Profielfoto\'s zijn niet ingesteld op deze server</string>
     <string name="server_avatar_unreadable">Die afbeelding kon niet worden gelezen</string>
+    <string name="server_request_too_large">Dit is te groot om te versturen. Probeer een kleiner bestand of minder transacties.</string>
+    <string name="server_transaction_id_taken">Een andere transactie heeft al de id %1$s. Gebruik een nieuwe id voor een nieuwe transactie.</string>
+    <string name="server_transaction_id_twice">Deze id komt twee keer voor in hetzelfde verzoek.</string>
     <string name="app_key_divide">Delen</string>
     <string name="app_key_multiply">Vermenigvuldigen</string>
     <string name="app_key_subtract">Aftrekken</string>

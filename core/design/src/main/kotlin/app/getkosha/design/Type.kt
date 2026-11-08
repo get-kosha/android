@@ -62,27 +62,32 @@ data class KoshaType(
     val expr: TextStyle,
 ) {
     companion object {
-        fun of(figures: Figures): KoshaType {
+        /**
+         * The type scale. [tracked] is false for scripts that letter spacing breaks: Android measures Devanagari
+         * with negative tracking too narrow, so a one-line title ends after a syllable ("नवं…").
+         */
+        fun of(figures: Figures, tracked: Boolean = true): KoshaType {
+            fun ls(em: Double) = if (tracked) em.em else 0.em
             val figure = if (figures == Figures.Mono) {
-                base.copy(fontFamily = GeistMono, letterSpacing = (-0.02).em, fontFeatureSettings = "tnum")
+                base.copy(fontFamily = GeistMono, letterSpacing = ls(-0.02), fontFeatureSettings = "tnum")
             } else {
-                base.copy(fontFamily = Geist, letterSpacing = (-0.01).em, fontFeatureSettings = "tnum")
+                base.copy(fontFamily = Geist, letterSpacing = ls(-0.01), fontFeatureSettings = "tnum")
             }
             return KoshaType(
-                hero = base.copy(fontSize = 40.sp, fontWeight = FontWeight.SemiBold, letterSpacing = (-0.035).em, lineHeight = 1.em, fontFeatureSettings = "tnum"),
-                page = base.copy(fontSize = 34.sp, fontWeight = FontWeight.SemiBold, letterSpacing = (-0.03).em, lineHeight = 1.05.em),
-                title = base.copy(fontSize = 22.sp, fontWeight = FontWeight.SemiBold, letterSpacing = (-0.02).em, lineHeight = 1.15.em),
-                sheetTitle = base.copy(fontSize = 17.sp, fontWeight = FontWeight.SemiBold, letterSpacing = (-0.01).em),
+                hero = base.copy(fontSize = 40.sp, fontWeight = FontWeight.SemiBold, letterSpacing = ls(-0.035), lineHeight = 1.em, fontFeatureSettings = "tnum"),
+                page = base.copy(fontSize = 34.sp, fontWeight = FontWeight.SemiBold, letterSpacing = ls(-0.03), lineHeight = 1.05.em),
+                title = base.copy(fontSize = 22.sp, fontWeight = FontWeight.SemiBold, letterSpacing = ls(-0.02), lineHeight = 1.15.em),
+                sheetTitle = base.copy(fontSize = 17.sp, fontWeight = FontWeight.SemiBold, letterSpacing = ls(-0.01)),
                 head = base.copy(fontWeight = FontWeight.Medium),
                 body = base,
                 small = base.copy(fontSize = 13.sp),
                 xs = base.copy(fontSize = 12.sp),
-                caption = base.copy(fontSize = 12.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.06.em),
+                caption = base.copy(fontSize = 12.sp, fontWeight = FontWeight.Medium, letterSpacing = ls(0.06)),
                 button = base.copy(fontSize = 16.sp, fontWeight = FontWeight.Medium),
                 num = figure,
-                amount = figure.copy(fontSize = 60.sp, fontWeight = FontWeight.Medium, letterSpacing = (-0.04).em, lineHeight = 1.em),
+                amount = figure.copy(fontSize = 60.sp, fontWeight = FontWeight.Medium, letterSpacing = ls(-0.04), lineHeight = 1.em),
                 key = figure.copy(fontSize = 28.sp),
-                expr = figure.copy(fontSize = 16.sp, letterSpacing = (-0.01).em),
+                expr = figure.copy(fontSize = 16.sp, letterSpacing = ls(-0.01)),
             )
         }
     }

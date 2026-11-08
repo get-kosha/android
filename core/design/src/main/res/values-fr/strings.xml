@@ -200,6 +200,10 @@
     <string name="email_reset_requested">Demandé le %1$s.</string>
     <string name="email_reset_footer">Vous recevez cet e-mail parce qu\'une réinitialisation du mot de passe a été demandée pour votre compte.</string>
     <string name="auth_consent_unnamed_app">Une app</string>
+    <string name="auth_app_callback_page_title">Ouvrir l\'app · Kosha</string>
+    <string name="auth_app_callback_title">Terminez dans l\'app Kosha</string>
+    <string name="auth_app_callback_body">Votre navigateur a ouvert cette page au lieu de l\'app Kosha. Continuez seulement si vous venez de vous connecter depuis l\'app Kosha sur ce téléphone.</string>
+    <string name="auth_app_callback_open">Ouvrir Kosha</string>
     <string name="shell_nav_overview">Aperçu</string>
     <string name="shell_nav_activity">Activité</string>
     <string name="shell_nav_recurring">Récurrents</string>
@@ -2467,7 +2471,7 @@
     <string name="server_recurring_not_found">Paiement récurrent introuvable</string>
     <string name="server_attachments_unavailable">Les pièces jointes ne sont pas configurées sur ce serveur</string>
     <string name="server_attachment_too_big">Choisissez un fichier de moins de 10 Mo</string>
-    <string name="server_attachment_type">Joignez une photo (JPEG, PNG ou WebP) ou un PDF</string>
+    <string name="server_attachment_type">Joignez une photo (JPEG, PNG, WebP ou HEIF) ou un PDF</string>
     <string name="server_attachment_not_found">Pièce jointe introuvable</string>
     <string name="server_avatar_too_big">Choisissez une image de moins de 512 Ko</string>
     <string name="server_choose_file">Choisissez un fichier</string>
@@ -2479,6 +2483,9 @@
     <string name="server_password_min_length">Utilisez au moins 10 caractères</string>
     <string name="server_avatars_off">Les photos de profil ne sont pas configurées sur ce serveur</string>
     <string name="server_avatar_unreadable">Impossible de lire cette image</string>
+    <string name="server_request_too_large">C\'est trop volumineux pour être envoyé. Essayez un fichier plus petit ou moins d\'opérations.</string>
+    <string name="server_transaction_id_taken">Une autre opération a déjà l\'identifiant %1$s. Utilisez un nouvel identifiant pour une nouvelle opération.</string>
+    <string name="server_transaction_id_twice">Cet identifiant apparaît deux fois dans la même requête.</string>
     <string name="app_key_divide">Diviser</string>
     <string name="app_key_multiply">Multiplier</string>
     <string name="app_key_subtract">Soustraire</string>
@@ -2654,7 +2661,7 @@
         <item quantity="other">Partager %1$s en zip</item>
     </plurals>
     <string name="app_acc_credit_used">%1$s de %2$s utilisés</string>
-    <string name="app_acc_debt_hint">La valeur nette compte ce que vous devez comme une dette.</string>
+    <string name="app_acc_debt_hint">Le patrimoine compte ce que vous devez comme une dette.</string>
     <string name="app_acc_from_account">De %1$s</string>
     <string name="app_acc_fx_cost">coût %1$s</string>
     <string name="app_acc_fx_empty">Aucun change pour l\'instant. Les virements entre comptes de devises différentes s\'affichent ici.</string>
@@ -2668,7 +2675,7 @@
     <string name="app_acc_kosha_shows">Kosha affiche %1$s</string>
     <string name="app_acc_owed">%1$s, dû</string>
     <string name="app_acc_reconcile_hint">Le comparer à un relevé bancaire</string>
-    <string name="app_acc_still_counted">toujours dans la valeur nette</string>
+    <string name="app_acc_still_counted">toujours dans le patrimoine</string>
     <string name="app_acc_value">Valeur</string>
     <plurals name="app_acc_currencies">
         <item quantity="zero">%1$s devises</item>

@@ -200,6 +200,10 @@
     <string name="email_reset_requested">Solicitado em %1$s.</string>
     <string name="email_reset_footer">Você está recebendo este e-mail porque foi solicitada a redefinição de senha da sua conta.</string>
     <string name="auth_consent_unnamed_app">Um app</string>
+    <string name="auth_app_callback_page_title">Abrir o app · Kosha</string>
+    <string name="auth_app_callback_title">Conclua no app Kosha</string>
+    <string name="auth_app_callback_body">Seu navegador abriu esta página em vez do app Kosha. Continue só se você acabou de entrar pelo app Kosha neste celular.</string>
+    <string name="auth_app_callback_open">Abrir o Kosha</string>
     <string name="shell_nav_overview">Visão geral</string>
     <string name="shell_nav_activity">Atividade</string>
     <string name="shell_nav_recurring">Recorrentes</string>
@@ -2467,7 +2471,7 @@
     <string name="server_recurring_not_found">Pagamento recorrente não encontrado</string>
     <string name="server_attachments_unavailable">Os anexos não estão configurados neste servidor</string>
     <string name="server_attachment_too_big">Escolha um arquivo com menos de 10 MB</string>
-    <string name="server_attachment_type">Anexe uma foto (JPEG, PNG ou WebP) ou um PDF</string>
+    <string name="server_attachment_type">Anexe uma foto (JPEG, PNG, WebP ou HEIF) ou um PDF</string>
     <string name="server_attachment_not_found">Anexo não encontrado</string>
     <string name="server_avatar_too_big">Escolha uma imagem com menos de 512 KB</string>
     <string name="server_choose_file">Escolha um arquivo</string>
@@ -2479,6 +2483,9 @@
     <string name="server_password_min_length">Use pelo menos 10 caracteres</string>
     <string name="server_avatars_off">As fotos de perfil não estão configuradas neste servidor</string>
     <string name="server_avatar_unreadable">Não foi possível ler essa imagem</string>
+    <string name="server_request_too_large">Isso é grande demais para enviar. Tente um arquivo menor ou menos lançamentos.</string>
+    <string name="server_transaction_id_taken">Outra transação já tem o id %1$s. Use um id novo para uma transação nova.</string>
+    <string name="server_transaction_id_twice">Este id aparece duas vezes na mesma solicitação.</string>
     <string name="app_key_divide">Dividir</string>
     <string name="app_key_multiply">Multiplicar</string>
     <string name="app_key_subtract">Subtrair</string>

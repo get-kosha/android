@@ -196,6 +196,10 @@
     <string name="email_reset_requested">Запрошено %1$s.</string>
     <string name="email_reset_footer">Вы получили это письмо, потому что для вашего аккаунта был запрошен сброс пароля.</string>
     <string name="auth_consent_unnamed_app">Приложение</string>
+    <string name="auth_app_callback_page_title">Открыть приложение · Kosha</string>
+    <string name="auth_app_callback_title">Завершите вход в приложении Kosha</string>
+    <string name="auth_app_callback_body">Браузер открыл эту страницу вместо приложения Kosha. Продолжайте, только если вы только что вошли из приложения Kosha на этом телефоне.</string>
+    <string name="auth_app_callback_open">Открыть Kosha</string>
     <string name="shell_nav_overview">Обзор</string>
     <string name="shell_nav_activity">Операции</string>
     <string name="shell_nav_recurring">Регулярные</string>
@@ -2361,7 +2365,7 @@
     <string name="server_recurring_not_found">Регулярный платёж не найден</string>
     <string name="server_attachments_unavailable">Вложения на этом сервере не настроены</string>
     <string name="server_attachment_too_big">Выберите файл меньше 10 МБ</string>
-    <string name="server_attachment_type">Прикрепите фото (JPEG, PNG или WebP) или PDF</string>
+    <string name="server_attachment_type">Прикрепите фото (JPEG, PNG, WebP или HEIF) или PDF</string>
     <string name="server_attachment_not_found">Вложение не найдено</string>
     <string name="server_avatar_too_big">Выберите изображение меньше 512 КБ</string>
     <string name="server_choose_file">Выберите файл</string>
@@ -2373,6 +2377,9 @@
     <string name="server_password_min_length">Используйте не меньше 10 символов</string>
     <string name="server_avatars_off">Фото профиля на этом сервере не настроены</string>
     <string name="server_avatar_unreadable">Не удалось прочитать это изображение</string>
+    <string name="server_request_too_large">Это слишком большой объём для отправки. Попробуйте файл поменьше или меньше операций.</string>
+    <string name="server_transaction_id_taken">У другой операции уже есть id %1$s. Для новой операции используйте новый id.</string>
+    <string name="server_transaction_id_twice">Этот id встречается в одном запросе дважды.</string>
     <string name="app_key_divide">Разделить</string>
     <string name="app_key_multiply">Умножить</string>
     <string name="app_key_subtract">Вычесть</string>

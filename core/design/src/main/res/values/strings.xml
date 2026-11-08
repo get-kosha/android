@@ -192,6 +192,10 @@
     <string name="email_reset_requested">Requested on %1$s.</string>
     <string name="email_reset_footer">You\'re getting this because a password reset was asked for on your account.</string>
     <string name="auth_consent_unnamed_app">An app</string>
+    <string name="auth_app_callback_page_title">Open the app · Kosha</string>
+    <string name="auth_app_callback_title">Finish in the Kosha app</string>
+    <string name="auth_app_callback_body">Your browser opened this page instead of the Kosha app. Continue only if you just signed in from the Kosha app on this phone.</string>
+    <string name="auth_app_callback_open">Open Kosha</string>
     <string name="shell_nav_overview">Overview</string>
     <string name="shell_nav_activity">Activity</string>
     <string name="shell_nav_recurring">Recurring</string>
@@ -2223,7 +2227,7 @@
     <string name="server_recurring_not_found">Recurring payment not found</string>
     <string name="server_attachments_unavailable">Attachments aren\'t set up on this server</string>
     <string name="server_attachment_too_big">Choose a file under 10 MB</string>
-    <string name="server_attachment_type">Attach a photo (JPEG, PNG or WebP) or a PDF</string>
+    <string name="server_attachment_type">Attach a photo (JPEG, PNG, WebP or HEIF) or a PDF</string>
     <string name="server_attachment_not_found">Attachment not found</string>
     <string name="server_avatar_too_big">Choose an image under 512 KB</string>
     <string name="server_choose_file">Choose a file</string>
@@ -2235,6 +2239,9 @@
     <string name="server_password_min_length">Use at least 10 characters</string>
     <string name="server_avatars_off">Profile pictures aren\'t set up on this server</string>
     <string name="server_avatar_unreadable">That image couldn\'t be read</string>
+    <string name="server_request_too_large">This is too large to send. Try a smaller file or fewer entries.</string>
+    <string name="server_transaction_id_taken">Another entry already has the id %1$s. Use a new id for a new entry.</string>
+    <string name="server_transaction_id_twice">This id appears twice in the same request.</string>
     <string name="app_key_divide">Divide</string>
     <string name="app_key_multiply">Multiply</string>
     <string name="app_key_subtract">Subtract</string>
