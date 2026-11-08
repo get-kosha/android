@@ -99,26 +99,44 @@ Built in one pass: the lead built M2 and M3, then five agents built the feature 
 
 Checks: `./gradlew test lint` passes, and so does the tour test on the Pixel 10 Pro emulator (Android 17). The tour found and fixed a launch crash (the current month was parsed from the time zone name), network reads on the main thread, and the web's unrounded converted amounts. I compared the light and dark screenshots of Overview, Activity, Add, Accounts and Settings with their PNGs, and they match closely.
 
+### Hardening pass (November 2026): done
+
+The server work on the web repo's `feat/mobile-app-hardening` branch (migrations 0009–0012) and the app work that goes with it. Server first, then the app: the app's new redirect fails against a server without 0010.
+
+- **Sign-in** (`f398759`):
+  - authorize and token use `<server>/app/oauth/callback`, the only redirect that skips consent
+  - an Auth Tab hands the answer back when the browser supports one and the server is HTTPS; otherwise a Custom Tab, an App Link on getkosha.app (`autoVerify`), or the server page's Open Kosha button (`app.getkosha:/oauth/callback`)
+  - the answer must come back to that host and path, with the state, and an `iss` that matches discovery (RFC 9207)
+  - 429, 408 and 5xx from the token endpoint keep the session; the next try sends the same refresh token (the server repeats a lost reply until the new token is used, up to 7 days); revoke is sent once, never retried
+- **Requests** (`cfc9273`):
+  - the outbox keeps entries on 429 and 5xx (it used to drop them); WorkManager retries from 60 s (`Retry-After`)
+  - Add queues a new entry when the server is busy or failing, as offline
+  - "No event" goes from the outbox as an explicit `eventId: null`
+  - 413 and 409 show the server's message, which follows `Accept-Language`
+- **New fields replace the workarounds** (`8a2f8b5`): variable amounts for every kind, paying one payment from another account, the transfer's provider and market rate, payslip and file counts, the Balance correction count, TagView's `byCategory`, and Reconcile's `walletId`.
+
+Checked: `./gradlew test lint`, and the tour on the Pixel 10 Pro Fold emulator against the branch's dev server (port 3456), including a fresh demo sign-in. Signed in by hand through own server → Open the demo → no consent → Open Kosha.
+
 ### Still open
 
-- **On-device review isn't complete.** The device panel failed all session (its screen-streaming helper crashes), so the only screenshots come from the tour test. Not yet checked:
+- **Before release:**
+  - deploy the server first (migrations 0009–0012 and code)
+  - set `ANDROID_CERT_SHA256` to the upload key's and Play app signing key's fingerprints, and the debug key's on staging only, so getkosha.app's `assetlinks.json` verifies the App Link and the Auth Tab
+  - the Auth Tab path is untested until then; today it falls back to a Custom Tab
+- **On-device review isn't complete.** Not yet checked:
   - neutral mode and the other four accents
   - 360dp width and the largest font
   - TalkBack
   - the sheets and states inside each screen (the tour opens screens, not sheets)
-- **Security:** the app clients skip consent on a custom URL scheme (see "Other notes"). The fix is a claimed HTTPS redirect with `assetlinks.json`, which needs the release signing key's fingerprint.
 - **Play internal testing:** needs a Play Console app and an upload key (`keystore.properties`). Wear OS isn't started.
-- **Server gaps that remain** (each has a workaround in the app, marked `ponytail`):
-  - variable bills can't be saved (the server stores `variable` only for transfers; the web wins)
-  - `update_recurring_payment` has no account
-  - `Transaction.transfer` carries no provider
-  - no payslip count per schedule, and no usage count for Balance correction
-  - TagView sums its entries by category on the phone
-  - an offline entry with "No event" loses that choice
+- **Server items for the owner:**
+  - `read_transaction` reads photos only, so the receipt camera has no PDF button
+  - TagView converts per-currency totals on the phone (allowed by Conflicts rule 5); a total already converted would remove that
 - **App gaps:**
   - the `motion` preference only reaches the charts; other animations don't follow it yet
   - a card's Pay opens Add as a transfer with no account or amount filled in
   - `feature:accounts` borrows `feature:recurring`'s helper file (`Kit.kt`); move it to `core:ui`
+  - the app messages added to `../kosha/messages` (app-add.json, app-money.json) are uncommitted in the web repo
 
 ## Gaps found at the start
 
@@ -169,7 +187,7 @@ These follow the web's own formulas. Port each formula and cite its source.
 
 ## Other notes
 
-- **Security.** Skipping consent for a public client on a custom URL scheme is what RFC 8252 §8.6 advises against. Another app on the same phone could register `app.getkosha:` and start a sign-in as `kosha-android`, and a signed-in browser would hand it a code with no screen in between. PKCE doesn't stop this, because that app makes its own verifier. Fix it in M2: add a claimed HTTPS redirect (`https://getkosha.app/app/oauth/callback`, served `assetlinks.json` with the release key's fingerprint), make it the app's redirect, then drop the custom scheme from the skip-consent client.
+- **Security (fixed in the hardening pass).** Skipping consent on a custom URL scheme is what RFC 8252 §8.6 advises against: another app could register `app.getkosha:` and get a code with no screen in between. Now only the HTTPS callback skips consent; `app.getkosha:` as a redirect shows consent every time, and the app only uses it to carry the HTTPS callback's answer from the server's button.
 - **Strings.** About 630 of roughly 1,200 text nodes on the boards already match English messages. Roughly 200 to 250 are new and go in a new `app` area, such as "Start with the amount", "Kosha is locked", "Its receipt is deleted with it." and "Signing out clears what this device saved." Write them in every locale with the glossary in `translations.md`.
 - **Tokens.** The design's colours match the web's `styles.css` exactly. The phone adds `sel`, `glass`, `scrim` and its own shadows and radii (card 16, button and field 14, sheet 24).
 - **quick-add.ts port.** Its exports are `parseQuickAdd(q, wallets, categories, locale)`, `needsAi` and `QuickParse`. It depends on `cleanTag` and the locale. It uses Unicode script classes and NFKC: use `Normalizer` and `UNICODE_CHARACTER_CLASS`, and `BigDecimal` instead of `parseFloat`. Port its asserts from `core.test.ts`.
