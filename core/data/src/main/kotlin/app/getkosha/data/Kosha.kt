@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingWorkPolicy
@@ -201,6 +202,8 @@ class Kosha private constructor(context: Context) {
             ExistingWorkPolicy.KEEP,
             OneTimeWorkRequestBuilder<OutboxWorker>()
                 .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
+                // The server asks a busy client to wait 60 seconds (Retry-After); retries start there and grow.
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 60, TimeUnit.SECONDS)
                 .build(),
         )
     }

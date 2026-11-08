@@ -27,6 +27,8 @@ import kotlin.coroutines.resumeWithException
 /** The server answered with an error. [error] carries its message (written for people) and invalid fields. */
 class ApiException(val status: Int, val error: ApiError) : Exception(error.message) {
     val readOnly get() = status == 403
+    /** Busy (429, Retry-After: 60) or failing (5xx): the same request may pass later. */
+    val retryable get() = status == 429 || status >= 500
 }
 
 /** No session: sign in again. */

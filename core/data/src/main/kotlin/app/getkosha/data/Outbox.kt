@@ -4,7 +4,11 @@ import android.content.Context
 import android.util.AtomicFile
 import app.getkosha.model.KoshaJson
 import app.getkosha.model.NewTransaction
-import app.getkosha.model.Transactions
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.jsonObject
 import app.getkosha.network.ApiException
 import app.getkosha.network.KoshaApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,9 +23,25 @@ import kotlinx.serialization.builtins.ListSerializer
 import java.io.File
 import java.io.IOException
 
-/** A new entry waiting for a connection. Lists show it with a "waiting" mark. */
+/** A new entry waiting for a connection. Lists show it with a "waiting" mark. [noEvent]: "No event" was picked. */
 @Serializable
-data class Queued(val entry: NewTransaction, val currency: String, val accountName: String, val categoryName: String)
+data class Queued(
+    val entry: NewTransaction,
+    val currency: String,
+    val accountName: String,
+    val categoryName: String,
+    val noEvent: Boolean = false,
+)
+
+/**
+ * The body of create_transactions for one new entry. "No event" goes as an explicit `eventId: null`; left out, the
+ * server picks the event by date. KoshaJson drops nulls, so it is added here.
+ */
+fun createTransactions(entry: NewTransaction, noEvent: Boolean): JsonObject {
+    var tx = KoshaJson.encodeToJsonElement(NewTransaction.serializer(), entry).jsonObject
+    if (noEvent) tx = JsonObject(tx + ("eventId" to JsonNull))
+    return buildJsonObject { put("transactions", JsonArray(listOf(tx))) }
+}
 
 /**
  * New transactions added without a connection, as on the web (src/lib/offline.ts). Only new entries queue;
@@ -62,12 +82,15 @@ class Outbox(context: Context, private val api: KoshaApi) {
         var sent = 0
         for (item in _items.value) {
             try {
-                api.post<Map<String, List<NewTransaction>>, Transactions>("/api/v1/transactions", mapOf("transactions" to listOf(item.entry)))
+                api.send("POST", "/api/v1/transactions", createTransactions(item.entry, item.noEvent))
                 sent++
             } catch (e: IOException) {
                 return@withLock sent
             } catch (e: ApiException) {
-                // The server refused it for good (400, 404, 409). A 403 means read-only: keep nothing either.
+                // Busy or failing: keep it for the next try; its id makes a repeat save once.
+                if (e.retryable) return@withLock sent
+                // The server refused it for good (400, 404; 409 when the id was used for other details). A 403 means
+                // read-only: keep nothing either.
                 _rejected.tryEmit(e.message ?: "")
             }
             save(_items.value.filterNot { it.entry.id == item.entry.id })

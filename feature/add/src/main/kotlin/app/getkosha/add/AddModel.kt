@@ -18,6 +18,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import app.getkosha.data.Kosha
 import app.getkosha.data.Queued
+import app.getkosha.data.createTransactions
 import app.getkosha.design.R
 import app.getkosha.design.Toast
 import app.getkosha.design.ToastState
@@ -396,20 +397,23 @@ internal class AddModel(route: Route.Add) : ViewModel() {
             eventId = eventId,
         )
         val staged = files.toList()
+        val noEvent = eventPicked && eventChoice == null
         saving = true
         sheet = null
         viewModelScope.launch {
             val queued = try {
-                kosha.api.send("POST", "/api/v1/transactions", body(entry))
+                kosha.api.send("POST", "/api/v1/transactions", createTransactions(entry, noEvent))
                 false
-            } catch (e: IOException) {
-                // Offline: only new entries queue, each with its id, so a retry is saved once.
-                kosha.outbox.add(Queued(entry, from.currency, from.name, catName))
+            } catch (e: Exception) {
+                // Offline, or the server busy or failing: only new entries queue, each with its id, so a retry is
+                // saved once.
+                if (e !is IOException && (e as? ApiException)?.retryable != true) {
+                    saving = false
+                    return@launch ui.error((e as? ApiException)?.message?.ifBlank { null } ?: ui.s(R.string.add_error_add))
+                }
+                kosha.outbox.add(Queued(entry, from.currency, from.name, catName, noEvent))
                 kosha.sendOutbox()
                 true
-            } catch (e: Exception) {
-                saving = false
-                return@launch ui.error((e as? ApiException)?.message?.ifBlank { null } ?: ui.s(R.string.add_error_add))
             }
             saving = false
             kosha.local.lastAccount = from.id
@@ -433,13 +437,6 @@ internal class AddModel(route: Route.Add) : ViewModel() {
             }
             if (again) next() else ui.close()
         }
-    }
-
-    /** A new transaction as create_transactions takes it. "No event" is sent as null; left out, the server picks by date. */
-    private fun body(entry: NewTransaction): JsonObject {
-        var tx = KoshaJson.encodeToJsonElement(entry).jsonObject
-        if (eventPicked && eventChoice == null) tx = JsonObject(tx + ("eventId" to JsonNull))
-        return buildJsonObject { put("transactions", JsonArray(listOf(tx))) }
     }
 
     /** Files go up after the entry is saved, and keep going once Add has closed. */
