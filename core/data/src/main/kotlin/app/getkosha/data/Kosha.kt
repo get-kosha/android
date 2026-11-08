@@ -25,6 +25,7 @@ import app.getkosha.network.SignedOutException
 import app.getkosha.network.TokenStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +33,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
@@ -208,8 +210,11 @@ class Kosha private constructor(context: Context) {
         )
     }
 
-    /** Signs out: revokes the refresh token, then clears what this phone saved and the outbox. */
-    suspend fun signOut() {
+    /**
+     * Signs out: revokes the refresh token, then clears what this phone saved and the outbox. Callers often launch
+     * it from a sheet that closes at once, so it finishes even when their scope is cancelled.
+     */
+    suspend fun signOut() = withContext(NonCancellable) {
         auth.signOut()
         signedOutLocally()
     }
