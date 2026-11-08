@@ -210,7 +210,7 @@ If App content lists a declaration this file doesn't cover, leave it alone and r
 Leave these to the owner and the Android build:
 - Uploading an app bundle (AAB) or creating any release, including internal testing.
 - Testers, closed testing and production access. Personal developer accounts need a closed test with at least 12 testers for 14 days before production.
-- **App signing.** Once the owner has uploaded the first AAB, read the SHA-256 fingerprints of the **app signing key** and the **upload key** at Test and release → Setup → App integrity → App signing, and include them in your report. Don't change any signing settings.
+- **App signing.** Once the owner has uploaded the first AAB, read the SHA-256 fingerprints of the **app signing key** and the **upload key** at Protected with Play → Play Store protection → Manage Play app signing, and include them in your report. Don't change any signing settings.
 
 ## Report
 
