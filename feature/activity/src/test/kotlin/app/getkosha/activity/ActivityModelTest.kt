@@ -42,11 +42,26 @@ class ActivityModelTest {
 
     @Test fun paramsLeaveOutWhatIsNotSet() {
         val p = Filters(query = "  rewe ", type = "expense", minAmount = 2000).params(YearMonth.of(2026, 11))
-        assertEquals("2026-11", p["month"])
+        // A search covers every date unless a period is picked.
+        assertEquals(null, p["month"])
+        assertEquals(null, p["from"])
         assertEquals("rewe", p["query"])
         assertEquals(2000L, p["minAmount"])
         assertEquals(null, p["includeCorrections"])
         assertEquals(1, Filters(minAmount = 1).count)
+    }
+
+    @Test fun periods() {
+        val now = YearMonth.of(2026, 11)
+        assertEquals("2026-11", Filters().params(now)["month"])
+        val year = Filters(query = "rewe", period = Period.Year(2025)).params(now)
+        assertEquals(listOf(null, "2025-01-01", "2025-12-31"), listOf(year["month"], year["from"], year["to"]))
+        val all = Filters(period = Period.All).params(now)
+        assertEquals(listOf(null, "1970-01-01", null), listOf(all["month"], all["from"], all["to"]))
+        assertEquals(Period.Month("2027-01"), Period.Month("2026-12").shift(1))
+        assertEquals(Period.Year(2025), Period.Year(2026).shift(-1))
+        assertEquals(null, Period.Range("2026-01-05", "2026-02-10").shift(1))
+        assertEquals("2026-02-28", Period.Month("2026-02").days?.second.toString())
     }
 
     @Test fun exchangeCostAsOnTheWeb() {

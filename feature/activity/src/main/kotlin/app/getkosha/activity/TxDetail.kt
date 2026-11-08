@@ -111,7 +111,7 @@ import java.time.YearMonth
 import kotlin.math.abs
 
 @Serializable
-private data class Patch(val transactions: List<JsonObject>)
+internal data class Patch(val transactions: List<JsonObject>)
 
 /** GET /api/app/payee-history: how often this payee comes up and this year's payments (finance.server.ts payeeHistory). */
 @Serializable
@@ -159,6 +159,7 @@ fun TxDetailScreen(id: String) {
     Column(Modifier.fillMaxSize().background(c.bg).statusBarsPadding()) {
         val kind = when {
             t == null -> ""
+            t.refundOf != null -> stringResource(R.string.tx_kind_refund)
             t.amount > 0 -> stringResource(R.string.tx_kind_income)
             Categories.isNeutral(t.categoryId) -> stringResource(R.string.tx_kind_correction)
             else -> stringResource(R.string.tx_kind_expense)
@@ -225,10 +226,12 @@ fun TxDetailScreen(id: String) {
                 )
             }
             val category = m.categories.firstOrNull { it.id == t.categoryId }
+            // A refund keeps its spending entry's category, which changes with that entry.
+            val refund = t.refundOf != null
             Card(Modifier.fillMaxWidth(), tight = true) {
                 FieldRow(stringResource(R.string.tx_payee), { edit("payee") }) { KText(t.payee.ifEmpty { "—" }, maxLines = 2) }
                 Hairline()
-                FieldRow(stringResource(R.string.tx_category), { edit("category") }) {
+                FieldRow(stringResource(R.string.tx_category), if (refund) null else { { edit("category") } }) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         PhIcon(categoryIconName(category?.icon), size = 18.dp)
                         KText(category?.name ?: t.categoryName, maxLines = 1)
@@ -245,8 +248,8 @@ fun TxDetailScreen(id: String) {
                 FieldRow(stringResource(R.string.tx_date), { edit("date") }) {
                     AmountText(AnnotatedString(shortDay(LocalDate.parse(t.day), locale, weekday = true, year = true) + " · " + t.time), style = KoshaTheme.type.body)
                 }
-                Hairline()
-                Row(Modifier.fillMaxWidth().heightIn(min = KoshaTheme.dims.settingsRow).padding(horizontal = 16.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                if (!refund) Hairline()
+                if (!refund) Row(Modifier.fillMaxWidth().heightIn(min = KoshaTheme.dims.settingsRow).padding(horizontal = 16.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                     KText(stringResource(R.string.tx_type), Modifier.width(76.dp), style = KoshaTheme.type.small, color = c.ink3)
                     Segmented(
                         listOf(
@@ -266,6 +269,11 @@ fun TxDetailScreen(id: String) {
                     )
                 }
             }
+            if (refund) {
+                val name = category?.name ?: t.categoryName
+                KText(stringResource(R.string.tx_refund_for, t.payee.ifEmpty { name }, name), style = KoshaTheme.type.small, color = c.ink3)
+            }
+            Refunds(t, writable) { edited = null }
             Card(Modifier.fillMaxWidth()) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     KText(stringResource(R.string.tx_tags), style = KoshaTheme.type.small, color = c.ink3)
@@ -304,7 +312,7 @@ fun TxDetailScreen(id: String) {
                 }
             }
             if (t.payee.isNotBlank()) AtPayee(t.payee, shown)
-            if (writable) {
+            if (writable && !refund) {
                 LinkCard("arrows-clockwise", stringResource(R.string.add_make_recurring)) { nav.navigate(Route.RecurringForm(fromTransaction = t.id)) }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Button(stringResource(R.string.tx_duplicate), { nav.navigate(Route.Add(duplicateOf = t.id)) }, Modifier.weight(1f), style = ButtonStyle.Secondary, size = ButtonSize.Medium, icon = "copy")

@@ -116,6 +116,8 @@ fun MainHeader(
     subtitle: String? = null,
     showMonth: Boolean = title == null,
     showCurrency: Boolean = showMonth,
+    /** Dates of the screen's own in place of the shared month, as Activity has. */
+    period: HeaderPeriod? = null,
     action: (@Composable () -> Unit)? = null,
 ) {
     val kosha = rememberKosha()
@@ -132,23 +134,26 @@ fun MainHeader(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        if (showMonth) {
+        if (showMonth || period != null) {
             val today = Dates.month(kosha.tz)
-            val label = month.month.getDisplayName(DateStyle.FULL_STANDALONE, locale) +
-                if (month.year != today.year) " ${month.year}" else ""
+            val shown = period ?: HeaderPeriod(
+                label = month.month.getDisplayName(DateStyle.FULL_STANDALONE, locale) + if (month.year != today.year) " ${month.year}" else "",
+                spoken = month.format(DateTimeFormatter.ofPattern("LLLL yyyy", locale)),
+                onOpen = { sheet = "month" },
+                previous = previous to { kosha.month.value = kosha.month.value.minusMonths(1) },
+                next = next to { kosha.month.value = kosha.month.value.plusMonths(1) },
+            )
+            val label = shown.label
             Row(
                 Modifier
                     .weight(1f)
                     .heightIn(min = 48.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .clickable(role = Role.Button) { sheet = "month" }
+                    .clickable(role = Role.Button, onClick = shown.onOpen)
                     .semantics {
-                        contentDescription = month.format(DateTimeFormatter.ofPattern("LLLL yyyy", locale))
-                        // The swipe that moves a month, for TalkBack.
-                        customActions = listOf(
-                            CustomAccessibilityAction(previous) { kosha.month.value = kosha.month.value.minusMonths(1); true },
-                            CustomAccessibilityAction(next) { kosha.month.value = kosha.month.value.plusMonths(1); true },
-                        )
+                        contentDescription = shown.spoken
+                        // The swipe that steps the dates, for TalkBack.
+                        customActions = listOfNotNull(shown.previous, shown.next).map { (name, go) -> CustomAccessibilityAction(name) { go(); true } }
                     },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -200,6 +205,18 @@ fun MainHeader(
         "menu" -> AccountMenu(onDismiss = { sheet = null })
     }
 }
+
+/**
+ * What the header's title shows when a screen picks its own dates: [label], read as [spoken], opening the
+ * screen's picker, and the steps back and on (a name for TalkBack and the action), when there are any.
+ */
+data class HeaderPeriod(
+    val label: String,
+    val spoken: String,
+    val onOpen: () -> Unit,
+    val previous: Pair<String, () -> Unit>? = null,
+    val next: Pair<String, () -> Unit>? = null,
+)
 
 /** The avatar: the account's initial on the selection ground. 48dp to tap. */
 @Composable
@@ -641,14 +658,18 @@ fun NavController.openActivity(search: ActivitySearch) {
  * Swiping sideways moves the shared month by one: left for the next, right for the previous. For Overview,
  * Activity and Recurring. Rows that swipe themselves (delete, duplicate) take the gesture first.
  */
-fun Modifier.monthSwipe(kosha: Kosha, threshold: Dp = 72.dp): Modifier = pointerInput(kosha) {
+fun Modifier.monthSwipe(kosha: Kosha, threshold: Dp = 72.dp): Modifier =
+    stepSwipe(kosha, { kosha.month.value = kosha.month.value.minusMonths(1) }, { kosha.month.value = kosha.month.value.plusMonths(1) }, threshold)
+
+/** Swiping sideways steps back (right) or on (left); [key] restarts the gesture when the steps change. */
+fun Modifier.stepSwipe(key: Any?, onPrevious: (() -> Unit)?, onNext: (() -> Unit)?, threshold: Dp = 72.dp): Modifier = pointerInput(key) {
     var total = 0f
     detectHorizontalDragGestures(
         onDragStart = { total = 0f },
         onDragEnd = {
             val t = threshold.toPx()
-            if (total > t) kosha.month.value = kosha.month.value.minusMonths(1)
-            if (total < -t) kosha.month.value = kosha.month.value.plusMonths(1)
+            if (total > t) onPrevious?.invoke()
+            if (total < -t) onNext?.invoke()
         },
     ) { change, amount ->
         total += amount

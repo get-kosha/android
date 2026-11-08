@@ -56,6 +56,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -74,6 +75,7 @@ import app.getkosha.design.IconButton
 import app.getkosha.design.IconTile
 import app.getkosha.design.KText
 import app.getkosha.design.KoshaTheme
+import app.getkosha.design.Pill
 import app.getkosha.design.ListOption
 import app.getkosha.design.ListPicker
 import app.getkosha.design.PhIcon
@@ -94,6 +96,7 @@ import app.getkosha.model.Sign
 import app.getkosha.model.Transaction
 import app.getkosha.model.TransactionList
 import app.getkosha.model.convert
+import app.getkosha.model.refundedInFull
 import app.getkosha.ui.ActivityRequests
 import app.getkosha.ui.AmountText
 import app.getkosha.ui.LoadingNote
@@ -107,7 +110,7 @@ import app.getkosha.ui.TabBanners
 import app.getkosha.ui.TabBarSpace
 import app.getkosha.ui.canWrite
 import app.getkosha.ui.meta
-import app.getkosha.ui.monthSwipe
+import app.getkosha.ui.stepSwipe
 import app.getkosha.ui.rememberKosha
 import app.getkosha.ui.shortDay
 import app.getkosha.ui.write
@@ -126,7 +129,7 @@ private val FiltersSaver = Saver<Filters, String>(
 )
 
 /**
- * Activity: the month's entries from search_transactions, with a search field, All · Out · In · Transfers, the
+ * Activity: the entries in its own period (a month by default) from search_transactions, with a search field, All · Out · In · Transfers, the
  * Filters sheet, a summary of the server's totals in the display currency, entries grouped by day, entries
  * waiting in the outbox on top, swipe left to delete and right to duplicate, and paging.
  */
@@ -137,7 +140,8 @@ fun ActivityScreen() {
     val toasts = LocalToasts.current
     val m = meta() ?: return
     val c = KoshaTheme.colors
-    val month by kosha.month.collectAsStateWithLifecycle()
+    // Activity picks its own dates; the shared month is Overview's and Accounts'.
+    val current = Dates.month(kosha.tz)
     val shown = kosha.currency.collectAsStateWithLifecycle().value ?: m.primary
     val version by kosha.version.collectAsStateWithLifecycle()
     val waiting by kosha.outbox.items.collectAsStateWithLifecycle()
@@ -146,12 +150,12 @@ fun ActivityScreen() {
     var filters by rememberSaveable(stateSaver = FiltersSaver) { mutableStateOf(Filters()) }
     var typed by rememberSaveable { mutableStateOf(filters.query) }
     var sheet by remember { mutableStateOf(false) }
+    var picking by remember { mutableStateOf(false) }
     var deleting by remember { mutableStateOf<Transaction?>(null) }
     // A search handed over from Overview, Search, Ask or a transaction.
     val asked by ActivityRequests.next.collectAsStateWithLifecycle()
     LaunchedEffect(asked) {
         val s = asked ?: return@LaunchedEffect
-        s.month?.let { kosha.month.value = YearMonth.parse(it) }
         filters = Filters.of(s)
         typed = filters.query
         ActivityRequests.next.value = null
@@ -160,12 +164,14 @@ fun ActivityScreen() {
         delay(300)
         if (typed != filters.query) filters = filters.copy(query = typed)
     }
-    val loaded = remember(filters, month, version) {
-        kosha.load(filters.key(month)) { get<TransactionList>("/api/v1/transactions", filters.params(month)) }
+    val loaded = remember(filters, current, version) {
+        kosha.load(filters.key(current)) { get<TransactionList>("/api/v1/transactions", filters.params(current)) }
     }.collectAsStateWithLifecycle(null).value
-    var more by remember(filters, month, version) { mutableStateOf<List<Transaction>>(emptyList()) }
-    var next by remember(filters, month, version) { mutableStateOf<Int?>(null) }
-    var loadingMore by remember(filters, month, version) { mutableStateOf(false) }
+    var more by remember(filters, current, version) { mutableStateOf<List<Transaction>>(emptyList()) }
+    var next by remember(filters, current, version) { mutableStateOf<Int?>(null) }
+    var loadingMore by remember(filters, current, version) { mutableStateOf(false) }
+    val period = filters.shown(current)
+    val pickPeriod = { p: Period -> filters = filters.copy(period = p.takeUnless { !filters.finding && it == Period.Month(current.toString()) }) }
     val list = loaded?.value
     LaunchedEffect(list) { list?.let { Seen.remember(it.transactions); next = it.nextOffset } }
     val rows = (list?.transactions ?: emptyList()) + more
@@ -173,7 +179,8 @@ fun ActivityScreen() {
     // Entries waiting for a connection, shown first in their day with a "waiting" mark.
     val pending = if (searching) emptyList() else waiting.mapNotNull { q ->
         val day = q.entry.day ?: Dates.text(Dates.today(kosha.tz))
-        if (!day.startsWith(month.toString())) null
+        val days = period.days
+        if (days != null && LocalDate.parse(day) !in days.first..days.second) null
         else Transaction(
             id = q.entry.id, day = day, payee = q.entry.payee, amount = q.entry.amount, currency = q.currency,
             accountId = q.entry.accountId, accountName = q.accountName, categoryId = q.entry.categoryId ?: "",
@@ -187,7 +194,7 @@ fun ActivityScreen() {
         if (offset != null && !loadingMore) {
             loadingMore = true
             scope.launch {
-                runCatching { kosha.api.get<TransactionList>("/api/v1/transactions", filters.params(month, offset)) }.onSuccess {
+                runCatching { kosha.api.get<TransactionList>("/api/v1/transactions", filters.params(current, offset)) }.onSuccess {
                     Seen.remember(it.transactions)
                     more = more + it.transactions
                     next = it.nextOffset
@@ -199,8 +206,9 @@ fun ActivityScreen() {
     val readOnly = stringResource(R.string.common_demo_read_only)
 
     Column(Modifier.fillMaxSize().background(c.bg)) {
-        MainHeader()
-        LazyColumn(Modifier.weight(1f).monthSwipe(kosha), contentPadding = TabBarSpace) {
+        val header = periodHeader(period, current, { picking = true }, pickPeriod)
+        MainHeader(showCurrency = true, period = header)
+        LazyColumn(Modifier.weight(1f).stepSwipe(period, header.previous?.second, header.next?.second), contentPadding = TabBarSpace) {
             item { TabBanners(Modifier.padding(bottom = 8.dp)) }
             item {
                 Row(Modifier.padding(horizontal = 16.dp).padding(top = 4.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -222,8 +230,8 @@ fun ActivityScreen() {
                 val totals = list?.totals.orEmpty().summary(shown, m.rates)
                 SummaryCard(totals, shown, empty = rows.isEmpty(), modifier = Modifier.padding(horizontal = 16.dp).padding(top = 12.dp))
             }
-            // A tag or event filter narrows to this month; its own view covers every date.
-            if (filters.tag != null || filters.eventId != null) {
+            // A tag or event with a period picked narrows to it; its own view covers every date.
+            if ((filters.tag != null || filters.eventId != null) && filters.period != null) {
                 item {
                     Box(Modifier.padding(horizontal = 16.dp).padding(top = 12.dp)) {
                         val event = m.events.firstOrNull { it.id == filters.eventId }
@@ -242,6 +250,7 @@ fun ActivityScreen() {
                 }
                 groups.isEmpty() -> item {
                     if (list == null) KText(loaded.error ?: stringResource(R.string.common_offline_body), Modifier.padding(16.dp), style = KoshaTheme.type.small, color = c.ink3)
+                    else if (filters.period != null) KText(stringResource(R.string.tx_empty_period), Modifier.fillMaxWidth().padding(top = 48.dp, start = 16.dp, end = 16.dp), style = KoshaTheme.type.small, color = c.ink3, align = TextAlign.Center)
                     else EmptyMonth()
                 }
                 else -> {
@@ -257,7 +266,8 @@ fun ActivityScreen() {
                                     SwipeRow(
                                         enabled = !isWaiting,
                                         onDelete = { if (writable) deleting = t else toasts.show(Toast(readOnly)) },
-                                        onDuplicate = { if (writable) nav.navigate(Route.Add(duplicateOf = t.id)) else toasts.show(Toast(readOnly)) },
+                                        // A copy of a refund would be ordinary income, so a refund only opens.
+                                        onDuplicate = { if (t.refundOf != null) openEntry(kosha, nav, t) else if (writable) nav.navigate(Route.Add(duplicateOf = t.id)) else toasts.show(Toast(readOnly)) },
                                     ) {
                                         TxRow(t, m, shown, waiting = isWaiting, onClick = if (isWaiting) null else ({ openEntry(kosha, nav, t) }))
                                     }
@@ -277,7 +287,8 @@ fun ActivityScreen() {
             }
         }
     }
-    if (sheet) FiltersSheet(filters, month, m, onApply = { filters = it; typed = it.query; sheet = false }, onDismiss = { sheet = false })
+    if (picking) PeriodSheet(period, current, { pickPeriod(it); picking = false }, { picking = false })
+    if (sheet) FiltersSheet(filters, current, m, onApply = { filters = it; typed = it.query; sheet = false }, onDismiss = { sheet = false })
     deleting?.let { t -> DeleteConfirm(t, onDone = { deleting = null }) }
 }
 
@@ -384,7 +395,16 @@ internal fun TxRow(t: Transaction, m: Meta, display: String, waiting: Boolean = 
                 }
                 KText(stringResource(R.string.tx_kind_transfer) + " · " + stringResource(R.string.subs_not_counted), style = KoshaTheme.type.xs, color = c.ink3, maxLines = 1)
             } else {
-                KText(t.payee.ifEmpty { category?.name ?: stringResource(R.string.tx_untitled) }, maxLines = 1)
+                val badge = when {
+                    t.refundOf != null -> stringResource(R.string.tx_refund_badge)
+                    t.refunds.isNullOrEmpty() -> null
+                    t.refundedInFull -> stringResource(R.string.tx_refunded_badge)
+                    else -> stringResource(R.string.tx_part_refunded_badge)
+                }
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    KText(t.payee.ifEmpty { category?.name ?: stringResource(R.string.tx_untitled) }, Modifier.weight(1f, fill = false), maxLines = 1)
+                    if (badge != null) Pill(badge)
+                }
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     KText((category?.name ?: t.categoryName) + " · ", style = KoshaTheme.type.xs, color = c.ink3, maxLines = 1)
                     AccountDot(c.account(accountIndex))
@@ -414,6 +434,8 @@ internal fun TxRow(t: Transaction, m: Meta, display: String, waiting: Boolean = 
                 transfer != null -> MoneyText(t.sent, t.currency, sign = Sign.None, color = c.ink2)
                 neutral -> MoneyText(t.amount, t.currency, sign = Sign.None, color = c.ink2)
                 t.amount > 0 -> MoneyText(t.amount, t.currency, sign = Sign.Always, color = c.pos)
+                // Refunded in full: it happened, but costs nothing now.
+                t.refundedInFull -> MoneyText(t.amount, t.currency, style = KoshaTheme.type.num.copy(textDecoration = TextDecoration.LineThrough), color = c.ink3)
                 else -> MoneyText(t.amount, t.currency)
             }
             if (t.currency != display) {
@@ -563,6 +585,7 @@ internal fun DeleteConfirm(t: Transaction, onDone: (deleted: Boolean) -> Unit) {
             if (t.attachmentCount > 0) {
                 KText(pluralStringResource(R.plurals.app_act_receipt_deleted, t.attachmentCount, t.attachmentCount), style = KoshaTheme.type.small, color = c.ink2, align = TextAlign.Center)
             }
+            if (!t.refunds.isNullOrEmpty()) KText(stringResource(R.string.tx_delete_refunds), style = KoshaTheme.type.small, color = c.ink2, align = TextAlign.Center)
             if (t.reconciled) KText(stringResource(R.string.tx_delete_reconciled), style = KoshaTheme.type.small, color = c.warn, align = TextAlign.Center)
         }
         Spacer(Modifier.height(14.dp))
@@ -590,7 +613,7 @@ internal fun DeleteConfirm(t: Transaction, onDone: (deleted: Boolean) -> Unit) {
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun FiltersSheet(start: Filters, month: YearMonth, m: Meta, onApply: (Filters) -> Unit, onDismiss: () -> Unit) {
+private fun FiltersSheet(start: Filters, current: YearMonth, m: Meta, onApply: (Filters) -> Unit, onDismiss: () -> Unit) {
     val kosha = rememberKosha()
     val c = KoshaTheme.colors
     val locale = KoshaTheme.locale
@@ -599,7 +622,7 @@ private fun FiltersSheet(start: Filters, month: YearMonth, m: Meta, onApply: (Fi
     var count by remember { mutableStateOf<Int?>(null) }
     LaunchedEffect(draft) {
         delay(250)
-        count = runCatching { kosha.api.get<TransactionList>("/api/v1/transactions", draft.params(month, limit = 1)).total }.getOrNull()
+        count = runCatching { kosha.api.get<TransactionList>("/api/v1/transactions", draft.params(current, limit = 1)).total }.getOrNull()
     }
     val any = stringResource(R.string.app_act_any)
     val title = when (page) {
@@ -695,8 +718,8 @@ private fun FiltersSheet(start: Filters, month: YearMonth, m: Meta, onApply: (Fi
 }
 
 /** An amount as the keypad types it: 2000 minor units is "20" (decimals only when there are cents). */
-internal fun plainAmount(minor: Long): String {
-    val v = java.math.BigDecimal.valueOf(abs(minor), 2).stripTrailingZeros()
+internal fun plainAmount(minor: Long, decimals: Int = 2): String {
+    val v = java.math.BigDecimal.valueOf(abs(minor), decimals).stripTrailingZeros()
     return (if (v.scale() < 0) v.setScale(0) else v).toPlainString()
 }
 

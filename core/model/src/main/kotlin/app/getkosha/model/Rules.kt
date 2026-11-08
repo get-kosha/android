@@ -15,6 +15,16 @@ object Categories {
     fun isSystem(id: String) = isNeutral(id) || id == TRANSFER_FEE
 }
 
+/** Whether money can come back for this entry (core.ts canRefund): paid spending, not a transfer, refund or correction. */
+val Transaction.canRefund: Boolean
+    get() = refunds != null && amount < 0 && status == "paid" && transfer == null && refundOf == null && !Categories.isNeutral(categoryId)
+
+/** All of it came back: it happened, but costs nothing now. */
+val Transaction.refundedInFull: Boolean get() = !refunds.isNullOrEmpty() && refunded >= -amount
+
+/** What is still to come back, in the entry's currency. */
+val Transaction.refundLeft: Long get() = maxOf(0, -amount - refunded)
+
 /**
  * Converts at rates held as units per 1 USD (core.ts convert), rounded to whole minor units.
  * ponytail: an unknown currency passes through unconverted, as on the web.

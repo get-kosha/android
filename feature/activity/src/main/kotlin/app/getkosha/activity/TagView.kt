@@ -28,6 +28,7 @@ import app.getkosha.design.KoshaTheme
 import app.getkosha.design.PhIcon
 import app.getkosha.design.R
 import app.getkosha.design.categoryIconName
+import app.getkosha.model.Dates
 import app.getkosha.model.TransactionList
 import app.getkosha.model.convert
 import app.getkosha.ui.HeroMoney
@@ -58,11 +59,11 @@ fun TagViewScreen(tag: String?, eventId: String?) {
     val filters = Filters(tag = tag, eventId = eventId)
     // ponytail: the entries by day stop at 2,000; a tag or event is rarely bigger. The totals above come from the server.
     val loaded = remember(tag, eventId, version) {
-        kosha.load(filters.key(null)) {
-            var page = get<TransactionList>("/api/v1/transactions", filters.params(null, limit = 500))
+        kosha.load(filters.key(Dates.month(kosha.tz))) {
+            var page = get<TransactionList>("/api/v1/transactions", filters.params(Dates.month(kosha.tz), limit = 500))
             var all = page
             while (page.nextOffset != null && all.transactions.size < 2000) {
-                page = get("/api/v1/transactions", filters.params(null, offset = page.nextOffset ?: 0, limit = 500))
+                page = get("/api/v1/transactions", filters.params(Dates.month(kosha.tz), offset = page.nextOffset ?: 0, limit = 500))
                 all = all.copy(transactions = all.transactions + page.transactions)
             }
             all

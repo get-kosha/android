@@ -97,7 +97,17 @@ data class Transaction(
     val reconciled: Boolean = false,
     val bankRef: String? = null,
     val attachmentCount: Int = 0,
+    /** A refund: the spending entry it gave money back for. */
+    val refundOf: String? = null,
+    /** A spending entry's refunds. null from a server older than refunds, which can't record them. */
+    val refunds: List<Refund>? = null,
+    /** The refunds' total in this entry's currency, other currencies at today's rate. */
+    val refunded: Long = 0,
 ) {
+    /** Money that came back for a spending entry, as its own entry in [accountId]. */
+    @Serializable
+    data class Refund(val id: String, val accountId: String, val amount: Long, val currency: String = "", val day: String)
+
     @Serializable
     data class TransferLink(
         val id: String,
