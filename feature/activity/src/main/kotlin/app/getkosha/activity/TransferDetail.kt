@@ -39,7 +39,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.getkosha.design.AccountDot
 import app.getkosha.design.AccountList
 import app.getkosha.design.AccountOption
@@ -71,20 +70,12 @@ import app.getkosha.ui.rememberKosha
 import app.getkosha.ui.shortDay
 import app.getkosha.ui.write
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import java.time.LocalDate
 import kotlin.math.abs
 import kotlin.math.roundToLong
-
-/** list_currency_exchanges: provider and market rate for transfers between currencies. */
-@Serializable
-private data class Exchanges(val exchanges: List<Exchange> = emptyList()) {
-    @Serializable
-    data class Exchange(val id: String, val provider: String = "", val marketRate: Double? = null)
-}
 
 /** What an exchange cost against the market rate (core.ts exchange()), in the source currency's minor units. */
 internal data class FxCost(val converted: Long, val rateCost: Double?, val totalCost: Double, val costPct: Double)
@@ -113,9 +104,6 @@ fun TransferDetailScreen(id: String) {
     val writable = canWrite()
     val loaded = rememberTransaction(id)
     val t = loaded?.value
-    val version by kosha.version.collectAsStateWithLifecycle()
-    val exchanges = remember(version) { kosha.load("exchanges") { get<Exchanges>("/api/v1/exchanges", mapOf("limit" to 500)) } }
-        .collectAsStateWithLifecycle(null).value?.value
     var sheet by remember { mutableStateOf<String?>(null) }
     var saved by remember { mutableStateOf(false) }
     var pending by remember { mutableStateOf<JsonObject?>(null) }
@@ -145,7 +133,6 @@ fun TransferDetailScreen(id: String) {
         val toCurrency = to?.currency ?: t.currency
         val sent = (if (outgoing) abs(t.amount) else abs(link.counterAmount ?: 0)) + link.fee
         val received = if (outgoing) abs(link.counterAmount ?: 0) else t.amount
-        val fx = exchanges?.exchanges?.firstOrNull { it.id == link.id }
         val save = { change: JsonObject, touchesReconciled: Boolean ->
             when {
                 !writable -> toasts.show(Toast(readOnly))
@@ -204,14 +191,14 @@ fun TransferDetailScreen(id: String) {
                     if (link.fee > 0) KText(stringResource(R.string.app_act_fee_counted, feeCategory), style = KoshaTheme.type.xs, color = c.ink3)
                 }) { MoneyText(link.fee, fromCurrency, sign = Sign.None) }
                 Hairline()
-                FieldRow(stringResource(R.string.tx_via), { edit("provider") }) { KText(fx?.provider?.ifEmpty { null } ?: "—", maxLines = 1) }
+                FieldRow(stringResource(R.string.tx_via), { edit("provider") }) { KText(link.provider?.ifEmpty { null } ?: "—", maxLines = 1) }
                 Hairline()
                 FieldRow(stringResource(R.string.tx_date), { edit("date") }) {
                     AmountText(AnnotatedString(shortDay(LocalDate.parse(t.day), locale, weekday = true, year = true) + " · " + t.time), style = KoshaTheme.type.body)
                 }
             }
-            if (fromCurrency != toCurrency && fx?.marketRate != null) {
-                val cost = exchange(sent, link.fee, received, fx.marketRate)
+            if (fromCurrency != toCurrency && link.marketRate != null) {
+                val cost = exchange(sent, link.fee, received, link.marketRate)
                 Column(
                     Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(c.soft).padding(horizontal = 12.dp, vertical = 10.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -220,7 +207,7 @@ fun TransferDetailScreen(id: String) {
                         AnnotatedString(
                             stringResource(
                                 R.string.tx_fx_becomes,
-                                Money.format(cost.converted, fromCurrency, locale), Money.format(received, toCurrency, locale), rateText(fx.marketRate, 1.0),
+                                Money.format(cost.converted, fromCurrency, locale), Money.format(received, toCurrency, locale), rateText(link.marketRate, 1.0),
                             ),
                         ),
                         style = KoshaTheme.type.small, color = c.ink2,
@@ -261,7 +248,7 @@ fun TransferDetailScreen(id: String) {
                 save(buildJsonObject { put("received", it) }, true)
             }
             "fee" -> FeeSheet(link.fee, fromCurrency, close) { close(); save(buildJsonObject { put("fee", it) }, true) }
-            "provider" -> TextSheet(stringResource(R.string.tx_provider), fx?.provider ?: "", singleLine = true, close) { close(); save(buildJsonObject { put("provider", it.trim().take(60)) }, false) }
+            "provider" -> TextSheet(stringResource(R.string.tx_provider), link.provider ?: "", singleLine = true, close) { close(); save(buildJsonObject { put("provider", it.trim().take(60)) }, false) }
             "note" -> TextSheet(stringResource(R.string.tx_note), t.note, singleLine = false, close) { close(); save(buildJsonObject { put("note", it.trim()) }, false) }
             "date" -> DateSheet(t.day, t.time, kosha.tz, close, withTime = false) { day, _ -> close(); save(buildJsonObject { put("day", day) }, true) }
             "from", "to" -> Sheet(stringResource(if (sheet == "from") R.string.tx_from else R.string.tx_to), close) {

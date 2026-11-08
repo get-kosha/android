@@ -2694,6 +2694,14 @@
         <item quantity="many">%1$s quest\'anno</item>
         <item quantity="other">%1$s quest\'anno</item>
     </plurals>
+    <plurals name="app_rec_payslips">
+        <item quantity="zero">%1$s buste paga</item>
+        <item quantity="one">%1$s busta paga</item>
+        <item quantity="two">%1$s buste paga</item>
+        <item quantity="few">%1$s buste paga</item>
+        <item quantity="many">%1$s buste paga</item>
+        <item quantity="other">%1$s buste paga</item>
+    </plurals>
     <string name="app_ov_show_totals_in">Mostra i totali in</string>
     <string name="app_ov_pick_month">Scegli un mese</string>
     <string name="app_ov_not_started">Non iniziato</string>

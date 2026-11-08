@@ -136,9 +136,19 @@ data class Explained(val summary: String = "", val suggestions: List<Suggestion>
 
 // ---------- reading a statement ----------
 
-/** POST /api/app/import/read: text for CSV, OFX and QFX, base64 for a PDF. [layout] is a [Layout.json]. */
+/**
+ * POST /api/app/import/read: text for CSV, OFX and QFX, base64 for a PDF. [layout] is a [Layout.json]. [walletId]
+ * is the account it's for, when known: a card's statement reads the other way, CSV or PDF.
+ */
 @Serializable
-data class ReadBody(val name: String, val content: String, val format: String? = null, val card: Boolean = false, val layout: JsonElement? = null)
+data class ReadBody(
+    val name: String,
+    val content: String,
+    val format: String? = null,
+    val card: Boolean = false,
+    val layout: JsonElement? = null,
+    val walletId: String? = null,
+)
 
 /** What /import/read gives: lines for every format, plus the CSV's rows and columns, or the OFX's or PDF's balances. */
 @Serializable

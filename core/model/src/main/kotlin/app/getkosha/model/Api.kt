@@ -99,7 +99,16 @@ data class Transaction(
     val attachmentCount: Int = 0,
 ) {
     @Serializable
-    data class TransferLink(val id: String, val counterAccountId: String? = null, val counterAmount: Long? = null, val fee: Long = 0)
+    data class TransferLink(
+        val id: String,
+        val counterAccountId: String? = null,
+        val counterAmount: Long? = null,
+        val fee: Long = 0,
+        /** Wise, Revolut, your bank… "" if not given. */
+        val provider: String = "",
+        /** The day's mid-market rate between the two currencies, when they differ and it's known. */
+        val marketRate: Double? = null,
+    )
 }
 
 @Serializable
@@ -108,7 +117,12 @@ data class TransactionList(
     val total: Int = 0,
     val nextOffset: Int? = null,
     val totals: List<Totals> = emptyList(),
+    /** Only with a tag or eventId: paid spending and income per category and currency, net, most spent first. */
+    val byCategory: List<CategoryTotal> = emptyList(),
 ) {
+    @Serializable
+    data class CategoryTotal(val categoryId: String, val categoryName: String = "", val currency: String, val amount: Long, val count: Int = 0)
+
     /** Money out, in and moved per currency for the filtered list. */
     @Serializable
     data class Totals(val currency: String, val spent: Long, val received: Long, val transferred: Long)
@@ -194,6 +208,8 @@ data class Recurring(
         val status: String,
         val edited: Boolean = false,
         val transactionId: String? = null,
+        /** The account it's paid from: the schedule's, unless changed for this payment. */
+        val accountId: String = "",
     )
 }
 

@@ -201,7 +201,8 @@ fun RecurringFormScreen(id: String?, fromPayee: String?, fromTransaction: String
     val toWallet = wallets.find { it.id == form.toWalletId }
     val currency = wallet?.currency ?: m?.primary ?: "eur"
     val cross = transfer && toWallet != null && toWallet.currency != wallet?.currency
-    val variable = transfer && form.variable
+    // The amount changes each time (an energy bill, a top-up): payments wait for it instead of recording on their day.
+    val variable = form.variable
     val categories = m?.categories.orEmpty().filter {
         !Categories.isSystem(it.id) && (!it.isArchived || it.id == form.categoryId) && it.isIncome == income
     }
@@ -241,15 +242,14 @@ fun RecurringFormScreen(id: String?, fromPayee: String?, fromTransaction: String
             put("autoPay", form.autoPay && !variable)
             put("kind", if (form.kind == FormKind.Subscription) "subscription" else "repetitive")
             put("note", form.note)
+            put("variable", variable)
             if (transfer) {
                 put("toAccountId", form.toWalletId)
-                put("variable", variable)
                 // create_recurring takes no null here; update_recurring clears it with null.
                 val to = form.toAmount?.takeIf { cross && !variable }
                 if (to != null) put("toAmount", to) else if (original != null) put("toAmount", JsonNull)
             } else if (original != null) {
                 put("toAccountId", JsonNull)
-                put("variable", false)
             }
             if (original == null && form.link.isNotEmpty()) put("linkTransactionIds", JsonArray(form.link.map(::JsonPrimitive)))
         }
@@ -317,10 +317,8 @@ fun RecurringFormScreen(id: String?, fromPayee: String?, fromTransaction: String
         }
 
         Card(Modifier.fillMaxWidth(), tight = true) {
-            if (transfer) {
-                SwitchRow(stringResource(R.string.subs_variable), stringResource(R.string.app_rec_asks_each_time), form.variable) { form.variable = it }
-                Hairline()
-            }
+            SwitchRow(stringResource(R.string.subs_variable), stringResource(R.string.app_rec_asks_each_time), form.variable) { form.variable = it }
+            Hairline()
             DetailRow(stringResource(if (transfer) R.string.subs_from else R.string.subs_account), { picker = Picker.Account }, labelWidth = 80.dp) {
                 AccountDot(c.account(wallets.indexOf(wallet)))
                 KText(wallet?.name ?: "")

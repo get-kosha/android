@@ -2389,6 +2389,14 @@
         <item quantity="many">今年 %1$s 次</item>
         <item quantity="other">今年 %1$s 次</item>
     </plurals>
+    <plurals name="app_rec_payslips">
+        <item quantity="zero">%1$s 份工资单</item>
+        <item quantity="one">%1$s 份工资单</item>
+        <item quantity="two">%1$s 份工资单</item>
+        <item quantity="few">%1$s 份工资单</item>
+        <item quantity="many">%1$s 份工资单</item>
+        <item quantity="other">%1$s 份工资单</item>
+    </plurals>
     <string name="app_ov_show_totals_in">合计显示为</string>
     <string name="app_ov_pick_month">选择月份</string>
     <string name="app_ov_not_started">尚未开始</string>

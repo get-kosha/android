@@ -48,6 +48,8 @@ data class Sub(
     val next: Instance? = null,
     /** Paid payments, newest first. */
     val history: List<Paid> = emptyList(),
+    /** Files attached to its payments: payslips for income, bills otherwise. */
+    @SerialName("attachment_count") val attachmentCount: Int = 0,
 ) {
     val isTransfer get() = toWalletId != null
     val isVariable get() = variable != 0
@@ -68,6 +70,8 @@ data class Instance(
     val status: String,
     val edited: Boolean = false,
     @SerialName("tx_id") val txId: String? = null,
+    /** The account its row uses, when changed for this payment or once it has a row; else the schedule's. */
+    @SerialName("wallet_id") val walletId: String? = null,
 )
 
 /** A paid payment: the transaction row. */

@@ -2588,6 +2588,14 @@
         <item quantity="many">%1$s в этом году</item>
         <item quantity="other">%1$s в этом году</item>
     </plurals>
+    <plurals name="app_rec_payslips">
+        <item quantity="zero">%1$s расчётного листка</item>
+        <item quantity="one">%1$s расчётный листок</item>
+        <item quantity="two">%1$s расчётного листка</item>
+        <item quantity="few">%1$s расчётных листка</item>
+        <item quantity="many">%1$s расчётных листков</item>
+        <item quantity="other">%1$s расчётного листка</item>
+    </plurals>
     <string name="app_ov_show_totals_in">Показывать суммы в</string>
     <string name="app_ov_pick_month">Выберите месяц</string>
     <string name="app_ov_not_started">Ещё не начался</string>

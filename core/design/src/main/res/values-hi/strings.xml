@@ -2450,6 +2450,14 @@
         <item quantity="many">इस साल %1$s</item>
         <item quantity="other">इस साल %1$s</item>
     </plurals>
+    <plurals name="app_rec_payslips">
+        <item quantity="zero">%1$s सैलरी स्लिप</item>
+        <item quantity="one">%1$s सैलरी स्लिप</item>
+        <item quantity="two">%1$s सैलरी स्लिप</item>
+        <item quantity="few">%1$s सैलरी स्लिप</item>
+        <item quantity="many">%1$s सैलरी स्लिप</item>
+        <item quantity="other">%1$s सैलरी स्लिप</item>
+    </plurals>
     <string name="app_ov_show_totals_in">कुल रकम इसमें दिखाएँ</string>
     <string name="app_ov_pick_month">महीना चुनें</string>
     <string name="app_ov_not_started">शुरू नहीं हुआ</string>

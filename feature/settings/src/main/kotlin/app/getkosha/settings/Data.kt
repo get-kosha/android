@@ -98,7 +98,11 @@ data class ApiAccess(
 data class NewKey(val id: String, val key: String)
 
 @Serializable
-data class CategoryList(val categories: List<app.getkosha.model.Category>)
+data class CategoryList(
+    val categories: List<app.getkosha.model.Category>,
+    /** Balance corrections, which use the unlisted system category 0. */
+    val correctionCount: Int = 0,
+)
 
 /** An event from list_events. */
 @Serializable

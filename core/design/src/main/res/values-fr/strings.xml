@@ -2694,6 +2694,14 @@
         <item quantity="many">%1$s cette année</item>
         <item quantity="other">%1$s cette année</item>
     </plurals>
+    <plurals name="app_rec_payslips">
+        <item quantity="zero">%1$s fiches de paie</item>
+        <item quantity="one">%1$s fiche de paie</item>
+        <item quantity="two">%1$s fiches de paie</item>
+        <item quantity="few">%1$s fiches de paie</item>
+        <item quantity="many">%1$s fiches de paie</item>
+        <item quantity="other">%1$s fiches de paie</item>
+    </plurals>
     <string name="app_ov_show_totals_in">Afficher les totaux en</string>
     <string name="app_ov_pick_month">Choisir un mois</string>
     <string name="app_ov_not_started">Pas encore commencé</string>

@@ -2389,6 +2389,14 @@
         <item quantity="many">올해 %1$s건</item>
         <item quantity="other">올해 %1$s건</item>
     </plurals>
+    <plurals name="app_rec_payslips">
+        <item quantity="zero">급여 명세서 %1$s건</item>
+        <item quantity="one">급여 명세서 %1$s건</item>
+        <item quantity="two">급여 명세서 %1$s건</item>
+        <item quantity="few">급여 명세서 %1$s건</item>
+        <item quantity="many">급여 명세서 %1$s건</item>
+        <item quantity="other">급여 명세서 %1$s건</item>
+    </plurals>
     <string name="app_ov_show_totals_in">합계 표시 통화</string>
     <string name="app_ov_pick_month">월 선택</string>
     <string name="app_ov_not_started">시작 전</string>

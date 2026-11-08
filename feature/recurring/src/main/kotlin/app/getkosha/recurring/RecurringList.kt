@@ -337,6 +337,9 @@ private fun SubRow(s: Sub, today: LocalDate, month: YearMonth, thisMonth: YearMo
             s.next?.let { stringResource(R.string.app_rec_next, nextLabel(it.day, today)) },
             if (s.isVariable) stringResource(R.string.subs_varies_asks) else null,
             if (s.isTransfer) stringResource(R.string.subs_not_counted) else null,
+            s.attachmentCount.takeIf { it > 0 && !s.isTransfer && m?.attachments == true }?.let {
+                pluralStringResource(if (s.amount > 0) R.plurals.app_rec_payslips else R.plurals.add_files, it, it.toString())
+            },
         ).joinToString(" · ")
     }
     ListRow(onClick = onClick) {

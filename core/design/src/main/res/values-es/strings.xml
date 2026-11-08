@@ -2694,6 +2694,14 @@
         <item quantity="many">%1$s este año</item>
         <item quantity="other">%1$s este año</item>
     </plurals>
+    <plurals name="app_rec_payslips">
+        <item quantity="zero">%1$s nóminas</item>
+        <item quantity="one">%1$s nómina</item>
+        <item quantity="two">%1$s nóminas</item>
+        <item quantity="few">%1$s nóminas</item>
+        <item quantity="many">%1$s nóminas</item>
+        <item quantity="other">%1$s nóminas</item>
+    </plurals>
     <string name="app_ov_show_totals_in">Mostrar totales en</string>
     <string name="app_ov_pick_month">Elige un mes</string>
     <string name="app_ov_not_started">Sin empezar</string>

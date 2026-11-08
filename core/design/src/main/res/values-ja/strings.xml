@@ -2334,6 +2334,14 @@
         <item quantity="many">今年%1$s件</item>
         <item quantity="other">今年%1$s件</item>
     </plurals>
+    <plurals name="app_rec_payslips">
+        <item quantity="zero">給与明細 %1$s 件</item>
+        <item quantity="one">給与明細 %1$s 件</item>
+        <item quantity="two">給与明細 %1$s 件</item>
+        <item quantity="few">給与明細 %1$s 件</item>
+        <item quantity="many">給与明細 %1$s 件</item>
+        <item quantity="other">給与明細 %1$s 件</item>
+    </plurals>
     <string name="app_ov_show_totals_in">合計の表示通貨</string>
     <string name="app_ov_pick_month">月を選ぶ</string>
     <string name="app_ov_not_started">まだです</string>

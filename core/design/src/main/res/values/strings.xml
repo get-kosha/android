@@ -2450,6 +2450,14 @@
         <item quantity="many">%1$s this year</item>
         <item quantity="other">%1$s this year</item>
     </plurals>
+    <plurals name="app_rec_payslips">
+        <item quantity="zero">%1$s payslips</item>
+        <item quantity="one">%1$s payslip</item>
+        <item quantity="two">%1$s payslips</item>
+        <item quantity="few">%1$s payslips</item>
+        <item quantity="many">%1$s payslips</item>
+        <item quantity="other">%1$s payslips</item>
+    </plurals>
     <string name="app_ov_show_totals_in">Show totals in</string>
     <string name="app_ov_pick_month">Pick a month</string>
     <string name="app_ov_not_started">Not started</string>

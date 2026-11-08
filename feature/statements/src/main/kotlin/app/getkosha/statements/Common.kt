@@ -56,9 +56,12 @@ import kotlin.math.abs
 // What Reconcile and Import share: reading a statement on the server, short days, money inside sentences, and
 // the sheets for a day, an amount and a choice.
 
-/** Reads a file on the server (POST /api/app/import/read). A [layout] re-reads a CSV with the columns as set. */
-suspend fun KoshaApi.read(file: Picked, card: Boolean, layout: Layout? = null): Read =
-    post("/api/app/import/read", ReadBody(file.name, file.content, if (file.pdf) "pdf" else null, card, layout?.json()))
+/**
+ * Reads a file on the server (POST /api/app/import/read). A [layout] re-reads a CSV with the columns as set.
+ * [walletId] names the account when it exists already (Reconcile); Import's accounts may not exist yet.
+ */
+suspend fun KoshaApi.read(file: Picked, card: Boolean, layout: Layout? = null, walletId: String? = null): Read =
+    post("/api/app/import/read", ReadBody(file.name, file.content, if (file.pdf) "pdf" else null, card, layout?.json(), walletId))
 
 /**
  * A CSV layout with the columns the AI model worked out (POST /api/app/import/layout), for one Kosha couldn't read

@@ -28,7 +28,6 @@ import app.getkosha.design.KoshaTheme
 import app.getkosha.design.PhIcon
 import app.getkosha.design.R
 import app.getkosha.design.categoryIconName
-import app.getkosha.model.Categories
 import app.getkosha.model.TransactionList
 import app.getkosha.model.convert
 import app.getkosha.ui.HeroMoney
@@ -57,7 +56,7 @@ fun TagViewScreen(tag: String?, eventId: String?) {
     val version by kosha.version.collectAsStateWithLifecycle()
     val event = eventId?.let { id -> m.events.firstOrNull { it.id == id } }
     val filters = Filters(tag = tag, eventId = eventId)
-    // ponytail: up to 2,000 entries; a tag or event is rarely bigger, and paging the whole of it is one read.
+    // ponytail: the entries by day stop at 2,000; a tag or event is rarely bigger. The totals above come from the server.
     val loaded = remember(tag, eventId, version) {
         kosha.load(filters.key(null)) {
             var page = get<TransactionList>("/api/v1/transactions", filters.params(null, limit = 500))
@@ -84,11 +83,11 @@ fun TagViewScreen(tag: String?, eventId: String?) {
             return@Page
         }
         val spent = -list.totals.sumOf { convert(it.spent, it.currency, shown, m.rates) }
-        // Spending by category, from the entries themselves: the API's totals are per currency only.
-        // ponytail: summed on the phone at the server's rates; a by-category total from the server would replace it.
-        val byCategory = rows.filter { it.amount < 0 && !Categories.isNeutral(it.categoryId) }
-            .groupBy { it.categoryId }
+        // Spending by category from the server's per-category, per-currency totals (net of refunds; transfers and
+        // corrections left out), converted at the server's rates. Categories that came out as income aren't shown.
+        val byCategory = list.byCategory.groupBy { it.categoryId }
             .mapValues { (_, l) -> -l.sumOf { convert(it.amount, it.currency, shown, m.rates) } }
+            .filterValues { it > 0 }
             .entries.sortedByDescending { it.value }
         val first = event?.startDay ?: rows.minOfOrNull { it.day }
         val last = event?.endDay ?: rows.maxOfOrNull { it.day }

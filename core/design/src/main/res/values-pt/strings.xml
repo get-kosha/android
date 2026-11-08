@@ -2694,6 +2694,14 @@
         <item quantity="many">%1$s este ano</item>
         <item quantity="other">%1$s este ano</item>
     </plurals>
+    <plurals name="app_rec_payslips">
+        <item quantity="zero">%1$s holerites</item>
+        <item quantity="one">%1$s holerite</item>
+        <item quantity="two">%1$s holerites</item>
+        <item quantity="few">%1$s holerites</item>
+        <item quantity="many">%1$s holerites</item>
+        <item quantity="other">%1$s holerites</item>
+    </plurals>
     <string name="app_ov_show_totals_in">Mostrar totais em</string>
     <string name="app_ov_pick_month">Escolha um mês</string>
     <string name="app_ov_not_started">Não começou</string>

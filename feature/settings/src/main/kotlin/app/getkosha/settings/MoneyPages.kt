@@ -365,15 +365,24 @@ fun CategoriesPage() {
                 *fees.map { cat -> @Composable { CategoryRow(cat, sub = false, system = true) { open("category", cat.id) } } }.toTypedArray(),
                 if (correction != null) {
                     {
-                        // ponytail: list_categories leaves corrections out, so their count isn't known here.
+                        val used = load.value?.correctionCount ?: 0
                         Row(
                             Modifier.fillMaxWidth().heightIn(min = KoshaTheme.dims.row).padding(horizontal = 16.dp, vertical = 10.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
                         ) {
                             app.getkosha.design.IconTile(categoryIconName(correction.icon ?: "⚖"))
-                            KText(correction.name, Modifier.weight(1f, fill = false))
-                            Pill(stringResource(R.string.settings_cat_system))
+                            Column(Modifier.weight(1f)) {
+                                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                    KText(correction.name, Modifier.weight(1f, fill = false))
+                                    Pill(stringResource(R.string.settings_cat_system))
+                                }
+                                KText(
+                                    if (used > 0) pluralStringResource(R.plurals.settings_cat_count_tx, used, used) else stringResource(R.string.settings_cat_unused),
+                                    style = KoshaTheme.type.xs,
+                                    color = c.ink3,
+                                )
+                            }
                         }
                     }
                 } else null,

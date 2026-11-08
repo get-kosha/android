@@ -146,7 +146,7 @@ private suspend fun readStatement(context: Context, kosha: Kosha, model: Reconci
             toasts.show(Toast(res.getString(R.string.reconcile_pdf_unsupported)))
             return
         }
-        val r = kosha.api.read(file, acc.credit)
+        val r = kosha.api.read(file, acc.credit, walletId = acc.id)
         when (r.format) {
             "pdf" -> {
                 if (r.currency != null && r.currency != acc.currency) {
@@ -172,7 +172,7 @@ private suspend fun readStatement(context: Context, kosha: Kosha, model: Reconci
                 var byAi = false
                 if (!remembered && !r.confident && m.ai.statements) {
                     kosha.api.aiLayout(r)?.let { l ->
-                        read = kosha.api.read(file, acc.credit, l)
+                        read = kosha.api.read(file, acc.credit, l, acc.id)
                         byAi = true
                     }
                 }
@@ -697,7 +697,7 @@ private fun ReconcileTick(model: ReconcileModel) {
                         startOpen = !st.remembered && !st.confident,
                         onChange = { layout ->
                             scope.launch {
-                                runCatching { kosha.api.read(st.file, credit, layout) }
+                                runCatching { kosha.api.read(st.file, credit, layout, a.id) }
                                     .onSuccess { r -> openCsv(model, st.copy(lines = r.lines, rows = r.rows, layout = layout, remembered = false, byAi = false), credit) }
                                     .onFailure { toasts.show(Toast((it as? ApiException)?.message ?: offline)) }
                             }

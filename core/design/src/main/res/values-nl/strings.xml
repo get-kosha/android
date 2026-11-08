@@ -2450,6 +2450,14 @@
         <item quantity="many">%1$s dit jaar</item>
         <item quantity="other">%1$s dit jaar</item>
     </plurals>
+    <plurals name="app_rec_payslips">
+        <item quantity="zero">%1$s loonstroken</item>
+        <item quantity="one">%1$s loonstrook</item>
+        <item quantity="two">%1$s loonstroken</item>
+        <item quantity="few">%1$s loonstroken</item>
+        <item quantity="many">%1$s loonstroken</item>
+        <item quantity="other">%1$s loonstroken</item>
+    </plurals>
     <string name="app_ov_show_totals_in">Totalen tonen in</string>
     <string name="app_ov_pick_month">Kies een maand</string>
     <string name="app_ov_not_started">Nog niet begonnen</string>

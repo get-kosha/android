@@ -2450,6 +2450,14 @@
         <item quantity="many">%1$s dieses Jahr</item>
         <item quantity="other">%1$s dieses Jahr</item>
     </plurals>
+    <plurals name="app_rec_payslips">
+        <item quantity="zero">%1$s Gehaltsabrechnungen</item>
+        <item quantity="one">%1$s Gehaltsabrechnung</item>
+        <item quantity="two">%1$s Gehaltsabrechnungen</item>
+        <item quantity="few">%1$s Gehaltsabrechnungen</item>
+        <item quantity="many">%1$s Gehaltsabrechnungen</item>
+        <item quantity="other">%1$s Gehaltsabrechnungen</item>
+    </plurals>
     <string name="app_ov_show_totals_in">Summen anzeigen in</string>
     <string name="app_ov_pick_month">Monat wählen</string>
     <string name="app_ov_not_started">Noch nicht begonnen</string>

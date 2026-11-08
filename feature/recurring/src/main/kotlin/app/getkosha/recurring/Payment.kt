@@ -7,6 +7,8 @@ import android.provider.OpenableColumns
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import app.getkosha.ui.filesAuthority
 import app.getkosha.design.AccountDot
+import app.getkosha.design.AccountList
 import app.getkosha.design.Button
 import app.getkosha.design.ButtonStyle
 import app.getkosha.design.Card
@@ -84,18 +87,24 @@ fun PaymentSheet(s: Sub, instance: Instance, pay: Boolean, onDismiss: () -> Unit
     val c = KoshaTheme.colors
     val writer = rememberWriter()
     val scope = rememberCoroutineScope()
-    // A variable amount starts empty so it can't be saved as the estimate by accident.
-    val start = if (pay && s.isVariable && !instance.edited) null else abs(instance.amount)
-    val state = rememberAmountInput(start, s.currency, instance.dueDay)
+    val wallets = m?.wallets.orEmpty()
+    // The account it's paid from: this payment's own, else the schedule's. For a transfer, the one it leaves.
+    val usual = instance.walletId ?: s.walletId
+    var from by remember { mutableStateOf(usual) }
+    var choosing by remember { mutableStateOf(false) }
+    val currency = wallets.find { it.id == from }?.currency ?: s.currency
+    // A variable amount starts empty so it can't be saved as the estimate by accident; so does one from an account
+    // in another currency, which must be given in that currency.
+    val start = if ((pay && s.isVariable && !instance.edited) || currency != s.currency) null else abs(instance.amount)
+    val state = rememberAmountInput(start, currency, instance.dueDay, from)
     var day by remember { mutableStateOf(LocalDate.parse(instance.day)) }
     var calendar by remember { mutableStateOf(false) }
     var month by remember { mutableStateOf(YearMonth.from(day)) }
     var file by remember { mutableStateOf<Picked?>(null) }
     var busy by remember { mutableStateOf(false) }
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let { file = read(context, it) } }
-    val wallets = m?.wallets.orEmpty()
-    val account = wallets.indexOfFirst { it.id == s.walletId }
-    val minor = state.minor(s.currency)
+    val account = wallets.indexOfFirst { it.id == from }
+    val minor = state.minor(currency)
     val recorded = stringResource(R.string.subs_recorded)
     val updated = stringResource(R.string.subs_payment_updated)
     val attachFailed = stringResource(R.string.tx_attach_failed)
@@ -112,6 +121,7 @@ fun PaymentSheet(s: Sub, instance: Instance, pay: Boolean, onDismiss: () -> Unit
                         put("status", if (pay) "paid" else "scheduled")
                         put("amount", amount)
                         put("day", day.toString())
+                        if (from != usual) put("accountId", from)
                     },
                 )
             }
@@ -147,12 +157,12 @@ fun PaymentSheet(s: Sub, instance: Instance, pay: Boolean, onDismiss: () -> Unit
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             AmountPad(
                 state,
-                s.currency,
+                currency,
                 note = stringResource(R.string.app_rec_usually, money(abs(s.amount), s.currency)),
                 keypad = !calendar,
             )
             FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Chip(wallets.getOrNull(account)?.name ?: "", leading = { AccountDot(c.account(account)) })
+                Chip(wallets.getOrNull(account)?.name ?: "", onClick = { choosing = true }, leading = { AccountDot(c.account(account)) })
                 Chip(dayText(day.toString(), "EEEdMMM"), on = calendar, onClick = { calendar = !calendar }, leading = { PhIcon("calendar-blank", size = 18.dp) })
                 if (pay && m?.attachments == true && !s.isTransfer) {
                     Chip(
@@ -180,6 +190,13 @@ fun PaymentSheet(s: Sub, instance: Instance, pay: Boolean, onDismiss: () -> Unit
                     Modifier.weight(1.4f),
                     enabled = !busy && minor != null && minor > 0,
                 )
+            }
+        }
+    }
+    if (choosing) {
+        Sheet(stringResource(R.string.subs_account), { choosing = false }) {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                AccountList(accountOptions(m, except = s.toWalletId), from, { from = it.id; choosing = false })
             }
         }
     }
