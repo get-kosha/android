@@ -53,5 +53,5 @@ jobs:
           packageName: app.getkosha
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
           mappingFile: app/build/outputs/mapping/release/mapping.txt
-          track: internal
+          tracks: internal
           status: completed
