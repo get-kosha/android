@@ -24,7 +24,7 @@ The PNGs are the spec for layout. `k.css` is the spec for numbers: colours, size
 
 ## 1. What Kosha is
 
-Kosha (कोश, "treasury") is a personal finance tracker for people with money in more than one place and more than one currency. Tagline: **"Jot down what you spent. Know where it went."** The web app runs at https://getkosha.app on one Cloudflare Worker with a D1 database. It is open source (MIT, github.com/amruthpillai/kosha), and people can run their own server.
+Kosha (कोश, "treasury") is a personal finance tracker for people with money in more than one place and more than one currency. Tagline: **"Jot down what you spent. Know where it went."** The web app runs at https://getkosha.app on one Cloudflare Worker with a D1 database. It is open source (MIT, github.com/get-kosha/web), and people can run their own server.
 
 The phone app has two jobs:
 
