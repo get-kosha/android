@@ -5,7 +5,6 @@ package app.getkosha.ui
 import kotlinx.serialization.UseSerializers
 import app.getkosha.model.RoundedLong
 
-import android.os.Build
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -39,7 +38,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
@@ -524,9 +522,10 @@ fun AmountText(
     var peek by remember { mutableStateOf(false) }
     val masked = hidden && !peek
     BasicText(
-        if (masked && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) AnnotatedString("••••") else text,
+        // Same length, so the cents' ink3 span still lines up.
+        if (masked) AnnotatedString(maskAmount(text.text), text.spanStyles, text.paragraphStyles) else text,
         modifier
-            .then(if (masked && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) Modifier.blur(7.dp) else Modifier)
+            .then(if (masked) amountBlur(style) else Modifier)
             .then(
                 if (hidden) Modifier.pointerInput(Unit) {
                     detectTapGestures(onPress = { peek = true; tryAwaitRelease(); peek = false })

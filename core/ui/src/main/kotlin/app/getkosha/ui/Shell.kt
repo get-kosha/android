@@ -29,10 +29,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -42,6 +44,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.getkosha.data.Kosha
 import app.getkosha.design.Accent
@@ -110,10 +113,10 @@ fun MoneyText(
     var peek by remember { mutableStateOf(false) }
     val masked = hidden && !peek
     KText(
-        if (masked && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) "••••" else text,
+        if (masked) maskAmount(text) else text,
         modifier
             .semantics { contentDescription = spoken }
-            .then(if (masked && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) Modifier.blur(7.dp) else Modifier)
+            .then(if (masked) amountBlur(style) else Modifier)
             .then(
                 if (hidden) Modifier.pointerInput(Unit) {
                     detectTapGestures(onPress = { peek = true; tryAwaitRelease(); peek = false })
@@ -124,6 +127,21 @@ fun MoneyText(
         align = align,
         maxLines = 1,
     )
+}
+
+/**
+ * What Hide amounts draws in place of a figure. The digits become 8s, so the blur hides the amount instead of
+ * only softening it (a large figure stays readable through a blur). Before Android 12, which can't blur, "••••".
+ */
+internal fun maskAmount(text: String): String =
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) "••••" else text.map { if (it.isDigit()) '8' else it }.joinToString("")
+
+/** The blur over a hidden figure: it grows with the text size and fades past the text's edges, with no hard box. */
+@Composable
+internal fun amountBlur(style: TextStyle): Modifier {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return Modifier
+    val size = with(LocalDensity.current) { (if (style.fontSize.isSp) style.fontSize else 16.sp).toDp() }
+    return Modifier.blur((size * 0.35f).coerceAtLeast(6.dp), BlurredEdgeTreatment.Unbounded)
 }
 
 /**
