@@ -16,3 +16,6 @@ design/
 keystore.properties
 *.jks
 *.keystore
+
+# Built APKs kept for installing by hand.
+dist/
