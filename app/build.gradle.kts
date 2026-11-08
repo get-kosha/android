@@ -13,7 +13,8 @@ android {
         applicationId = "app.getkosha"
         minSdk = 28
         targetSdk = 37
-        versionCode = 1
+        // CI passes -PversionCode so each Play upload is higher than the last; local builds stay at 1.
+        versionCode = (findProperty("versionCode") as String?)?.toInt() ?: 1
         versionName = "0.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // The tour test signs in to a Kosha dev server reached through `adb reverse tcp:3000 tcp:3000`.
