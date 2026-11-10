@@ -264,7 +264,7 @@ fun ActivityScreen() {
                                     if (i > 0) Hairline()
                                     val isWaiting = t.id in waitingIds
                                     SwipeRow(
-                                        enabled = !isWaiting,
+                                        enabled = !isWaiting && t.loan == null,
                                         onDelete = { if (writable) deleting = t else toasts.show(Toast(readOnly)) },
                                         // A copy of a refund would be ordinary income, so a refund only opens.
                                         onDuplicate = { if (t.refundOf != null) openEntry(kosha, nav, t) else if (writable) nav.navigate(Route.Add(duplicateOf = t.id)) else toasts.show(Toast(readOnly)) },
@@ -295,7 +295,7 @@ fun ActivityScreen() {
 /** Opens an entry's detail, keeping its row on this phone so the detail opens at once, offline too. */
 internal fun openEntry(kosha: app.getkosha.data.Kosha, nav: androidx.navigation.NavController, t: Transaction) {
     kosha.cache.write("tx/${t.id}", KoshaJson.encodeToString(Transaction.serializer(), t))
-    nav.navigate(if (t.transfer != null) Route.TransferDetail(t.id) else Route.TxDetail(t.id))
+    nav.navigate(if (t.loan != null) Route.LoanDetail(t.loan!!.id) else if (t.transfer != null) Route.TransferDetail(t.id) else Route.TxDetail(t.id))
 }
 
 /** All · Out · In · Transfers. */
@@ -396,6 +396,7 @@ internal fun TxRow(t: Transaction, m: Meta, display: String, waiting: Boolean = 
                 KText(stringResource(R.string.tx_kind_transfer) + " · " + stringResource(R.string.subs_not_counted), style = KoshaTheme.type.xs, color = c.ink3, maxLines = 1)
             } else {
                 val badge = when {
+                    t.loan != null -> stringResource(if (t.loan!!.kind == "funding") { if (t.loan!!.direction == "lent") R.string.loans_lent else R.string.loans_borrowed } else { if (t.loan!!.direction == "lent") R.string.loans_received else R.string.loans_made })
                     t.refundOf != null -> stringResource(R.string.tx_refund_badge)
                     t.refunds.isNullOrEmpty() -> null
                     t.refundedInFull -> stringResource(R.string.tx_refunded_badge)
@@ -432,6 +433,7 @@ internal fun TxRow(t: Transaction, m: Meta, display: String, waiting: Boolean = 
         Column(horizontalAlignment = Alignment.End) {
             when {
                 transfer != null -> MoneyText(t.sent, t.currency, sign = Sign.None, color = c.ink2)
+                t.loan != null -> MoneyText(t.amount, t.currency, sign = Sign.Always, color = c.ink2)
                 neutral -> MoneyText(t.amount, t.currency, sign = Sign.None, color = c.ink2)
                 t.amount > 0 -> MoneyText(t.amount, t.currency, sign = Sign.Always, color = c.pos)
                 // Refunded in full: it happened, but costs nothing now.
@@ -637,7 +639,7 @@ private fun FiltersSheet(start: Filters, current: YearMonth, m: Meta, onApply: (
         when (page) {
             "category" -> ListPicker(
                 listOf(ListOption("", stringResource(R.string.tx_any_category))) +
-                    m.categories.filter { !it.isArchived && !Categories.isNeutral(it.id) }.map { ListOption(it.id, it.name) },
+                    m.categories.filter { !it.isArchived && (!Categories.isNeutral(it.id) || it.id == Categories.LOAN_PRINCIPAL) }.map { ListOption(it.id, it.name) },
                 draft.categoryId ?: "",
                 { draft = draft.copy(categoryId = it.value.ifEmpty { null }); page = "" },
             )

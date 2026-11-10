@@ -103,6 +103,7 @@ data class Transaction(
     val refunds: List<Refund>? = null,
     /** The refunds' total in this entry's currency, other currencies at today's rate. */
     val refunded: Long = 0,
+    val loan: LoanLink? = null,
 ) {
     /** Money that came back for a spending entry, as its own entry in [accountId]. */
     @Serializable
@@ -250,6 +251,7 @@ data class Meta(
     val avatars: Boolean = false,
     val attachments: Boolean = false,
     val version: Int = 0,
+    val loans: List<Loan> = emptyList(),
 ) {
     @Serializable
     data class User(val id: String, val name: String, val email: String, val image: String? = null)

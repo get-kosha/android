@@ -132,6 +132,8 @@ fun AccountsScreen() {
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 6.dp, bottom = TabBarSpace.calculateBottomPadding()),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
+            item { app.getkosha.ui.AccountLoansSwitch(false) }
+            item { app.getkosha.ui.LoanSummary() }
             item {
                 val o = overview.value
                 if (o == null) {

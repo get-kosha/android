@@ -7,9 +7,10 @@ package app.getkosha.model
 object Categories {
     const val CORRECTION = "0"
     const val TRANSFER = "transfer"
+    const val LOAN_PRINCIPAL = "loan_principal"
     const val TRANSFER_FEE = "transfer_fee"
 
-    fun isNeutral(id: String) = id == CORRECTION || id == TRANSFER
+    fun isNeutral(id: String) = id == CORRECTION || id == TRANSFER || id == LOAN_PRINCIPAL
 
     /** Kosha's own categories, which the person can't pick for an ordinary entry. */
     fun isSystem(id: String) = isNeutral(id) || id == TRANSFER_FEE

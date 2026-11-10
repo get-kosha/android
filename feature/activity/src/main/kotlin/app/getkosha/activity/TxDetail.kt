@@ -149,6 +149,17 @@ fun TxDetailScreen(id: String) {
     val loaded = rememberTransaction(id)
     var edited by remember(id) { mutableStateOf<Transaction?>(null) }
     val t = edited ?: loaded?.value
+    val loanLink = t?.loan
+    if (loanLink != null && loaded?.refreshing == true) {
+        LoadingNote()
+        return
+    }
+    if (loanLink != null) {
+        androidx.compose.runtime.LaunchedEffect(loanLink.id) {
+            nav.navigate(Route.LoanDetail(loanLink.id)) { popUpTo<Route.TxDetail> { inclusive = true } }
+        }
+        return
+    }
     var sheet by remember { mutableStateOf<String?>(null) }
     var status by remember { mutableStateOf<String?>(null) }
     var pending by remember { mutableStateOf<JsonObject?>(null) }

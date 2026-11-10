@@ -1,5 +1,6 @@
 package app.getkosha.network
 
+import kotlinx.serialization.json.jsonObject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -66,6 +67,39 @@ class RefreshTest {
         assertEquals(1, refreshes.get())
         assertEquals(List(5) { "Bearer access-1" }, answers)
         assertEquals("refresh-1", store.tokens?.refresh)
+    }
+
+    @Test fun loanWriteReplaysIdenticalUuidAndPayloadAfterRefresh() = runBlocking {
+        val store = store()
+        val http = OkHttpClient()
+        val api = KoshaApi(http, store, Auth(http, store)) { Locale.UK }
+        val body = app.getkosha.model.KoshaJson.parseToJsonElement("""{"id":"00000000-0000-4000-8000-000000000002","loanId":"loan","amount":40000,"accountAmount":44000,"accountId":"usd","day":"2026-11-01","note":"Demo repayment"}""").jsonObject
+        api.post<kotlinx.serialization.json.JsonObject, Ok>("/api/v1/loans/loan/repayments", body)
+        val first = server.takeRequest()
+        val refresh = server.takeRequest()
+        val replay = server.takeRequest()
+        assertEquals("/api/v1/loans/loan/repayments", first.url.encodedPath)
+        assertEquals("POST", first.method)
+        assertEquals("/api/auth/oauth2/token", refresh.url.encodedPath)
+        assertEquals(first.body!!.utf8(), replay.body!!.utf8())
+        assertEquals("Bearer access-1", replay.headers["Authorization"])
+    }
+
+    @Test fun loanConflictKeepsItsServerMessageAndDoesNotRetry() = runBlocking {
+        server.dispatcher = object : Dispatcher() {
+            override fun dispatch(request: RecordedRequest) = MockResponse.Builder().code(409)
+                .body("""{"error":{"code":"conflict","message":"Remaining principal changed","issues":[{"path":"amount","message":"Too much"}]}}""").build()
+        }
+        val store = store()
+        val http = OkHttpClient()
+        val api = KoshaApi(http, store, Auth(http, store)) { Locale.UK }
+        val body = app.getkosha.model.KoshaJson.parseToJsonElement("""{"id":"00000000-0000-4000-8000-000000000002","loanId":"l","amount":40000,"accountId":"a","day":"2026-11-01"}""").jsonObject
+        val error = runCatching { api.post<kotlinx.serialization.json.JsonObject, Ok>("/api/v1/loans/l/repayments", body) }.exceptionOrNull() as ApiException
+        assertEquals(409, error.status)
+        assertEquals("Remaining principal changed", error.message)
+        assertEquals("amount", error.error.issues.single().path)
+        assertEquals(1, server.requestCount)
+        assertEquals(body.toString(), server.takeRequest().body!!.utf8())
     }
 
     @Test fun refusedRefreshSignsOut() = runBlocking {

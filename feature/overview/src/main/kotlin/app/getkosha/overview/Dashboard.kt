@@ -70,7 +70,7 @@ data class Dashboard(
 
 /** Net worth from get_net_worth. */
 @Serializable
-data class NetWorth(val currency: String = "", val total: Long = 0)
+data class NetWorth(val currency: String = "", val total: Long = 0, val receivables: Long? = null, val personalDebt: Long? = null)
 
 /** GET /api/app/recap: the recap Overview shows, if any (ai-tasks.server.ts getRecap). */
 @Serializable

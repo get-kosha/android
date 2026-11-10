@@ -222,10 +222,14 @@ fun SearchSheet(onDismiss: () -> Unit) {
                         ) { close { nav.openActivity(ActivitySearch(query = py.payee)) } }
                     }
                 }
+                if (text.isNotBlank()) m.loans.filter { (it.person + " " + it.purpose).contains(text, true) }.take(5).forEach { loan ->
+                    Result(icon = { IconTile("handshake") }, title = loan.person, sub = loan.purpose, end = "arrow-up-right") { close { nav.navigate(Route.LoanDetail(loan.id)) } }
+                }
                 val cats = if (text.isEmpty()) emptyList() else categories.filter { it.name.lowercase().contains(low) }.take(4)
                 val accounts = if (text.isEmpty()) emptyList() else wallets.filter { it.name.lowercase().contains(low) }.take(3)
                 val pages = listOf(
                     Triple("arrows-clockwise", stringResource(R.string.shell_nav_recurring)) { nav.openTab(Route.Recurring) },
+                    Triple("handshake", stringResource(R.string.loans_title)) { nav.navigate(Route.Loans) },
                     Triple("bank", stringResource(R.string.shell_nav_accounts)) { nav.openTab(Route.Accounts) },
                     Triple("tray-arrow-down", stringResource(R.string.shell_page_import)) { nav.navigate(Route.Import) },
                     Triple("scales", stringResource(R.string.shell_page_reconcile)) { nav.navigate(Route.Reconcile()) },

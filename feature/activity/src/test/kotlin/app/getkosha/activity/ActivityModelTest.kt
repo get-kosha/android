@@ -21,6 +21,9 @@ class ActivityModelTest {
             tx("bvg", "2026-11-06", -350),
             tx("move", "2026-11-06", -20000, category = "transfer", fee = 120),
             tx("fix", "2026-11-06", 500, category = "0"),
+            tx("funding", "2026-11-06", -100000, category = "loan_principal"),
+            tx("repayment", "2026-11-06", 40000, category = "loan_principal"),
+            tx("borrowing", "2026-11-06", 70000, category = "loan_principal"),
             tx("pay", "2026-11-06", 1000, currency = "usd"),
         )
         val days = list.byDay()

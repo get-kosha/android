@@ -187,10 +187,11 @@ private fun RecentCard(w: Wallet, recent: List<Transaction>, today: java.time.Lo
         KText(stringResource(R.string.accounts_recent), Modifier.padding(start = 16.dp, end = 16.dp, top = 14.dp, bottom = 6.dp), style = KoshaTheme.type.head)
         recent.forEach { t ->
             Hairline()
+            val loanLink = t.loan
             val transfer = t.transfer
             val counter = m?.wallets?.find { it.id == transfer?.counterAccountId }?.name ?: stringResource(R.string.accounts_another_account)
             val cat = m?.categories?.find { it.id == t.categoryId }
-            ListRow(onClick = { nav.navigate(if (transfer != null) Route.TransferDetail(transfer.id) else Route.TxDetail(t.id)) }) {
+            ListRow(onClick = { nav.navigate(if (loanLink != null) Route.LoanDetail(loanLink.id) else if (transfer != null) Route.TransferDetail(transfer.id) else Route.TxDetail(t.id)) }) {
                 IconTile(if (transfer != null) "arrows-left-right" else categoryIconName(cat?.icon))
                 Column(Modifier.weight(1f)) {
                     KText(
@@ -202,12 +203,13 @@ private fun RecentCard(w: Wallet, recent: List<Transaction>, today: java.time.Lo
                         maxLines = 1,
                     )
                     KText(
-                        dayLabel(java.time.LocalDate.parse(t.day), today) + " · " + (if (transfer != null) stringResource(R.string.subs_kind_transfer) else t.categoryName.ifEmpty { cat?.name ?: "" }),
+                        dayLabel(java.time.LocalDate.parse(t.day), today) + " · " + (if (loanLink != null) stringResource(if (loanLink.kind == "funding") R.string.loans_original else R.string.loans_repayment) else if (transfer != null) stringResource(R.string.subs_kind_transfer) else t.categoryName.ifEmpty { cat?.name ?: "" }),
                         style = KoshaTheme.type.xs,
                         color = c.ink3,
                     )
                 }
                 when {
+                    loanLink != null -> MoneyText(t.amount, t.currency, sign = Sign.Always, color = c.ink2)
                     transfersOnly -> MoneyText(t.amount, t.currency, sign = Sign.Always, color = if (t.amount > 0) c.pos else c.ink)
                     transfer != null -> MoneyText(t.amount, t.currency, color = c.ink2)
                     else -> MoneyText(t.amount, t.currency, sign = Sign.Always, color = if (t.amount > 0) c.pos else c.ink)

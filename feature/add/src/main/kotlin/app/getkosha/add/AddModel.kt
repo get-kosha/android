@@ -707,6 +707,7 @@ internal class AddModel(route: Route.Add) : ViewModel() {
     private suspend fun duplicate(id: String) {
         val found = runCatching { kosha.api.get<Transaction>("/api/app/transactions/$id") }.getOrNull()
         val tx = found ?: return
+        if (tx.loan != null || tx.categoryId == Categories.LOAN_PRINCIPAL) return
         val link = tx.transfer
         kind = when {
             link != null -> EntryKind.Transfer

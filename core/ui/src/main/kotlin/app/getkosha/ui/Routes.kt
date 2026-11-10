@@ -30,6 +30,9 @@ sealed interface Route {
     @Serializable data class RecurringForm(val id: String? = null, val fromPayee: String? = null, val fromTransaction: String? = null) : Route
 
     // Accounts
+    @Serializable data object Loans : Route
+    @Serializable data class LoanDetail(val id: String) : Route
+    @Serializable data class LoanForm(val id: String? = null, val repayment: Boolean = false) : Route
     @Serializable data class AccountDetail(val id: String) : Route
     @Serializable data class InvestmentDetail(val id: String) : Route
     @Serializable data class AccountForm(val id: String? = null) : Route
