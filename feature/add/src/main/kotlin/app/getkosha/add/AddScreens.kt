@@ -336,7 +336,7 @@ private fun PayeeField(m: AddModel, focused: Boolean, onFocus: (Boolean) -> Unit
     val c = KoshaTheme.colors
     val focus = LocalFocusManager.current
     val shape = RoundedCornerShape(14.dp)
-    val usual = m.match?.averageAmount?.takeIf { it != 0L }
+    val usual = m.match?.usualAmount?.takeIf { it != 0L }
     val label = stringResource(R.string.add_payee)
     BasicTextField(
         value = m.payee,
@@ -451,9 +451,9 @@ private fun SuggestionRow(m: AddModel, p: Payee, onClick: () -> Unit) {
             )
             if (detail.isNotEmpty()) KText(detail, style = KoshaTheme.type.small, color = c.ink3)
         }
-        val avg = p.averageAmount
-        if (avg != null && avg != 0L && p.currency != null) {
-            KText(stringResource(R.string.add_usually, money(abs(avg), p.currency!!)), Modifier.width(96.dp), style = KoshaTheme.type.small, color = c.ink3, align = TextAlign.End)
+        val usual = p.usualAmount
+        if (usual != null && usual != 0L && p.currency != null) {
+            KText(stringResource(R.string.add_usually, money(abs(usual), p.currency!!)), Modifier.width(96.dp), style = KoshaTheme.type.small, color = c.ink3, align = TextAlign.End)
         }
     }
 }

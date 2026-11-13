@@ -113,9 +113,9 @@ import kotlin.math.abs
 @Serializable
 internal data class Patch(val transactions: List<JsonObject>)
 
-/** GET /api/app/payee-history: how often this payee comes up and this year's payments (finance.server.ts payeeHistory). */
+/** GET /api/app/payee-history: how often this payee comes up and the amount entered most often (finance.server.ts payeeHistory). */
 @Serializable
-private data class PayeeHistory(val count: Int = 0, val thisYear: List<Row> = emptyList()) {
+private data class PayeeHistory(val count: Int = 0, val usual: Row? = null) {
     @Serializable
     data class Row(val amount: Long, val currency: String)
 }
@@ -431,8 +431,7 @@ private fun AtPayee(payee: String, shown: String) {
     val history = remember(payee) { kosha.load("payee/$payee") { get<PayeeHistory>("/api/app/payee-history", mapOf("name" to payee)) } }
         .collectAsStateWithLifecycle(null).value?.value ?: return
     if (history.count < 2) return
-    // The usual amount is this year's average, as the web's panel shows it.
-    val usual = if (history.thisYear.isEmpty()) null else abs(history.thisYear.sumOf { convert(it.amount, it.currency, shown, m.rates) }) / history.thisYear.size
+    val usual = history.usual?.let { abs(convert(it.amount, it.currency, shown, m.rates)) }
     LinkCard(
         "storefront", stringResource(R.string.tx_at_payee),
         sub = if (usual != null) stringResource(R.string.shell_search_payee_usually, history.count.toString(), Money.format(usual, shown, KoshaTheme.locale))

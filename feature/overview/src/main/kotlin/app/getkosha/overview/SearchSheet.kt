@@ -215,8 +215,8 @@ fun SearchSheet(onDismiss: () -> Unit) {
                         Result(
                             icon = { IconTile(categoryIconName(cat?.icon)) },
                             title = py.payee,
-                            sub = py.averageAmount?.let { avg ->
-                                stringResource(R.string.shell_search_payee_usually, py.count.toString(), Money.format(kotlin.math.abs(avg), py.currency ?: m.primary, locale))
+                            sub = py.usualAmount?.let { usual ->
+                                stringResource(R.string.shell_search_payee_usually, py.count.toString(), Money.format(kotlin.math.abs(usual), py.currency ?: m.primary, locale))
                             },
                             end = "arrow-up-right",
                         ) { close { nav.openActivity(ActivitySearch(query = py.payee)) } }

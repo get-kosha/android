@@ -165,7 +165,7 @@ data class Payee(
     val categoryId: String? = null,
     val accountId: String? = null,
     val currency: String? = null,
-    val averageAmount: Long? = null,
+    val usualAmount: Long? = null,
 )
 
 @Serializable
