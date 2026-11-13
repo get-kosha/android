@@ -147,7 +147,6 @@ fun OverviewScreen() {
         ) {
             TabBanners()
             Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                app.getkosha.ui.LoanSummary()
                 when {
                     d == null && dash?.refreshing != false -> Loading()
                     d == null -> KText(dash.error ?: stringResource(R.string.common_offline_body), style = KoshaTheme.type.small, color = KoshaTheme.colors.ink3)
@@ -212,6 +211,7 @@ private fun Month(d: Dashboard, m: Meta, worth: NetWorth?, recap: RecapView?) {
     NeedsAttention(d, m, today)
     ComingUp(d, m, today)
     WhereItWent(d, m)
+    app.getkosha.ui.LoansCard()
     NetWorthCard(d, worth)
 }
 

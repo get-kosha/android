@@ -133,7 +133,6 @@ fun AccountsScreen() {
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             item { app.getkosha.ui.AccountLoansSwitch(false) }
-            item { app.getkosha.ui.LoanSummary() }
             item {
                 val o = overview.value
                 if (o == null) {
@@ -143,6 +142,7 @@ fun AccountsScreen() {
                 }
             }
             overview.value?.let { o -> item { RatesNote(o, open, display) } }
+            item { app.getkosha.ui.LoansLink() }
             listOf(
                 listOf(AccountType.Bank, AccountType.Cash) to R.string.accounts_group_bank_cash,
                 listOf(AccountType.Credit) to R.string.accounts_group_credit,
