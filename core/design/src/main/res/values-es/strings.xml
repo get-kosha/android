@@ -80,6 +80,8 @@
     <string name="auth_login_description">Inicia sesión en Kosha o crea una cuenta gratis.</string>
     <string name="auth_google_not_linked">Ese correo ya tiene una cuenta de Kosha. Inicia sesión con tu contraseña o llave de acceso y luego conecta Google en Ajustes › Inicio de sesión y seguridad.</string>
     <string name="auth_google_failed">No se pudo iniciar sesión con Google. Inténtalo de nuevo.</string>
+    <string name="auth_apple_not_linked">Ese correo ya tiene una cuenta de Kosha. Inicia sesión con tu contraseña o llave de acceso.</string>
+    <string name="auth_apple_failed">No se pudo iniciar sesión con Apple. Inténtalo de nuevo.</string>
     <string name="auth_error_rate_limited">Demasiados intentos. Espera un minuto y vuelve a intentarlo.</string>
     <string name="auth_error_wrong_password">Correo o contraseña incorrectos. Inténtalo de nuevo o usa una llave de acceso.</string>
     <string name="auth_error_invalid_email">Introduce un correo completo, como tu@ejemplo.com.</string>
@@ -115,9 +117,11 @@
     <string name="auth_sign_in_passkey">Iniciar sesión con una llave de acceso</string>
     <string name="auth_passkey">Llave de acceso</string>
     <string name="auth_sign_in_google">Iniciar sesión con Google</string>
+    <string name="auth_sign_in_apple">Iniciar sesión con Apple</string>
     <string name="auth_just_looking">¿Solo quieres mirar? <annotation tag="demo">Abre la demo</annotation></string>
     <string name="auth_or">o</string>
     <string name="auth_sign_up_google">Registrarse con Google</string>
+    <string name="auth_sign_up_apple">Registrarse con Apple</string>
     <string name="auth_agree">Al crear una cuenta aceptas los <annotation tag="terms">términos</annotation> y la <annotation tag="privacy">política de privacidad</annotation>.</string>
     <string name="auth_demo_own_account">¿Ya tienes cuenta? <annotation tag="link">Inicia sesión en la tuya</annotation></string>
     <string name="auth_phone_no_account">¿Aún no tienes cuenta? <annotation tag="link">Crea una</annotation></string>

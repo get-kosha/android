@@ -70,6 +70,8 @@
     <string name="auth_login_description">登录 Kosha，或免费创建一个账号。</string>
     <string name="auth_google_not_linked">该邮箱已有 Kosha 账号。请用密码或通行密钥登录，然后在“设置 › 登录与安全”中关联 Google。</string>
     <string name="auth_google_failed">使用 Google 登录失败，请重试。</string>
+    <string name="auth_apple_not_linked">该邮箱已有 Kosha 账号。请改用密码或通行密钥登录。</string>
+    <string name="auth_apple_failed">通过 Apple 登录失败，请重试。</string>
     <string name="auth_error_rate_limited">尝试次数过多。请等一分钟后再试。</string>
     <string name="auth_error_wrong_password">邮箱或密码错误。请重试，或使用通行密钥。</string>
     <string name="auth_error_invalid_email">请输入完整的邮箱地址，例如 you@example.com。</string>
@@ -105,9 +107,11 @@
     <string name="auth_sign_in_passkey">使用通行密钥登录</string>
     <string name="auth_passkey">通行密钥</string>
     <string name="auth_sign_in_google">使用 Google 登录</string>
+    <string name="auth_sign_in_apple">通过 Apple 登录</string>
     <string name="auth_just_looking">只是看看？<annotation tag="demo">打开演示</annotation></string>
     <string name="auth_or">或</string>
     <string name="auth_sign_up_google">使用 Google 注册</string>
+    <string name="auth_sign_up_apple">通过 Apple 注册</string>
     <string name="auth_agree">创建账号即表示你同意<annotation tag="terms">服务条款</annotation>和<annotation tag="privacy">隐私政策</annotation>。</string>
     <string name="auth_demo_own_account">已有账号？<annotation tag="link">登录你自己的账号</annotation></string>
     <string name="auth_phone_no_account">还没有账号？<annotation tag="link">创建一个</annotation></string>

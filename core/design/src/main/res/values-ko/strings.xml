@@ -70,6 +70,8 @@
     <string name="auth_login_description">Kosha에 로그인하거나 무료 계정을 만드세요.</string>
     <string name="auth_google_not_linked">이 이메일로 이미 Kosha 계정이 있어요. 비밀번호나 패스키로 로그인한 다음 설정 › 로그인 및 보안에서 Google을 연결하세요.</string>
     <string name="auth_google_failed">Google 로그인에 실패했어요. 다시 시도해 주세요.</string>
+    <string name="auth_apple_not_linked">이 이메일로 이미 Kosha 계정이 있어요. 비밀번호나 패스키로 로그인하세요.</string>
+    <string name="auth_apple_failed">Apple 로그인에 실패했어요. 다시 시도해 주세요.</string>
     <string name="auth_error_rate_limited">시도 횟수가 너무 많아요. 1분 정도 기다린 뒤 다시 시도해 주세요.</string>
     <string name="auth_error_wrong_password">이메일 또는 비밀번호가 올바르지 않아요. 다시 시도하거나 패스키를 사용하세요.</string>
     <string name="auth_error_invalid_email">you@example.com처럼 전체 이메일 주소를 입력해 주세요.</string>
@@ -105,9 +107,11 @@
     <string name="auth_sign_in_passkey">패스키로 로그인</string>
     <string name="auth_passkey">패스키</string>
     <string name="auth_sign_in_google">Google로 로그인</string>
+    <string name="auth_sign_in_apple">Apple로 로그인</string>
     <string name="auth_just_looking">둘러보기만 하실 건가요? <annotation tag="demo">데모 열기</annotation></string>
     <string name="auth_or">또는</string>
     <string name="auth_sign_up_google">Google로 가입</string>
+    <string name="auth_sign_up_apple">Apple로 가입</string>
     <string name="auth_agree">계정을 만들면 <annotation tag="terms">이용약관</annotation> 및 <annotation tag="privacy">개인정보 처리방침</annotation>에 동의하게 돼요.</string>
     <string name="auth_demo_own_account">계정이 있으신가요? <annotation tag="link">내 계정으로 로그인</annotation></string>
     <string name="auth_phone_no_account">아직 계정이 없으신가요? <annotation tag="link">계정 만들기</annotation></string>

@@ -72,6 +72,8 @@
     <string name="auth_login_description">Melde dich bei Kosha an oder erstelle ein kostenloses Konto.</string>
     <string name="auth_google_not_linked">Für diese E-Mail-Adresse gibt es schon ein Kosha-Konto. Melde dich mit deinem Passwort oder Passkey an und verbinde Google dann unter Einstellungen › Anmeldung &amp; Sicherheit.</string>
     <string name="auth_google_failed">Die Anmeldung mit Google hat nicht geklappt. Versuch es noch mal.</string>
+    <string name="auth_apple_not_linked">Für diese E-Mail-Adresse gibt es schon ein Kosha-Konto. Melde dich stattdessen mit deinem Passwort oder Passkey an.</string>
+    <string name="auth_apple_failed">Die Anmeldung mit Apple hat nicht geklappt. Versuch es noch mal.</string>
     <string name="auth_error_rate_limited">Zu viele Versuche. Warte eine Minute und versuch es dann noch mal.</string>
     <string name="auth_error_wrong_password">E-Mail oder Passwort stimmt nicht. Versuch es noch mal oder nimm einen Passkey.</string>
     <string name="auth_error_invalid_email">Gib eine vollständige E-Mail-Adresse ein, z. B. du@beispiel.de.</string>
@@ -107,9 +109,11 @@
     <string name="auth_sign_in_passkey">Mit Passkey anmelden</string>
     <string name="auth_passkey">Passkey</string>
     <string name="auth_sign_in_google">Mit Google anmelden</string>
+    <string name="auth_sign_in_apple">Mit Apple anmelden</string>
     <string name="auth_just_looking">Nur mal schauen? <annotation tag="demo">Demo öffnen</annotation></string>
     <string name="auth_or">oder</string>
     <string name="auth_sign_up_google">Mit Google registrieren</string>
+    <string name="auth_sign_up_apple">Mit Apple registrieren</string>
     <string name="auth_agree">Mit dem Erstellen eines Kontos stimmst du den <annotation tag="terms">Nutzungsbedingungen</annotation> und der <annotation tag="privacy">Datenschutzerklärung</annotation> zu.</string>
     <string name="auth_demo_own_account">Schon ein Konto? <annotation tag="link">Melde dich bei deinem an</annotation></string>
     <string name="auth_phone_no_account">Noch kein Konto? <annotation tag="link">Erstelle eins</annotation></string>

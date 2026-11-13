@@ -72,6 +72,8 @@
     <string name="auth_login_description">Kosha में साइन इन करें, या मुफ़्त अकाउंट बनाएँ।</string>
     <string name="auth_google_not_linked">उस ईमेल से पहले से एक Kosha अकाउंट है। अपने पासवर्ड या पासकी से साइन इन करें, फिर सेटिंग्स › साइन-इन और सुरक्षा में Google कनेक्ट करें।</string>
     <string name="auth_google_failed">Google से साइन इन नहीं हो पाया। फिर से कोशिश करें।</string>
+    <string name="auth_apple_not_linked">उस ईमेल से पहले से एक Kosha अकाउंट है। इसके बजाय अपने पासवर्ड या पासकी से साइन इन करें।</string>
+    <string name="auth_apple_failed">Apple से साइन इन नहीं हो पाया। फिर से कोशिश करें।</string>
     <string name="auth_error_rate_limited">बहुत ज़्यादा कोशिशें हो गईं। एक मिनट रुकें, फिर कोशिश करें।</string>
     <string name="auth_error_wrong_password">ईमेल या पासवर्ड गलत है। फिर से कोशिश करें, या पासकी इस्तेमाल करें।</string>
     <string name="auth_error_invalid_email">पूरा ईमेल पता लिखें, जैसे you@example.com।</string>
@@ -107,9 +109,11 @@
     <string name="auth_sign_in_passkey">पासकी से साइन इन करें</string>
     <string name="auth_passkey">पासकी</string>
     <string name="auth_sign_in_google">Google से साइन इन करें</string>
+    <string name="auth_sign_in_apple">Apple से साइन इन करें</string>
     <string name="auth_just_looking">बस देख रहे हैं? <annotation tag="demo">डेमो खोलें</annotation></string>
     <string name="auth_or">या</string>
     <string name="auth_sign_up_google">Google से साइन अप करें</string>
+    <string name="auth_sign_up_apple">Apple से साइन अप करें</string>
     <string name="auth_agree">अकाउंट बनाकर आप <annotation tag="terms">शर्तों</annotation> और <annotation tag="privacy">गोपनीयता नीति</annotation> से सहमत होते हैं।</string>
     <string name="auth_demo_own_account">पहले से अकाउंट है? <annotation tag="link">अपने अकाउंट में साइन इन करें</annotation></string>
     <string name="auth_phone_no_account">अभी तक अकाउंट नहीं है? <annotation tag="link">एक बनाएँ</annotation></string>

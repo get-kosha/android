@@ -72,6 +72,8 @@
     <string name="auth_login_description">Log in bij Kosha, of maak een gratis account aan.</string>
     <string name="auth_google_not_linked">Er bestaat al een Kosha-account met dat e-mailadres. Log in met je wachtwoord of passkey en koppel daarna Google via Instellingen › Inloggen &amp; beveiliging.</string>
     <string name="auth_google_failed">Inloggen met Google is niet gelukt. Probeer het opnieuw.</string>
+    <string name="auth_apple_not_linked">Er bestaat al een Kosha-account met dat e-mailadres. Log in plaats daarvan in met je wachtwoord of passkey.</string>
+    <string name="auth_apple_failed">Inloggen met Apple is niet gelukt. Probeer het opnieuw.</string>
     <string name="auth_error_rate_limited">Te veel pogingen. Wacht een minuut en probeer het dan opnieuw.</string>
     <string name="auth_error_wrong_password">Verkeerd e-mailadres of wachtwoord. Probeer het opnieuw, of gebruik een passkey.</string>
     <string name="auth_error_invalid_email">Vul een volledig e-mailadres in, zoals jij@voorbeeld.nl.</string>
@@ -107,9 +109,11 @@
     <string name="auth_sign_in_passkey">Inloggen met een passkey</string>
     <string name="auth_passkey">Passkey</string>
     <string name="auth_sign_in_google">Inloggen met Google</string>
+    <string name="auth_sign_in_apple">Inloggen met Apple</string>
     <string name="auth_just_looking">Even rondkijken? <annotation tag="demo">Open de demo</annotation></string>
     <string name="auth_or">of</string>
     <string name="auth_sign_up_google">Registreren met Google</string>
+    <string name="auth_sign_up_apple">Registreren met Apple</string>
     <string name="auth_agree">Door een account aan te maken ga je akkoord met de <annotation tag="terms">voorwaarden</annotation> en het <annotation tag="privacy">privacybeleid</annotation>.</string>
     <string name="auth_demo_own_account">Heb je al een account? <annotation tag="link">Log in op je eigen account</annotation></string>
     <string name="auth_phone_no_account">Nog geen account? <annotation tag="link">Maak er een aan</annotation></string>

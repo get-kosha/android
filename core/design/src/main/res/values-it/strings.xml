@@ -80,6 +80,8 @@
     <string name="auth_login_description">Accedi a Kosha o crea un account gratuito.</string>
     <string name="auth_google_not_linked">Questa email ha già un account Kosha. Accedi con la password o una passkey, poi collega Google in Impostazioni › Accesso e sicurezza.</string>
     <string name="auth_google_failed">L\'accesso con Google non è riuscito. Riprova.</string>
+    <string name="auth_apple_not_linked">Questa email ha già un account Kosha. Accedi invece con la password o una passkey.</string>
+    <string name="auth_apple_failed">L\'accesso con Apple non è riuscito. Riprova.</string>
     <string name="auth_error_rate_limited">Troppi tentativi. Aspetta un minuto e riprova.</string>
     <string name="auth_error_wrong_password">Email o password errata. Riprova o usa una passkey.</string>
     <string name="auth_error_invalid_email">Inserisci un indirizzo email completo, come tu@example.com.</string>
@@ -115,9 +117,11 @@
     <string name="auth_sign_in_passkey">Accedi con una passkey</string>
     <string name="auth_passkey">Passkey</string>
     <string name="auth_sign_in_google">Accedi con Google</string>
+    <string name="auth_sign_in_apple">Accedi con Apple</string>
     <string name="auth_just_looking">Vuoi solo curiosare? <annotation tag="demo">Apri la demo</annotation></string>
     <string name="auth_or">oppure</string>
     <string name="auth_sign_up_google">Registrati con Google</string>
+    <string name="auth_sign_up_apple">Registrati con Apple</string>
     <string name="auth_agree">Creando un account accetti i <annotation tag="terms">termini di servizio</annotation> e l\'<annotation tag="privacy">informativa sulla privacy</annotation>.</string>
     <string name="auth_demo_own_account">Hai già un account? <annotation tag="link">Accedi al tuo</annotation></string>
     <string name="auth_phone_no_account">Non hai ancora un account? <annotation tag="link">Creane uno</annotation></string>

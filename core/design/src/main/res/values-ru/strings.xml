@@ -76,6 +76,8 @@
     <string name="auth_login_description">Войдите в Kosha или создайте бесплатный аккаунт.</string>
     <string name="auth_google_not_linked">Для этого адреса уже есть аккаунт Kosha. Войдите с паролем или ключом доступа, затем подключите Google в разделе Настройки › Вход и безопасность.</string>
     <string name="auth_google_failed">Не удалось войти через Google. Попробуйте ещё раз.</string>
+    <string name="auth_apple_not_linked">Для этого адреса уже есть аккаунт Kosha. Войдите с паролем или ключом доступа.</string>
+    <string name="auth_apple_failed">Не удалось войти через Apple. Попробуйте ещё раз.</string>
     <string name="auth_error_rate_limited">Слишком много попыток. Подождите минуту и попробуйте снова.</string>
     <string name="auth_error_wrong_password">Неверный адрес почты или пароль. Попробуйте ещё раз или войдите с ключом доступа.</string>
     <string name="auth_error_invalid_email">Введите полный адрес почты, например you@example.com.</string>
@@ -111,9 +113,11 @@
     <string name="auth_sign_in_passkey">Войти с ключом доступа</string>
     <string name="auth_passkey">Ключ доступа</string>
     <string name="auth_sign_in_google">Войти через Google</string>
+    <string name="auth_sign_in_apple">Войти через Apple</string>
     <string name="auth_just_looking">Просто смотрите? <annotation tag="demo">Откройте демо</annotation></string>
     <string name="auth_or">или</string>
     <string name="auth_sign_up_google">Регистрация через Google</string>
+    <string name="auth_sign_up_apple">Регистрация через Apple</string>
     <string name="auth_agree">Создавая аккаунт, вы принимаете <annotation tag="terms">условия использования</annotation> и <annotation tag="privacy">политику конфиденциальности</annotation>.</string>
     <string name="auth_demo_own_account">Есть аккаунт? <annotation tag="link">Войдите в свой</annotation></string>
     <string name="auth_phone_no_account">Ещё нет аккаунта? <annotation tag="link">Создайте</annotation></string>
