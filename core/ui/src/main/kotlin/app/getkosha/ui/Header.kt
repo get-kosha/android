@@ -648,10 +648,16 @@ fun NavController.openTab(route: Route) = navigate(route) {
     restoreState = true
 }
 
-/** Opens Activity with a search applied. */
+/**
+ * Opens Activity with a search applied. A fresh Activity, not the saved tab: restoring the tab would bring back
+ * whatever was open over it (the transaction this was tapped from), so nothing would seem to happen.
+ */
 fun NavController.openActivity(search: ActivitySearch) {
     ActivityRequests.next.value = search
-    openTab(Route.Activity)
+    navigate(Route.Activity) {
+        popUpTo(graph.startDestinationId) { saveState = true }
+        launchSingleTop = true
+    }
 }
 
 /**
